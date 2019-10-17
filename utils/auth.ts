@@ -1,6 +1,6 @@
 import auth0, { Auth0Error, Auth0Callback } from 'auth0-js';
 
-import { ISignUpArgs, SignInFunction, SignInTypes } from './types';
+import { ISignUpArgs, SignInTypes } from './types';
 
 const DATABASE_CONNECTION = 'Username-Password-Authentication'
 
@@ -15,10 +15,10 @@ const webAuth = new auth0.WebAuth({
 
 const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
   if (error) return console.log(`Error: ${error.description}`);
-  return console.log(`You ${res.user_metadata} successfully signed up`);
+  return console.log(`You, ${res.user_metadata}, successfully signed up`);
 };
 
-export const signIn: SignInFunction = ({ email, password, type }): void => {
+export const signIn = (type: SignInTypes, email?: string, password = ''): void => {
   if(type === SignInTypes.auth0) {
     webAuth.login({
       realm: DATABASE_CONNECTION,
