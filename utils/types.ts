@@ -10,7 +10,7 @@ interface IUserMetadata {
   // other user data like goal?
 }
 
-enum SignInTypes {
+export enum SignInTypes {
   auth0 = "AUTH0",
   social = "SOCIAL"
 }
