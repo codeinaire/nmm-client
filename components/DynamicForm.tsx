@@ -1,8 +1,9 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 
+// TODO - STYLING
 export default function DynamicForm(props: any) {
-  const { formTest, validationSchema } = props;
+  const { formTest, validationSchema, onSubmit } = props;
   return (
     <>
       <Formik
@@ -11,10 +12,7 @@ export default function DynamicForm(props: any) {
             [cur.name]: ''
           })
         }, {})}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log('This is values', values);
-          setSubmitting(false);
-        }}
+        onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
         {({

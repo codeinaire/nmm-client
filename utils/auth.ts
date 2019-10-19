@@ -15,7 +15,7 @@ const webAuth = new auth0.WebAuth({
 
 const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
   if (error) return console.log(`Error: ${error.description}`);
-  return console.log(`You, ${res.user_metadata}, successfully signed up`);
+  return console.log(`You, ${res.user_metadata}, have been  successful`);
 };
 
 export const signIn = (type: SignInTypes, email?: string, password = ''): void => {
