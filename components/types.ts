@@ -4,13 +4,14 @@ export interface DynamicFormProps {
   formTest: Array<DynamicFormObject>;
   validationSchema: ObjectSchema;
   onSubmit: (arg0: OnSubmitObject) => void;
+  submitType: string;
 }
 
 export interface OnSubmitObject {
   [key: string]: string
 }
 
-interface DynamicFormObject {
+export interface DynamicFormObject {
   type: string;
   name: string;
   errorMessageId: string;

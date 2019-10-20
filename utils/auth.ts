@@ -34,12 +34,11 @@ export const signIn = (type: SignInTypes, email?: string, password = ''): void =
   }
 }
 
-export const signUp = ({ email, password, username, user_metadata }: ISignUpArgs): void => {
+export const signUp = ({ email, password, username }: ISignUpArgs): void => {
   webAuth.signup({
     connection: DATABASE_CONNECTION,
     email,
     password,
-    username,
-    user_metadata
+    username
   }, responseCallback);
 }

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
+import { DynamicFormProps, DynamicFormObject } from './types';
 
 // TODO - STYLING
-export default function DynamicForm(props: any) {
-  const { formTest, validationSchema, onSubmit } = props;
+// TODO - placeholder for inputs explaining pw conditions
+export default function DynamicForm(props: DynamicFormProps) {
+  const { formTest, validationSchema, onSubmit, submitType } = props;
   return (
     <>
       <Formik
@@ -20,8 +22,8 @@ export default function DynamicForm(props: any) {
           touched
         }) => (
           <Form>
-          {formTest.map((formItem: any) => (
-            <>
+          {formTest.map((formItem: DynamicFormObject) => (
+            <React.Fragment key={formItem.name}>
               <label htmlFor={formItem.name}>{formItem.displayName}</label>
               <Field
                 id={formItem.name}
@@ -29,16 +31,16 @@ export default function DynamicForm(props: any) {
                 name={formItem.name}
                 aria-errormessage={formItem.errorMessageId}
                 aria-required={formItem.required}
-                autocomplete={formItem.autocomplete}
+                autoComplete={formItem.autocomplete}
                 aria-invalid={!!errors[formItem.name]}
               />
               {errors[formItem.name] && touched[formItem.name] ? (
                 <div id={formItem.errorMessageId}>{errors[formItem.name]}</div>
               ) : null}
               <br/>
-            </>
+            </React.Fragment>
           ))}
-          <button type="submit">Submit</button>
+          <button type="submit">{submitType}</button>
           </Form>
         )}
       </Formik>
