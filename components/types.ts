@@ -1,9 +1,10 @@
 import { ObjectSchema } from 'yup';
+import { FormikActions } from 'formik';
 
 export interface DynamicFormProps {
   formTest: Array<DynamicFormObject>;
   validationSchema: ObjectSchema;
-  onSubmit: (arg0: OnSubmitObject) => void;
+  onSubmit: (arg0: OnSubmitObject, arg1: FormikActions) => void;
   submitType: string;
 }
 

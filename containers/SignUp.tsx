@@ -4,6 +4,7 @@ import { signUp } from '../utils/auth';
 
 import DynamicForm from '../components/DynamicForm';
 
+import { FormikActions } from 'formik';
 import { OnSubmitObject } from '../components/types';
 
 export default function SignIn() {
@@ -36,27 +37,28 @@ export default function SignIn() {
   const PASSWORD_REGEX = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])([^\s]){10,16}$/;
   const validationSchema = object().shape({
     email: string()
-      .email('Invalid email')
+      .email('Invalid email!')
       .trim()
-      .required('Please enter your email!'),
+      .required('Please enter an email!'),
     password: string()
-      .min(10, 'Too Short!')
+      .min(10, 'Too short!')
       .matches(PASSWORD_REGEX, 'Password must be at least 10 characters long with one (1) upper case, one (1) lower case, and one(1) special character(!@#$%^&*)')
       .trim()
-      .required('Please enter your password!'),
+      .required('Please enter a password!'),
     username: string()
       .trim()
-      .max(15, 'Too Long!')
+      .max(15, 'Too long!')
       .required('Please enter a username!')
   })
 
-  const onSubmit = (values: OnSubmitObject) => {
+  const onSubmit = (values: OnSubmitObject, actions: FormikActions<OnSubmitObject>) => {
     console.log('VALUES', values);
     signUp({
       email: values.email,
       password: values.password,
       username: values.username
     })
+    actions.resetForm();
   }
 
   const submitType = 'Sign Up!'

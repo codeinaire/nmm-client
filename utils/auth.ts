@@ -14,8 +14,9 @@ const webAuth = new auth0.WebAuth({
 });
 
 const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
+  console.log('TEST');
   if (error) return console.log(`Error: ${error.description}`);
-  return console.log(`You, ${res.user_metadata}, have been  successful`);
+  return console.log(`You, ${res.username}, have been  successful`);
 };
 
 export const signIn = (type: SignInTypes, email?: string, password = ''): void => {
@@ -35,6 +36,7 @@ export const signIn = (type: SignInTypes, email?: string, password = ''): void =
 }
 
 export const signUp = ({ email, password, username }: ISignUpArgs): void => {
+  console.log('IN SIGNUP', email, password, username);
   webAuth.signup({
     connection: DATABASE_CONNECTION,
     email,
