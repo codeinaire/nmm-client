@@ -26,6 +26,7 @@ export default function DynamicForm(props: DynamicFormProps) {
             <React.Fragment key={formItem.name}>
               <label htmlFor={formItem.name}>{formItem.displayName}</label>
               <Field
+                data-testid={formItem.name}
                 id={formItem.name}
                 type={formItem.type}
                 name={formItem.name}
@@ -35,12 +36,12 @@ export default function DynamicForm(props: DynamicFormProps) {
                 aria-invalid={!!errors[formItem.name]}
               />
               {errors[formItem.name] && touched[formItem.name] ? (
-                <div id={formItem.errorMessageId}>{errors[formItem.name]}</div>
+                <div id={formItem.errorMessageId} data-testid={formItem.errorMessageId}>{errors[formItem.name]}</div>
               ) : null}
               <br/>
             </React.Fragment>
           ))}
-          <button type="submit">{submitType}</button>
+          <button data-testid='submit' type='submit'>{submitType}</button>
           </Form>
         )}
       </Formik>

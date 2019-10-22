@@ -29,10 +29,10 @@ export default function SignIn() {
 
   const validationSchema = object().shape({
     email: string()
-      .email('Invalid email')
+      .email('Invalid email!')
       .required('Please enter your email!'),
     password: string()
-      .min(10, 'Too Short!')
+      .min(10, 'Too short!')
       .required('Please enter your password!')
   })
 

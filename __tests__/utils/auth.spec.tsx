@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { fireEvent, render, wait, queryByTestId } from '@testing-library/react';
+import { fireEvent, render, wait, getNodeText } from '@testing-library/react';
 import { mocked } from 'ts-jest/utils'
 
 import SignUp from '../../containers/SignUp';
+import SignIn from '../../containers/SignIn';
 
 // Mocks
 import auth0 from 'auth0-js';
+
 jest.mock('auth0-js');
 const webAuth = new auth0.WebAuth({
   domain: 'testdomain.com'|| '',
@@ -18,39 +20,18 @@ const webAuth = new auth0.WebAuth({
 
 const mockedWebAuth: any = mocked(webAuth, true);
 
-const fillField = (field: HTMLElement, value: any) => {
-  fireEvent.change(field, {
-      persist: () => {},
-      target: { value },
-  });
-};
-
-const waitForSubmission = (
-  submitButton: HTMLElement,
-) => {
-  fireEvent.click(submitButton);
-};
-
 
 describe('Auth0 component & functions', () => {
-  describe('[SignUp] process', () => {
+  describe('[SIGN UP] process', () => {
     describe('is given [VALID] signup details', () => {
-      it('Returned - user details', async done => {
+      it('[RETURNED] - user details', async done => {
         const component = await render(<SignUp />);
 
-        fillField(component.getByLabelText('Email', {
-          selector: 'input'
-        }), 'test@email.com');
-        fillField(component.getByLabelText('Password', {
-          selector: 'input'
-        }), 'Aoeui1@345');
-        fillField(component.getByLabelText('Username', {
-          selector: 'input'
-        }), 'TestUser');
+        fillField(component.getByTestId('email'), 'test@user.com');
+        fillField(component.getByTestId('password'), 'Aoeui1@345');
+        fillField(component.getByTestId('username'), 'TestUser');
 
-        await waitForSubmission(
-          component.getByText('Sign Up!')
-        )
+        fireEvent.click(component.getByTestId('submit'));
 
         // TODO - not exactly sure if this is really necessary??
         mockedWebAuth.signup.mockReturnValueOnce({
@@ -68,76 +49,92 @@ describe('Auth0 component & functions', () => {
       })
     })
 
-    describe('[ERRORS] from incorrect signup', () => {
+    describe('[ERRORS] from incorrect input', () => {
       describe('is given [EMPTY] signup details', () => {
-        it('Returned - "Please enter..." error messages', async done => {
-          const component = await render(<SignUp />);
+        it('[RETURNED] - "Please enter..." error messages', async () => {
+          const component = render(<SignUp />);
 
-          fillField(component.getByLabelText('Email', {
-            selector: 'input'
-          }), '');
-          fillField(component.getByLabelText('Password', {
-            selector: 'input'
-          }), '');
-          fillField(component.getByLabelText('Username', {
-            selector: 'input'
-          }), '');
+          fillField(component.getByTestId('email'), '');
+          fillField(component.getByTestId('password'), '');
+          fillField(component.getByTestId('username'), '');
 
-          await waitForSubmission(component.getByText('Sign Up!'));
+          fireEvent.click(component.getByTestId('submit'));
 
           await wait(() => {
-              expect(component.queryByText('Please enter an email!')).toBeTruthy()
-              done();
-            }
-          );
-          await wait(() => {
-              expect(component.queryByText('Please enter a password!')).toBeTruthy()
-              done();
-            }
-          );
-          await wait(() => {
-              expect(component.queryByText('Please enter a username!')).toBeTruthy()
-              done();
-            }
-          )
-          done();
+            testFormValidation(component, 'emailError', 'Please enter an email!');
+            testFormValidation(component, 'passwordError', 'Please enter a password!');
+            testFormValidation(component, 'usernameError', 'Please enter a username!');
+          });
         })
       })
 
       describe('is given [INVALID] signup details', () => {
-        it('Returned - Invalid details error messages', async done => {
+        it('[RETURNED] - Invalid details error messages', async () => {
           const component = await render(<SignUp />);
 
-          fillField(component.getByLabelText('Email', {
-            selector: 'input'
-          }), 'test');
-          fillField(component.getByLabelText('Password', {
-            selector: 'input'
-          }), 'Aoeui');
-          fillField(component.getByLabelText('Username', {
-            selector: 'input'
-          }), 'toooooooolongusername');
+          fillField(component.getByTestId('email'), 'test');
+          fillField(component.getByTestId('password'), 'Aoeui');
+          fillField(component.getByTestId('username'), 'looooonggggusername');
 
-          await waitForSubmission(component.getByText('Sign Up!'));
+          fireEvent.click(component.getByTestId('submit'));
 
           await wait(() => {
-              expect(component.queryByText('Invalid email!')).toBeTruthy()
-              done();
-            }
-          );
+            testFormValidation(component, 'emailError', 'Invalid email!');
+            testFormValidation(component, 'passwordError', 'Too short!');
+            testFormValidation(component, 'usernameError', 'Too long!');
+          })
+        })
+      })
+    })
+  })
+
+  describe('[SIGN IN] process', () => {
+    describe('[ERRORS] from incorrect input', () => {
+      describe('is given [EMPTY] details', () => {
+        it('[RETURNED] - "Please enter..." error messages', async () => {
+          const component = render(<SignIn />);
+
+          fillField(component.getByTestId('email'), '');
+          fillField(component.getByTestId('password'), '');
+
+          fireEvent.click(component.getByTestId('submit'));
+
           await wait(() => {
-              expect(component.queryByText('Too short!')).toBeTruthy()
-              done();
-            }
-          );
+            testFormValidation(component, 'emailError', 'Please enter your email!');
+            testFormValidation(component, 'passwordError', 'Please enter your password!');
+          });
+        })
+      })
+
+      describe('is given [INVALID] details', () => {
+        it('[RETURNED] - Invalid details error messages', async () => {
+          const component = await render(<SignIn />);
+
+          fillField(component.getByTestId('email'), 'test');
+          fillField(component.getByTestId('password'), 'Aoeui');
+
+          fireEvent.click(component.getByTestId('submit'));
+
           await wait(() => {
-              expect(component.queryByText('Too long!')).toBeTruthy()
-              done();
-            }
-          )
-          done();
+            testFormValidation(component, 'emailError', 'Invalid email!');
+            testFormValidation(component, 'passwordError', 'Too short!');
+          })
         })
       })
     })
   })
 })
+
+
+// Helper Functions
+const fillField = (field: HTMLElement, value: any) => {
+  fireEvent.change(field, {
+    persist: () => {},
+    target: { value },
+ })
+};
+
+const testFormValidation = async (component: any, elementDataId: string, errorMessage: string) => {
+  const textOfNode = getNodeText(component.getByTestId(elementDataId))
+  expect(textOfNode).toBe(errorMessage);
+};
