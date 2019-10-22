@@ -16,8 +16,13 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "suppressImplicitAnyIndexErrors": true,
     "target": "esnext"
   },
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "out",
+    ".next"
+  ],
   "include": ["**/*.ts", "**/*.tsx"]
 }
