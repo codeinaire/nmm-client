@@ -30,8 +30,8 @@ export default function DynamicForm(props: DynamicFormProps) {
                 id={formItem.name}
                 type={formItem.type}
                 name={formItem.name}
-                aria-errormessage={formItem.errorMessageId}
                 aria-required={formItem.required}
+                aria-errormessage={formItem.errorMessageId}
                 autoComplete={formItem.autocomplete}
                 aria-invalid={!!errors[formItem.name]}
               />

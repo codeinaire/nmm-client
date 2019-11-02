@@ -1,4 +1,5 @@
 import auth0, { Auth0Error, Auth0Callback } from 'auth0-js';
+import logger from './logger';
 
 import { ISignUpArgs, SignInTypes } from './types';
 
@@ -15,8 +16,17 @@ const webAuth = new auth0.WebAuth({
 
 const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
   console.log('TEST');
-  if (error) return console.log(`Error: ${error.description}`);
-  return console.log(`You, ${res.username}, have been  successful`);
+  if (error) {
+    logger.log({
+      level: 'ERROR',
+      description: error.description
+    });
+  } else {
+    logger.log({
+      level: 'INFO',
+      description: `You, ${res.username}, have been successful`
+    })
+  }
 };
 
 export const signIn = (type: SignInTypes, email?: string, password = ''): void => {

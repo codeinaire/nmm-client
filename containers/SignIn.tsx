@@ -37,7 +37,7 @@ export default function SignIn() {
   })
 
   const onSubmit = (values: OnSubmitObject) => {
-    signIn(SignInTypes.auth0, values.email, values.password)
+    signIn(SignInTypes.auth0, values.email, values.password);
   }
 
   const submitType = 'Sign In!';
