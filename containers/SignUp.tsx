@@ -8,7 +8,7 @@ import { FormikActions } from 'formik';
 import { OnSubmitObject } from '../components/types';
 
 export default function SignIn() {
-  const formTest = [
+  const formInput = [
     {
       type: 'email',
       name: 'email',
@@ -67,7 +67,7 @@ export default function SignIn() {
     <div>
       <p>Please sign up</p>
       <DynamicForm
-        formTest={formTest}
+        formInput={formInput}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}

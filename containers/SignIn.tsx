@@ -8,7 +8,7 @@ import { OnSubmitObject } from '../components/types';
 import { SignInTypes } from '../utils/types';
 
 export default function SignIn() {
-  const formTest = [
+  const formInput = [
     {
       type: 'email',
       name: 'email',
@@ -46,7 +46,7 @@ export default function SignIn() {
     <div>
       <p>Please sign in</p>
       <DynamicForm
-        formTest={formTest}
+        formInput={formInput}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}
