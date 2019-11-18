@@ -13,7 +13,7 @@ export default function SignIn() {
       type: 'email',
       name: 'email',
       errorMessageId: 'emailError',
-      required: 'true',
+      required: true,
       autocomplete: 'on',
       displayName: 'Email'
     },
@@ -21,7 +21,7 @@ export default function SignIn() {
       type: 'password',
       name: 'password',
       errorMessageId: 'passwordError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Password'
     }

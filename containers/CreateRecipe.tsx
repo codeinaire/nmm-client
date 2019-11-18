@@ -24,7 +24,7 @@ export default function SignIn() {
       type: 'text',
       name: 'title',
       errorMessageId: 'titleError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Title'
     },
@@ -32,7 +32,7 @@ export default function SignIn() {
       type: 'text',
       name: 'ingredients',
       errorMessageId: 'ingredientsError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Ingredients',
       textArea: true
@@ -41,7 +41,7 @@ export default function SignIn() {
       type: 'text',
       name: 'method',
       errorMessageId: 'methodError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Method',
       textArea: true
@@ -50,7 +50,7 @@ export default function SignIn() {
       type: 'text',
       name: 'hashtags',
       errorMessageId: 'hashtagsError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Hashtags'
     },
@@ -58,7 +58,7 @@ export default function SignIn() {
       type: 'text',
       name: 'name',
       errorMessageId: 'nameError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Chef\'s Name'
     },
@@ -66,7 +66,7 @@ export default function SignIn() {
       type: 'text',
       name: 'website',
       errorMessageId: 'websiteError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Website'
     },
@@ -74,7 +74,7 @@ export default function SignIn() {
       type: 'email',
       name: 'email',
       errorMessageId: 'emailError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Email'
     },
@@ -82,7 +82,7 @@ export default function SignIn() {
       type: 'text',
       name: 'facebook',
       errorMessageId: 'facebookError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Facebook page or profile'
     },
@@ -90,7 +90,7 @@ export default function SignIn() {
       type: 'text',
       name: 'instagram',
       errorMessageId: 'instagramError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Instagram profile'
     },
@@ -98,7 +98,7 @@ export default function SignIn() {
       type: 'text',
       name: 'twitter',
       errorMessageId: 'twitterError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Twitter profile'
     },
@@ -106,7 +106,7 @@ export default function SignIn() {
       type: 'file',
       name: 'photo',
       errorMessageId: 'photoError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Recipe Photo',
     }
@@ -197,7 +197,8 @@ export default function SignIn() {
     'email',
     'facebook',
     'instagram',
-    'twitter'
+    'twitter',
+    'photo'
   ]
 
   const validationSchema = object().shape({

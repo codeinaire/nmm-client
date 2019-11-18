@@ -21,7 +21,7 @@ export default function SignIn() {
       type: 'password',
       name: 'password',
       errorMessageId: 'passwordError',
-      required: 'false',
+      required: false,
       autocomplete: 'off',
       displayName: 'Password'
     },
@@ -29,7 +29,7 @@ export default function SignIn() {
       type: 'text',
       name: 'username',
       errorMessageId: 'usernameError',
-      required: 'false',
+      required: false,
       autocomplete: 'off',
       displayName: 'Username'
     }

@@ -19,7 +19,7 @@ export interface DynamicFormInputObject {
   type: string
   name: string
   errorMessageId: string
-  required: string
+  required: boolean
   autocomplete: string
   displayName: string
   textArea?: boolean
