@@ -1,74 +1,65 @@
-import * as React from 'react'
+import React from 'react'
 
-export interface MediaUploadProps {
-  id: string;
-  onChange: (field: string, mediaId: string) => void;
-  field: any
-  form: any
-}
+import logger from '../utils/logger'
+import { FileUploadProps } from './types'
 
-export interface MediaUploadState {
-  progress: number;
-  file?: File;
-  error?: string;
-}
+export default (props: FileUploadProps) => {
+  const { field, form } = props
 
-export default class MediaUpload extends React.Component<
-  MediaUploadProps,
-  MediaUploadState
-> {
-  state: MediaUploadState = { progress: -1 }
-
-  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('MediaUploads comp', this.props);
-
-    if (!e.target.files) {
-      return
-    }
-    let file = e.target.files[0]
-    this.setState({ file: file })
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    logger.log({
+      level: 'INFO',
+      description: 'Starting file upload...'
+    })
+    if (!event.target.files) return
+    const file = event.target.files[0]
 
     let data = new FormData()
     data.append('file', file)
+    // N.B. - Cloudinary settings for image transformation
     data.append('upload_preset', 'nmm-recipes')
 
-    this.setState({ error: undefined, progress: 0 })
-
     const res = await fetch(
-      'https://api.cloudinary.com/v1_1/codeinaire/image/upload',
+      process.env.CLOUDINARY_API || '',
       {
         method: 'POST',
         body: data,
       }
     )
-
-    this.setState({ error: undefined, progress: -1 })
+    logger.log({
+      level: 'INFO',
+      description: `Transformation status: ${res.statusText} ${res.status}`
+    })
 
     const files = await res.json()
-    this.props.form.setFieldValue('lowResolution', files.secure_url)
-    this.props.form.setFieldValue('standardResolution', files.eager[0].secure_url)
-    this.props.field.onChange(this.props.id, files.secure_url)
-    if(!this.props.form.isValid) {
-      console.log('inside isvalid IF');
-      this.props.form.setFieldError('photo', 'A new error message!!')
-      this.props.form.setErrors({ fields: { photo: 'This is an error message!!!'}})
+    if(files.error) {
+      logger.log({
+        level: 'ERROR',
+        description: files.error.message
+      })
+      return
     }
+
+    form.setFieldValue(field.name, files.secure_url)
+    form.setFieldValue('standardResolution', files.eager[0].secure_url)
+    logger.log({
+      level: 'INFO',
+      description: 'Finished file upload!'
+    })
   }
 
-  render() {
-    return (
-      <div>
-        <div style={{ marginTop: 10 }}>
-          <label className="button button--purple button--secondary">
-            Upload new picture
-            <input
-              className="visually-hidden"
-              type="file"
-              onChange={this.handleFileChange}
-            />
-          </label>
-        </div>
-      </div>
-    )
-  }
+  return (
+    <>
+      <input
+        aria-errormessage={props['aria-errormessage']}
+        aria-invalid={props['aria-invalid']}
+        aria-required={props['aria-required']}
+        autoComplete={props.autoComplete}
+        data-testid={props["data-testid"]}
+        id={props.id}
+        type={props.type}
+        onChange={event => handleChange(event)}
+      />
+    </>
+  )
 }

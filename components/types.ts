@@ -1,5 +1,5 @@
 import { ObjectSchema } from 'yup'
-import { FormikActions } from 'formik'
+import { FormikActions, FieldProps } from 'formik'
 
 export interface DynamicFormProps {
   formInput: Array<DynamicFormInputObject>
@@ -8,7 +8,6 @@ export interface DynamicFormProps {
   submitType: string
   formSelect?: Array<DynamicFormSelectObject>
   formInitialValues?: Array<string>
-  useState?: boolean
 }
 
 export interface OnSubmitObject {
@@ -27,10 +26,22 @@ export interface DynamicFormInputObject {
 
 export interface DynamicFormSelectObject {
   name: string
+  errorMessageId: string
   options: Array<SelectOption>
 }
 
 export interface SelectOption {
   value: string
   displayName: string
+}
+
+export interface FileUploadProps extends FieldProps {
+  'aria-errormessage': string
+  'aria-invalid': boolean
+  'aria-required': boolean
+  autoComplete: string
+  children: undefined | string
+  'data-testid': string
+  id: string
+  type: string
 }

@@ -1,22 +1,23 @@
-import React from 'react';
-import { object, string } from 'yup';
-// import { useMutation } from '@apollo/react-hooks';
-// import gql from 'graphql-tag';
-
-import DynamicForm from '../components/DynamicForm';
+import React from 'react'
+import { object, string } from 'yup'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import logger from '../utils/logger'
+// COMPONENTS
+import DynamicForm from '../components/DynamicForm'
 // TYPES
-import { OnSubmitObject } from '../components/types';
+import { OnSubmitObject } from '../components/types'
+import { FormikActions } from 'formik'
 
-
-// const CREATE_RECIPE = gql`
-//   mutation createRecipe($recipe: RecipeInput!) {
-//     createRecipe(recipe: $recipe) {
-//       id
-//       title
-//       method
-//     }
-//   }
-// `
+const CREATE_RECIPE = gql`
+  mutation createRecipe($recipe: RecipeInput!) {
+    createRecipe(recipe: $recipe) {
+      id
+      title
+      method
+    }
+  }
+`
 
 export default function SignIn() {
   const formInput = [
@@ -60,7 +61,7 @@ export default function SignIn() {
       errorMessageId: 'nameError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Chef\'s Name'
+      displayName: "Chef's Name"
     },
     {
       type: 'text',
@@ -104,17 +105,18 @@ export default function SignIn() {
     },
     {
       type: 'file',
-      name: 'photo',
-      errorMessageId: 'photoError',
+      name: 'testResolution',
+      errorMessageId: 'lowResolutionError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Recipe Photo',
+      displayName: 'Recipe Photo'
     }
   ]
 
   const formSelect = [
     {
       name: 'difficulty',
+      errorMessageId: 'difficultyError',
       options: [
         {
           value: '',
@@ -136,6 +138,7 @@ export default function SignIn() {
     },
     {
       name: 'cost',
+      errorMessageId: 'costError',
       options: [
         {
           value: '',
@@ -157,6 +160,7 @@ export default function SignIn() {
     },
     {
       name: 'mealType',
+      errorMessageId: 'mealTypeError',
       options: [
         {
           value: '',
@@ -185,7 +189,7 @@ export default function SignIn() {
   const formInitialValues = [
     'mealType',
     'lowResolution',
-    'highResolution',
+    'standardResolution',
     'name',
     'title',
     'ingredients',
@@ -197,42 +201,49 @@ export default function SignIn() {
     'email',
     'facebook',
     'instagram',
-    'twitter',
-    'photo'
+    'twitter'
   ]
 
   const validationSchema = object().shape({
     email: string()
       .email('Invalid email!')
-      .required('Please enter the chef\'s email!'),
-    title: string()
-      .required('Please enter the title!'),
-    ingredients: string()
-      .required('Please enter the ingredients!'),
-    method: string()
-      .required('Please enter the method!'),
-    hashtags: string()
-      .required('Please enter the hashtags!'),
-    name: string()
-      .required('Please enter the chef\'s name!'),
-    website: string()
-      .required('Please enter the chef\'s website!'),
-    photo: string()
-      .required('Please upload a photo!')
+      .required("Please enter the chef's email!"),
+    title: string().required('Please enter the title!'),
+    ingredients: string().required('Please enter the ingredients!'),
+    method: string().required('Please enter the method!'),
+    hashtags: string().required('Please enter the hashtags!'),
+    name: string().required("Please enter the chef's name!"),
+    website: string().required("Please enter the chef's website!"),
+    cost: string().required('Please select cost!'),
+    mealType: string().required('Please select meal type'),
+    difficulty: string().required('Please select difficulty')
   })
 
-  // const [createRecipe] = useMutation(CREATE_RECIPE)
-  const onSubmit = async (values: OnSubmitObject) => {
-    console.log('testing',values);
-
-    // createRecipe({
-    //   variables: {
-    //     recipe: values
-    //   }
-    // })
+  const [createRecipe] = useMutation(CREATE_RECIPE)
+  const onSubmit = async (
+    values: OnSubmitObject,
+    { resetForm, setSubmitting }: FormikActions<OnSubmitObject>
+  ) => {
+    try {
+      await createRecipe({
+        variables: {
+          recipe: values
+        }
+      })
+      resetForm()
+      // setStatus({ success: true })
+    } catch (error) {
+      logger.log({
+        level: 'ERROR',
+        description: error
+      })
+      // setStatus({success: false})
+      setSubmitting(false)
+      // setErrors({submit: error.message})
+    }
   }
 
-  const submitType = 'Create Recipe!';
+  const submitType = 'Create Recipe!'
 
   return (
     <div>

@@ -13,7 +13,7 @@ export default function SignIn() {
       type: 'email',
       name: 'email',
       errorMessageId: 'emailError',
-      required: 'false',
+      required: false,
       autocomplete: 'on',
       displayName: 'Email'
     },

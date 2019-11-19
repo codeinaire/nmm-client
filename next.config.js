@@ -7,6 +7,7 @@ module.exports = {
     AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
     REDIRECT_URL: 'http://localhost:3000/',
     LOGGER_URI: 'https://zjy4b2tny0.execute-api.ap-southeast-2.amazonaws.com',
-    IS_DEVELOPMENT: true
+    IS_DEVELOPMENT: true,
+    CLOUDINARY_API: 'https://api.cloudinary.com/v1_1/codeinaire/image/upload'
   }
 }

@@ -1,13 +1,13 @@
-import React from 'react';
-import { Formik, Field } from 'formik';
-import MediaUpload from './FileUpload';
+import React from 'react'
+import { Formik, Field } from 'formik'
+import ImageUpload from './FileUpload'
 
 import {
   DynamicFormProps,
   DynamicFormInputObject,
   DynamicFormSelectObject,
   SelectOption
-} from './types';
+} from './types'
 
 // TODO - STYLING
 // TODO - placeholder for inputs explaining pw conditions
@@ -19,7 +19,7 @@ export default function DynamicForm(props: DynamicFormProps) {
     submitType,
     formSelect = [],
     formInitialValues = []
-  } = props;
+  } = props
 
   return (
     <>
@@ -29,39 +29,36 @@ export default function DynamicForm(props: DynamicFormProps) {
             ? formInitialValues.reduce((acc: object, name: string) => {
                 return Object.assign(acc, {
                   [name]: ''
-                });
+                })
               }, {})
-            : formInput.reduce((acc: object, cur: any) => {
+            : formInput.reduce((acc: object, cur: DynamicFormInputObject) => {
                 return Object.assign(acc, {
                   [cur.name]: ''
-                });
+                })
               }, {})
         }
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        {({
-          errors,
-          touched,
-          handleReset,
-          handleSubmit,
-          // handleChange
-          // handleBlur,
-          // setValues,
-          // values
-        }) => (
-          <form onReset={handleReset} onSubmit={handleSubmit} method='POST'>
+        {({ errors, touched, handleReset, handleSubmit }) => (
+          <form onReset={handleReset} onSubmit={handleSubmit} method="POST">
             {formInput.map((inputItem: DynamicFormInputObject) => (
               <React.Fragment key={inputItem.name}>
                 <label htmlFor={inputItem.name}>
-                  {inputItem.displayName}: {' '}
+                  {inputItem.displayName}:{' '}
                 </label>
                 <Field
                   aria-errormessage={inputItem.errorMessageId}
                   aria-invalid={!!errors[inputItem.name]}
                   aria-required={inputItem.required}
                   autoComplete={inputItem.autocomplete}
-                  component={inputItem.textArea ? 'textarea' : inputItem.name == 'photo' ? MediaUpload : 'input' }
+                  component={
+                    inputItem.textArea
+                      ? 'textarea'
+                      : inputItem.name == 'lowResolution'
+                      ? ImageUpload
+                      : 'input'
+                  }
                   data-testid={inputItem.name}
                   id={inputItem.name}
                   name={inputItem.name}
@@ -97,6 +94,14 @@ export default function DynamicForm(props: DynamicFormProps) {
                         </option>
                       ))}
                     </Field>
+                    {errors[selectItem.name] && touched[selectItem.name] ? (
+                      <div
+                        id={selectItem.errorMessageId}
+                        data-testid={selectItem.errorMessageId}
+                      >
+                        {errors[selectItem.name]}
+                      </div>
+                    ) : null}
                     <br />
                   </React.Fragment>
                 ))
@@ -109,5 +114,5 @@ export default function DynamicForm(props: DynamicFormProps) {
         )}
       </Formik>
     </>
-  );
+  )
 }

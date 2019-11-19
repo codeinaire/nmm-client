@@ -13,7 +13,8 @@
           {
               "semi": false,
               "singleQuote": true,
-              "function-call-argument-newline": "consistent"
+              "function-call-argument-newline": "consistent",
+              "allowAllPropertiesOnSameLine": false
           }
       ],
       "curly": [
