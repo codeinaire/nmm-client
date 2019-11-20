@@ -3,7 +3,7 @@ import React from 'react';
 import RecipeTest from '../components/RecipeTest';
 import SignIn from '../containers/SignIn';
 import SignUp from '../containers/SignUp';
-import { Modal } from '../containers/Modal';
+import Modal from '../containers/Modal';
 
 const modalProps = {
   triggerText: "Launch the Modal!"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 import logger from '../utils/logger'
 import { FileUploadProps } from './types'
@@ -6,7 +6,7 @@ import { FileUploadProps } from './types'
 export default (props: FileUploadProps) => {
   const { field, form } = props
 
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     logger.log({
       level: 'INFO',
       description: 'Starting file upload...'

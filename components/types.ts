@@ -1,6 +1,7 @@
 import { ObjectSchema } from 'yup'
 import { FormikActions, FieldProps } from 'formik'
-
+import { MouseEvent, KeyboardEvent, ReactElement } from 'react'
+// DYNAMIC FORM TYPES
 export interface DynamicFormProps {
   failMessage?: string
   formInput: Array<DynamicFormInputObject>
@@ -47,3 +48,25 @@ export interface FileUploadProps extends FieldProps {
   id: string
   type: string
 }
+
+// MODAL TYPES
+export interface ModalContentProps {
+  modalRef: (arg0: any) => void
+  buttonRef: (arg0: any) => void
+  closeModal: () => void
+  content: ReactElement
+  onKeyDown: (arg0: KeyboardEvent<HTMLInputElement>) => void
+  onClickOutside: (arg0: MouseEvent<HTMLInputElement>) =>  void
+}
+
+export interface ModalTriggerProps {
+  showModal: () => void
+  buttonRef: (arg0: any) => void
+  triggerText: string
+}
+
+export interface ModalProps {
+  trigggerText: string
+}
+
+export type ModalContentType = ReactElement
