@@ -208,16 +208,16 @@ export default function SignIn() {
     email: string()
       .email('Invalid email!')
       .required("Please enter the chef's email!"),
-    // title: string().required('Please enter the title!'),
-    // ingredients: string().required('Please enter the ingredients!'),
-    // method: string().required('Please enter the method!'),
-    // hashtags: string().required('Please enter the hashtags!'),
-    // name: string().required("Please enter the chef's name!"),
-    // website: string().required("Please enter the chef's website!"),
-    // cost: string().required('Please select cost!'),
-    // mealType: string().required('Please select meal type!'),
-    // difficulty: string().required('Please select difficulty!'),
-    // lowResolution: string().required('Please upload a photo!')
+    title: string().required('Please enter the title!'),
+    ingredients: string().required('Please enter the ingredients!'),
+    method: string().required('Please enter the method!'),
+    hashtags: string().required('Please enter the hashtags!'),
+    name: string().required("Please enter the chef's name!"),
+    website: string().required("Please enter the chef's website!"),
+    cost: string().required('Please select cost!'),
+    mealType: string().required('Please select meal type!'),
+    difficulty: string().required('Please select difficulty!'),
+    lowResolution: string().required('Please upload a photo!')
   })
 
   const [createRecipe] = useMutation(CREATE_RECIPE)
@@ -226,19 +226,23 @@ export default function SignIn() {
     { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
-      await createRecipe({
+      const recipe = await createRecipe({
         variables: {
           recipe: values
         }
       })
       resetForm()
-      setStatus({ success: true })
+      setStatus({ openModal: true, success: true })
+      logger.log({
+        level: 'INFO',
+        description: `Recipe ${recipe.data.createRecipe.id} with title ${recipe.data.createRecipe.title} succeeded in being created!`
+      })
     } catch (err) {
       logger.log({
         level: 'ERROR',
         description: err
       })
-      setStatus({ fail: true })
+      setStatus({ openModal: true, success: false })
       setSubmitting(false)
     }
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Formik, Field } from 'formik'
 import ImageUpload from './FileUpload'
+import Modal from '../components/Modal'
 
 import {
   DynamicFormProps,
@@ -16,8 +17,8 @@ export default function DynamicForm(props: DynamicFormProps) {
     failMessage,
     formInput,
     onSubmit,
-    submitType,
     successMessage,
+    submitType,
     validationSchema,
     formSelect = [],
     formInitialValues = []
@@ -42,86 +43,87 @@ export default function DynamicForm(props: DynamicFormProps) {
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        {({ errors, touched, handleReset, handleSubmit, status }) => (
-          <form onReset={handleReset} onSubmit={handleSubmit} method="POST">
-            {formInput.map((inputItem: DynamicFormInputObject) => (
-              <React.Fragment key={inputItem.name}>
-                <label htmlFor={inputItem.name}>
-                  {inputItem.displayName}:{' '}
-                </label>
-                <Field
-                  aria-errormessage={inputItem.errorMessageId}
-                  aria-invalid={!!errors[inputItem.name]}
-                  aria-required={inputItem.required}
-                  autoComplete={inputItem.autocomplete}
-                  component={
-                    inputItem.textArea
-                      ? 'textarea'
-                      : inputItem.name == 'lowResolution'
-                      ? ImageUpload
-                      : 'input'
-                  }
-                  data-testid={inputItem.name}
-                  id={inputItem.name}
-                  name={inputItem.name}
-                  type={inputItem.type}
-                />
-                {errors[inputItem.name] && touched[inputItem.name] ? (
-                  <div
-                    id={inputItem.errorMessageId}
-                    data-testid={inputItem.errorMessageId}
-                  >
-                    {errors[inputItem.name]}
-                  </div>
-                ) : null}
-                <br />
-              </React.Fragment>
-            ))}
-            {formSelect.length
-              ? formSelect.map((selectItem: DynamicFormSelectObject) => (
-                  <React.Fragment key={selectItem.name}>
-                    <br />
-                    <Field
-                      component="select"
-                      name={selectItem.name}
-                      id={`${selectItem.name}-select`}
-                      key={selectItem.name}
+        {({ errors, touched, handleReset, handleSubmit, status, setStatus }) => (
+          <>
+            <Modal
+              failMessage={failMessage}
+              successMessage={successMessage}
+              status={status}
+              setStatus={setStatus}
+            />
+            <form onReset={handleReset} onSubmit={handleSubmit} method="POST">
+              {formInput.map((inputItem: DynamicFormInputObject) => (
+                <React.Fragment key={inputItem.name}>
+                  <label htmlFor={inputItem.name}>
+                    {inputItem.displayName}:{' '}
+                  </label>
+                  <Field
+                    aria-errormessage={inputItem.errorMessageId}
+                    aria-invalid={!!errors[inputItem.name]}
+                    aria-required={inputItem.required}
+                    autoComplete={inputItem.autocomplete}
+                    component={
+                      inputItem.textArea
+                        ? 'textarea'
+                        : inputItem.name == 'lowResolution'
+                        ? ImageUpload
+                        : 'input'
+                    }
+                    data-testid={inputItem.name}
+                    id={inputItem.name}
+                    name={inputItem.name}
+                    type={inputItem.type}
+                  />
+                  {errors[inputItem.name] && touched[inputItem.name] ? (
+                    <div
+                      id={inputItem.errorMessageId}
+                      data-testid={inputItem.errorMessageId}
                     >
-                      {selectItem.options.map((selectOption: SelectOption) => (
-                        <option
-                          value={selectOption.value}
-                          key={selectOption.value}
-                        >
-                          {selectOption.displayName}
-                        </option>
-                      ))}
-                    </Field>
-                    {errors[selectItem.name] && touched[selectItem.name] ? (
-                      <div
-                        id={selectItem.errorMessageId}
-                        data-testid={selectItem.errorMessageId}
+                      {errors[inputItem.name]}
+                    </div>
+                  ) : null}
+                  <br />
+                </React.Fragment>
+              ))}
+              {formSelect.length
+                ? formSelect.map((selectItem: DynamicFormSelectObject) => (
+                    <React.Fragment key={selectItem.name}>
+                      <br />
+                      <Field
+                        component="select"
+                        name={selectItem.name}
+                        id={`${selectItem.name}-select`}
+                        key={selectItem.name}
                       >
-                        {errors[selectItem.name]}
-                      </div>
-                    ) : null}
-                    <br />
-                  </React.Fragment>
-                ))
-              : null}
-            <br />
-            {status && status.success ? (
-              <div>
-                <h3>{successMessage}</h3>
-              </div>
-            ) : status && status.fail ? (
-              <div>
-                <h3>{failMessage}</h3>
-              </div>
-            ) : null}
-            <button data-testid="submit" type="submit">
-              {submitType}
-            </button>
-          </form>
+                        {selectItem.options.map(
+                          (selectOption: SelectOption) => (
+                            <option
+                              value={selectOption.value}
+                              key={selectOption.value}
+                            >
+                              {selectOption.displayName}
+                            </option>
+                          )
+                        )}
+                      </Field>
+                      {errors[selectItem.name] && touched[selectItem.name] ? (
+                        <div
+                          id={selectItem.errorMessageId}
+                          data-testid={selectItem.errorMessageId}
+                        >
+                          {errors[selectItem.name]}
+                        </div>
+                      ) : null}
+                      <br />
+                    </React.Fragment>
+                  ))
+                : null}
+              <br />
+              <button data-testid="submit" type="submit">
+                {submitType}
+              </button>
+            </form>
+          </>
         )}
       </Formik>
     </>

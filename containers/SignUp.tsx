@@ -62,15 +62,19 @@ export default function SignIn() {
   }
 
   const submitType = 'Sign Up!'
+  const failMessage = 'Sign Up failed! Please try again!'
+  const successMessage = 'You suceeded in Signing Up! Yay!'
 
   return (
     <div>
       <p>Please sign up</p>
       <DynamicForm
+        failMessage={failMessage}
         formInput={formInput}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}
+        successMessage={successMessage}
       />
     </div>
   )
