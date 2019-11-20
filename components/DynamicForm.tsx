@@ -13,10 +13,12 @@ import {
 // TODO - placeholder for inputs explaining pw conditions
 export default function DynamicForm(props: DynamicFormProps) {
   const {
+    failMessage,
     formInput,
-    validationSchema,
     onSubmit,
     submitType,
+    successMessage,
+    validationSchema,
     formSelect = [],
     formInitialValues = []
   } = props
@@ -40,7 +42,7 @@ export default function DynamicForm(props: DynamicFormProps) {
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        {({ errors, touched, handleReset, handleSubmit }) => (
+        {({ errors, touched, handleReset, handleSubmit, status }) => (
           <form onReset={handleReset} onSubmit={handleSubmit} method="POST">
             {formInput.map((inputItem: DynamicFormInputObject) => (
               <React.Fragment key={inputItem.name}>
@@ -80,7 +82,7 @@ export default function DynamicForm(props: DynamicFormProps) {
                   <React.Fragment key={selectItem.name}>
                     <br />
                     <Field
-                      component='select'
+                      component="select"
                       name={selectItem.name}
                       id={`${selectItem.name}-select`}
                       key={selectItem.name}
@@ -107,7 +109,16 @@ export default function DynamicForm(props: DynamicFormProps) {
                 ))
               : null}
             <br />
-            <button data-testid='submit' type='submit'>
+            {status && status.success ? (
+              <div>
+                <h3>{successMessage}</h3>
+              </div>
+            ) : status && status.fail ? (
+              <div>
+                <h3>{failMessage}</h3>
+              </div>
+            ) : null}
+            <button data-testid="submit" type="submit">
               {submitType}
             </button>
           </form>

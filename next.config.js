@@ -1,4 +1,6 @@
-module.exports = {
+const withCSS = require('@zeit/next-css')
+
+module.exports = withCSS({
   env: {
     APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
@@ -10,4 +12,4 @@ module.exports = {
     IS_DEVELOPMENT: true,
     CLOUDINARY_API: 'https://api.cloudinary.com/v1_1/codeinaire/image/upload'
   }
-}
+})

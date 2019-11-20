@@ -105,7 +105,7 @@ export default function SignIn() {
     },
     {
       type: 'file',
-      name: 'testResolution',
+      name: 'lowResolution',
       errorMessageId: 'lowResolutionError',
       required: true,
       autocomplete: 'off',
@@ -208,21 +208,22 @@ export default function SignIn() {
     email: string()
       .email('Invalid email!')
       .required("Please enter the chef's email!"),
-    title: string().required('Please enter the title!'),
-    ingredients: string().required('Please enter the ingredients!'),
-    method: string().required('Please enter the method!'),
-    hashtags: string().required('Please enter the hashtags!'),
-    name: string().required("Please enter the chef's name!"),
-    website: string().required("Please enter the chef's website!"),
-    cost: string().required('Please select cost!'),
-    mealType: string().required('Please select meal type'),
-    difficulty: string().required('Please select difficulty')
+    // title: string().required('Please enter the title!'),
+    // ingredients: string().required('Please enter the ingredients!'),
+    // method: string().required('Please enter the method!'),
+    // hashtags: string().required('Please enter the hashtags!'),
+    // name: string().required("Please enter the chef's name!"),
+    // website: string().required("Please enter the chef's website!"),
+    // cost: string().required('Please select cost!'),
+    // mealType: string().required('Please select meal type!'),
+    // difficulty: string().required('Please select difficulty!'),
+    // lowResolution: string().required('Please upload a photo!')
   })
 
   const [createRecipe] = useMutation(CREATE_RECIPE)
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setSubmitting }: FormikActions<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
       await createRecipe({
@@ -231,28 +232,31 @@ export default function SignIn() {
         }
       })
       resetForm()
-      // setStatus({ success: true })
-    } catch (error) {
+      setStatus({ success: true })
+    } catch (err) {
       logger.log({
         level: 'ERROR',
-        description: error
+        description: err
       })
-      // setStatus({success: false})
+      setStatus({ fail: true })
       setSubmitting(false)
-      // setErrors({submit: error.message})
     }
   }
 
   const submitType = 'Create Recipe!'
+  const failMessage = 'Recipe creation failed. Please try again!'
+  const successMessage = 'Recipe creation succeeded! Yay!'
 
   return (
     <div>
       <p>Create your recipe!</p>
       <DynamicForm
+        failMessage={failMessage}
         formInput={formInput}
-        validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}
+        successMessage={successMessage}
+        validationSchema={validationSchema}
         formSelect={formSelect}
         formInitialValues={formInitialValues}
       />

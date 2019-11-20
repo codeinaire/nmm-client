@@ -2,10 +2,12 @@ import { ObjectSchema } from 'yup'
 import { FormikActions, FieldProps } from 'formik'
 
 export interface DynamicFormProps {
+  failMessage?: string
   formInput: Array<DynamicFormInputObject>
-  validationSchema: ObjectSchema
   onSubmit: (arg0: OnSubmitObject, arg1: FormikActions<OnSubmitObject>) => void
   submitType: string
+  successMessage?: string
+  validationSchema: ObjectSchema
   formSelect?: Array<DynamicFormSelectObject>
   formInitialValues?: Array<string>
 }
