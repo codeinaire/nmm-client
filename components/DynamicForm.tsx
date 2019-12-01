@@ -20,6 +20,7 @@ export default function DynamicForm(props: DynamicFormProps) {
     successMessage,
     submitType,
     validationSchema,
+    inputHints = false,
     formSelect = [],
     formInitialValues = []
   } = props
@@ -81,6 +82,11 @@ export default function DynamicForm(props: DynamicFormProps) {
                     >
                       {errors[inputItem.name]}
                     </div>
+                  ) : null}
+                  {inputHints ? (
+                    <span>
+                      <p>{inputItem.hintText}</p>
+                    </span>
                   ) : null}
                   <br />
                 </React.Fragment>

@@ -36,7 +36,8 @@ export default function SignIn() {
       required: true,
       autocomplete: 'off',
       displayName: 'Ingredients',
-      textArea: true
+      textArea: true,
+      hintText: 'Comma separated ingredient items, please.'
     },
     {
       type: 'text',
@@ -45,7 +46,8 @@ export default function SignIn() {
       required: true,
       autocomplete: 'off',
       displayName: 'Method',
-      textArea: true
+      textArea: true,
+      hintText: 'Comma separated, numbered steps please e.g. 1\) This is a step,2\) This is a step'
     },
     {
       type: 'text',
@@ -53,7 +55,8 @@ export default function SignIn() {
       errorMessageId: 'hashtagsError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Hashtags'
+      displayName: 'Hashtags',
+      hintText: 'Comma separated, spaceless hashtags e.g. #hashtag1,#hashtag2,#hashTag3'
     },
     {
       type: 'text',
@@ -61,7 +64,7 @@ export default function SignIn() {
       errorMessageId: 'nameError',
       required: true,
       autocomplete: 'off',
-      displayName: "Chef's Name"
+      displayName: "Creator's Name"
     },
     {
       type: 'text',
@@ -69,7 +72,8 @@ export default function SignIn() {
       errorMessageId: 'websiteError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Website'
+      displayName: 'Website',
+      hintText: "URL to creator's site"
     },
     {
       type: 'email',
@@ -85,7 +89,8 @@ export default function SignIn() {
       errorMessageId: 'facebookError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Facebook page or profile'
+      displayName: 'Facebook page or profile',
+      hintText: "Full URL to creator's page or profile"
     },
     {
       type: 'text',
@@ -93,7 +98,8 @@ export default function SignIn() {
       errorMessageId: 'instagramError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Instagram profile'
+      displayName: 'Instagram profile',
+      hintText: "Full URL to creator's page"
     },
     {
       type: 'text',
@@ -101,7 +107,8 @@ export default function SignIn() {
       errorMessageId: 'twitterError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Twitter profile'
+      displayName: 'Twitter profile',
+      hintText: "Full URL to creator's profile"
     },
     {
       type: 'file',
@@ -109,7 +116,8 @@ export default function SignIn() {
       errorMessageId: 'lowResolutionError',
       required: true,
       autocomplete: 'off',
-      displayName: 'Recipe Photo'
+      displayName: 'Recipe Photo',
+      hintText: 'One photo only please.'
     }
   ]
 
@@ -207,13 +215,13 @@ export default function SignIn() {
   const validationSchema = object().shape({
     email: string()
       .email('Invalid email!')
-      .required("Please enter the chef's email!"),
+      .required("Please enter the creators's email!"),
     title: string().required('Please enter the title!'),
     ingredients: string().required('Please enter the ingredients!'),
     method: string().required('Please enter the method!'),
     hashtags: string().required('Please enter the hashtags!'),
-    name: string().required("Please enter the chef's name!"),
-    website: string().required("Please enter the chef's website!"),
+    name: string().required("Please enter the creator's name!"),
+    website: string().required("Please enter the creator's website!"),
     cost: string().required('Please select cost!'),
     mealType: string().required('Please select meal type!'),
     difficulty: string().required('Please select difficulty!'),
@@ -263,6 +271,7 @@ export default function SignIn() {
         validationSchema={validationSchema}
         formSelect={formSelect}
         formInitialValues={formInitialValues}
+        inputHints={true}
       />
     </div>
   )

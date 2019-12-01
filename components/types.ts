@@ -3,6 +3,7 @@ import { FormikActions, FieldProps } from 'formik'
 
 // DYNAMIC FORM TYPES
 export interface DynamicFormProps {
+  inputHints?: boolean
   failMessage: string
   formInput: Array<DynamicFormInputObject>
   onSubmit: (arg0: OnSubmitObject, arg1: FormikActions<OnSubmitObject>) => void
@@ -24,6 +25,7 @@ export interface DynamicFormInputObject {
   required: boolean
   autocomplete: string
   displayName: string
+  hintText?: string
   textArea?: boolean
 }
 
