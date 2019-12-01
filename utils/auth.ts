@@ -4,6 +4,7 @@ import logger from './logger';
 import { ISignUpArgs, SignInTypes } from './types';
 
 const DATABASE_CONNECTION = 'Username-Password-Authentication'
+const SOCIAL_MEDIA_SIGN_IN = 'facebook'
 
 const webAuth = new auth0.WebAuth({
   domain: process.env.APP_DOMAIN || '',
@@ -15,7 +16,6 @@ const webAuth = new auth0.WebAuth({
 });
 
 const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
-  console.log('TEST');
   if (error) {
     logger.log({
       level: 'ERROR',
@@ -40,7 +40,7 @@ export const signIn = (type: SignInTypes, email?: string, password = ''): void =
 
   if(type === SignInTypes.social) {
     webAuth.authorize({
-      connection: 'facebook'
+      connection: SOCIAL_MEDIA_SIGN_IN
     })
   }
 }

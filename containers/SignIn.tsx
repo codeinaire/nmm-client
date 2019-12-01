@@ -8,12 +8,12 @@ import { OnSubmitObject } from '../components/types';
 import { SignInTypes } from '../utils/types';
 
 export default function SignIn() {
-  const formTest = [
+  const formInput = [
     {
       type: 'email',
       name: 'email',
       errorMessageId: 'emailError',
-      required: 'true',
+      required: true,
       autocomplete: 'on',
       displayName: 'Email'
     },
@@ -21,7 +21,7 @@ export default function SignIn() {
       type: 'password',
       name: 'password',
       errorMessageId: 'passwordError',
-      required: 'true',
+      required: true,
       autocomplete: 'off',
       displayName: 'Password'
     }
@@ -41,15 +41,19 @@ export default function SignIn() {
   }
 
   const submitType = 'Sign In!';
+  const failMessage = 'Failed to Sign In. Please try again!'
+  const successMessage = 'You signed in onward to awesomeness! Yay!'
 
   return (
     <div>
       <p>Please sign in</p>
       <DynamicForm
-        formTest={formTest}
+        failMessage={failMessage}
+        formInput={formInput}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}
+        successMessage={successMessage}
       />
     </div>
   )

@@ -1,13 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import AuthTest from '../components/AuthTest';
+import RecipeTest from '../components/RecipeTest'
+import SignIn from '../containers/SignIn'
+import SignUp from '../containers/SignUp'
 
 export default function Home() {
-
-  return(
+  return (
     <div>
       <h1>Welcome Home!</h1>
-      <AuthTest />
+      <RecipeTest />
+      <SignIn />
+      <SignUp />
     </div>
   )
 }

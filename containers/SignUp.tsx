@@ -8,12 +8,12 @@ import { FormikActions } from 'formik';
 import { OnSubmitObject } from '../components/types';
 
 export default function SignIn() {
-  const formTest = [
+  const formInput = [
     {
       type: 'email',
       name: 'email',
       errorMessageId: 'emailError',
-      required: 'false',
+      required: false,
       autocomplete: 'on',
       displayName: 'Email'
     },
@@ -21,7 +21,7 @@ export default function SignIn() {
       type: 'password',
       name: 'password',
       errorMessageId: 'passwordError',
-      required: 'false',
+      required: false,
       autocomplete: 'off',
       displayName: 'Password'
     },
@@ -29,7 +29,7 @@ export default function SignIn() {
       type: 'text',
       name: 'username',
       errorMessageId: 'usernameError',
-      required: 'false',
+      required: false,
       autocomplete: 'off',
       displayName: 'Username'
     }
@@ -62,15 +62,19 @@ export default function SignIn() {
   }
 
   const submitType = 'Sign Up!'
+  const failMessage = 'Sign Up failed! Please try again!'
+  const successMessage = 'You suceeded in Signing Up! Yay!'
 
   return (
     <div>
       <p>Please sign up</p>
       <DynamicForm
-        formTest={formTest}
+        failMessage={failMessage}
+        formInput={formInput}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         submitType={submitType}
+        successMessage={successMessage}
       />
     </div>
   )
