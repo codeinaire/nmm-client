@@ -256,7 +256,7 @@ export default function SignIn() {
   }
 
   const submitType = 'Create Recipe!'
-  const failMessage = 'Recipe creation failed. Please try again!'
+  const failMessage = 'Recipe creation failed. You do not have to fill out values. Please press submit again!'
   const successMessage = 'Recipe creation succeeded! Yay!'
 
   return (
