@@ -69,6 +69,7 @@ export default function SignIn() {
       resetForm()
       setStatus({ openModal: true, success: true })
     } catch (error) {
+      resetForm()
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
     }

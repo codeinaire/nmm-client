@@ -37,17 +37,18 @@ export default function SignIn() {
       .required('Please enter your password!')
   })
 
-  const onSubmit = (
+  const onSubmit = async (
     values: OnSubmitObject,
     { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
-      signIn(SignInTypes.auth0, values.email, values.password)
+      await signIn(SignInTypes.auth0, values.email, values.password)
       resetForm()
       setStatus({ openModal: true, success: true })
     } catch (error) {
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
+      resetForm()
     }
   }
 
