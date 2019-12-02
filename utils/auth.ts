@@ -31,6 +31,10 @@ const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res
 
 export const signIn = (type: SignInTypes, email?: string, password = ''): void => {
   if(type === SignInTypes.auth0) {
+    logger.log({
+      level: 'INFO',
+      description: `${email} address, is signing in with Auth0`
+    })
     webAuth.login({
       realm: DATABASE_CONNECTION,
       email,
@@ -39,6 +43,10 @@ export const signIn = (type: SignInTypes, email?: string, password = ''): void =
   }
 
   if(type === SignInTypes.social) {
+    logger.log({
+      level: 'INFO',
+      description: `${email} address, is signing in with Facebook`
+    })
     webAuth.authorize({
       connection: SOCIAL_MEDIA_SIGN_IN
     })
@@ -46,7 +54,10 @@ export const signIn = (type: SignInTypes, email?: string, password = ''): void =
 }
 
 export const signUp = ({ email, password, username }: ISignUpArgs): void => {
-  console.log('IN SIGNUP', email, password, username);
+  logger.log({
+    level: 'INFO',
+    description: `${username} with ${email} address, is signing up`
+  })
   webAuth.signup({
     connection: DATABASE_CONNECTION,
     email,
