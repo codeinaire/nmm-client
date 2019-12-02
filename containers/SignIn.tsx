@@ -1,11 +1,12 @@
-import React from 'react';
-import { object, string } from 'yup';
-import { signIn } from '../utils/auth';
+import React from 'react'
+import { object, string } from 'yup'
+import { FormikActions } from 'formik'
 
-import DynamicForm from '../components/DynamicForm';
+import { signIn } from '../utils/auth'
+import DynamicForm from '../components/DynamicForm'
 
-import { OnSubmitObject } from '../components/types';
-import { SignInTypes } from '../utils/types';
+import { OnSubmitObject } from '../components/types'
+import { SignInTypes } from '../utils/types'
 
 export default function SignIn() {
   const formInput = [
@@ -36,11 +37,21 @@ export default function SignIn() {
       .required('Please enter your password!')
   })
 
-  const onSubmit = (values: OnSubmitObject) => {
-    signIn(SignInTypes.auth0, values.email, values.password);
+  const onSubmit = (
+    values: OnSubmitObject,
+    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
+  ) => {
+    try {
+      signIn(SignInTypes.auth0, values.email, values.password)
+      resetForm()
+      setStatus({ openModal: true, success: true })
+    } catch (error) {
+      setStatus({ openModal: true, success: false })
+      setSubmitting(false)
+    }
   }
 
-  const submitType = 'Sign In!';
+  const submitType = 'Sign In!'
   const failMessage = 'Failed to Sign In. Please try again!'
   const successMessage = 'You signed in onward to awesomeness! Yay!'
 

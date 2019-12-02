@@ -58,15 +58,20 @@ export default function SignIn() {
 
   const onSubmit = (
     values: OnSubmitObject,
-    actions: FormikActions<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus}: FormikActions<OnSubmitObject>
   ) => {
-    console.log('VALUES', values)
-    signUp({
-      email: values.email,
-      password: values.password,
-      username: values.username
-    })
-    actions.resetForm()
+    try {
+      signUp({
+        email: values.email,
+        password: values.password,
+        username: values.username
+      })
+      resetForm()
+      setStatus({ openModal: true, success: true })
+    } catch (error) {
+      setStatus({ openModal: true, success: false })
+      setSubmitting(false)
+    }
   }
 
   const submitType = 'Sign Up!'
