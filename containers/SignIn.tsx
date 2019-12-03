@@ -16,7 +16,8 @@ export default function SignIn() {
       errorMessageId: 'emailError',
       required: true,
       autocomplete: 'on',
-      displayName: 'Email'
+      displayName: 'Email',
+      hintText: 'this is working'
     },
     {
       type: 'password',

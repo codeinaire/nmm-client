@@ -199,6 +199,9 @@ export default function SignIn() {
     }
   ]
 
+  // N.B. used for create-recipe b/c one photo is made sent to cloudinary
+  // to return a low & standard resolution size. All the inputs in
+  // formInitialvalues are sent to the lambda.
   const formInitialValues = [
     'mealType',
     'lowResolution',
@@ -281,7 +284,6 @@ export default function SignIn() {
         validationSchema={validationSchema}
         formSelect={formSelect}
         formInitialValues={formInitialValues}
-        inputHints={true}
       />
     </div>
   )

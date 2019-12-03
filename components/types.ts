@@ -3,7 +3,6 @@ import { FormikActions, FieldProps } from 'formik'
 
 // DYNAMIC FORM TYPES
 export interface DynamicFormProps {
-  inputHints?: boolean
   failMessage: string
   formInput: Array<DynamicFormInputObject>
   onSubmit: (arg0: OnSubmitObject, arg1: FormikActions<OnSubmitObject>) => void
@@ -19,24 +18,38 @@ export interface OnSubmitObject {
 }
 
 export interface DynamicFormInputObject {
+  type?: string
+  name: string
+  errorMessageId?: string
+  required?: boolean
+  autocomplete?: string
+  displayName?: string
+  checkboxInput?: Array<DynamicFormCheckboxInputObject>
+  legend?: string
+  checkbox?: boolean
+  disabled?: boolean
+  hintText?: string
+  textArea?: boolean
+}
+
+interface DynamicFormCheckboxInputObject {
   type: string
   name: string
   errorMessageId: string
   required: boolean
   autocomplete: string
   displayName: string
-  hintText?: string
-  textArea?: boolean
 }
 
 export interface DynamicFormSelectObject {
   name: string
   errorMessageId: string
   options: Array<SelectOption>
+  title?: string
 }
 
 export interface SelectOption {
-  value: string
+  value: string | number
   displayName: string
 }
 
