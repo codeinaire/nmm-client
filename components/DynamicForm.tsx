@@ -7,7 +7,8 @@ import {
   DynamicFormProps,
   DynamicFormInputObject,
   DynamicFormSelectObject,
-  SelectOption
+  SelectOption,
+  InitialValues
 } from './types'
 
 // TODO - STYLING
@@ -16,30 +17,25 @@ export default function DynamicForm(props: DynamicFormProps) {
   const {
     failMessage,
     formInput,
+    formInitialValues,
     onSubmit,
     successMessage,
     submitType,
     validationSchema,
     formSelect = [],
-    formInitialValues = []
   } = props
 
   return (
     <>
       <Formik
-        initialValues={
-          formInitialValues.length
-            ? formInitialValues.reduce((acc: object, name: string) => {
-                return Object.assign(acc, {
-                  [name]: ''
-                })
-              }, {})
-            : formInput.reduce((acc: object, cur: DynamicFormInputObject) => {
-                return Object.assign(acc, {
-                  [cur.name]: ''
-                })
-              }, {})
-        }
+        initialValues={formInitialValues.reduce(
+          (acc: object, cur: InitialValues) => {
+            return Object.assign(acc, {
+              [cur.name]: cur.value
+            })
+          },
+          {}
+        )}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
@@ -67,6 +63,14 @@ export default function DynamicForm(props: DynamicFormProps) {
                       {inputItem.checkboxInput!.map(
                         (checkboxItem: DynamicFormInputObject) => (
                           <React.Fragment key={checkboxItem.name}>
+                            {errors[checkboxItem.name] && touched[checkboxItem.name] ? (
+                              <div
+                                id={checkboxItem.errorMessageId}
+                                data-testid={checkboxItem.errorMessageId}
+                              >
+                                {errors[checkboxItem.name]}
+                              </div>
+                            ) : null}
                             <label htmlFor={checkboxItem.name}>
                               <b>{checkboxItem.displayName}</b>:{' '}
                               <Field
@@ -79,18 +83,8 @@ export default function DynamicForm(props: DynamicFormProps) {
                                 id={checkboxItem.name}
                                 name={checkboxItem.name}
                                 type={checkboxItem.type}
-                                value={checkboxItem.name}
                               />
                             </label>
-                            {errors[checkboxItem.name] &&
-                            touched[checkboxItem.name] ? (
-                              <div
-                                id={checkboxItem.errorMessageId}
-                                data-testid={checkboxItem.errorMessageId}
-                              >
-                                {errors[checkboxItem.name]}
-                              </div>
-                            ) : null}
                           </React.Fragment>
                         )
                       )}
@@ -141,6 +135,7 @@ export default function DynamicForm(props: DynamicFormProps) {
                     <React.Fragment key={selectItem.name}>
                       <br />
                       <label htmlFor={selectItem.name}>
+                        <b>{selectItem.title}</b>:{' '}
                         <Field
                           component="select"
                           name={selectItem.name}

@@ -1,26 +1,27 @@
 import React from 'react'
-import { object, string, boolean } from 'yup'
+import { object, number, boolean, ValidationError } from 'yup'
 import { FormikActions } from 'formik'
-// import { useMutation } from '@apollo/react-hooks'
-// import gql from 'graphql-tag'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
+import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 
-import { OnSubmitObject } from '../components/types'
+import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
 
-// export const CREATE_USER_PROFILE = gql`
-//   mutation CreateUserProfile($userProfileInput: UserProfileInput) {
-//     createUserProfile(userProfileInput: $userProfileInput) {
-//       totalPoints
-//       username
-//       profilePic
-//       challengeQuote
-//     }
-//   }
-// `
+export const CREATE_USER_PROFILE = gql`
+  mutation CreateUserProfile($userProfileInput: UserProfileInput) {
+    createUserProfile(userProfileInput: $userProfileInput) {
+      totalPoints
+      username
+      profilePic
+      challengeQuote
+    }
+  }
+`
 
 export default function CreateProfile() {
-  // const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
+  const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
 
   const checkboxInput = [
     {
@@ -90,6 +91,7 @@ export default function CreateProfile() {
       checkbox: true,
       legend: 'Motivations',
       name: 'motivations',
+      errorMessageId: 'motivationsError',
       checkboxInput,
       hintText: 'Choose at least 1!'
     },
@@ -134,12 +136,33 @@ export default function CreateProfile() {
     }
   ]
 
-  const validationSchema = object().shape({
-    bio: string(),
-    environment: boolean().oneOf([true], 'Please choose one motivation!'),
-    animalWelfare: boolean().oneOf([true], 'Please choose one motivation!'),
-    personalHealth: boolean().oneOf([true], 'Please choose one motivation!'),
-    foodSecurity: boolean().oneOf([true], 'Please choose one motivation!')
+  let validationSchema = object().shape({
+    challengeGoals: number().required(
+      'Please select challenges goals to work towards!'
+    ),
+    environment: boolean(),
+    animalWelfare: boolean(),
+    personalHealth: boolean(),
+    foodSecurity: boolean()
+  })
+
+  const validationSchemaExtended = validationSchema.test({
+    name: 'motivationsCheckboxTest',
+    test: (checkboxObj: CheckboxSchemaObj) => {
+      if (
+        checkboxObj.environment ||
+        checkboxObj.animalWelfare ||
+        checkboxObj.personalHealth ||
+        checkboxObj.foodSecurity
+      ) {
+        return true
+      }
+      return new ValidationError(
+        'Check at least one motivation please!',
+        null,
+        'environment'
+      )
+    }
   })
 
   const onSubmit = async (
@@ -147,6 +170,7 @@ export default function CreateProfile() {
     { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
+      // N.B. convert checkbox values to string for DB
       let motivations: string = ''
       for (const valuesProperty in values) {
         if (
@@ -160,10 +184,24 @@ export default function CreateProfile() {
         }
         values.motivations = motivations
       }
+      (values.challengeGoals as unknown as number) = parseInt(values.challengeGoals, 10)
 
+      const createdProfile = await createUserProfile({
+        variables: {
+          userProfileInputs: values
+        }
+      })
       resetForm()
       setStatus({ openModal: true, success: true })
-    } catch (error) {
+      logger.log({
+        level: 'INFO',
+        description: `Profile ${createdProfile.data.createUserProfile.id} with username ${createdProfile.data.createUserProfile.username} succeeded in being created!`
+      })
+    } catch (err) {
+      logger.log({
+        level: 'ERROR',
+        description: err
+      })
       resetForm()
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
@@ -174,17 +212,27 @@ export default function CreateProfile() {
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
 
+  const formInitialValues = [
+    { name: 'environment', value: false },
+    { name: 'challengeGoals', value: '' },
+    { name: 'bio', value: '' },
+    { name: 'challengeQuote', value: '' },
+    { name: 'motivations', value: '' },
+    { name: 'profilePic', value: '' }
+  ]
+
   return (
     <div>
       <h1>Fill it out please!</h1>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
-        validationSchema={validationSchema}
+        validationSchema={validationSchemaExtended}
         onSubmit={onSubmit}
         submitType={submitType}
         successMessage={successMessage}
         formSelect={formSelect}
+        formInitialValues={formInitialValues}
       />
     </div>
   )

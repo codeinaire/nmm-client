@@ -5,12 +5,17 @@ import { FormikActions, FieldProps } from 'formik'
 export interface DynamicFormProps {
   failMessage: string
   formInput: Array<DynamicFormInputObject>
+  formInitialValues: Array<InitialValues>
   onSubmit: (arg0: OnSubmitObject, arg1: FormikActions<OnSubmitObject>) => void
   submitType: string
   successMessage: string
   validationSchema: ObjectSchema
   formSelect?: Array<DynamicFormSelectObject>
-  formInitialValues?: Array<string>
+}
+
+export interface InitialValues {
+  name: string
+  value: any
 }
 
 export interface OnSubmitObject {
@@ -75,4 +80,11 @@ export interface ModalProps {
 export interface ModalStatus {
   success?: boolean
   openModal: boolean
+}
+
+export interface CheckboxSchemaObj {
+  environment: boolean
+  animalWelfare: boolean
+  personalHealth: boolean
+  foodSecurity: boolean
 }

@@ -57,6 +57,12 @@ export default function SignIn() {
   const failMessage = 'Failed to Sign In. Please try again!'
   const successMessage = 'You signed in onward to awesomeness! Yay!'
 
+  const formInitialValues = [
+    { name: 'email', value: '' },
+    { name: 'password', value: '' }
+  ]
+
+
   return (
     <div>
       <p>Please sign in</p>
@@ -67,6 +73,7 @@ export default function SignIn() {
         onSubmit={onSubmit}
         submitType={submitType}
         successMessage={successMessage}
+        formInitialValues={formInitialValues}
       />
     </div>
   )

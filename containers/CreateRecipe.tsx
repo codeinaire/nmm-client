@@ -130,6 +130,7 @@ export default function SignIn() {
     {
       name: 'difficulty',
       errorMessageId: 'difficultyError',
+      title: 'How difficult is the recipe?',
       options: [
         {
           value: '',
@@ -203,21 +204,21 @@ export default function SignIn() {
   // to return a low & standard resolution size. All the inputs in
   // formInitialvalues are sent to the lambda.
   const formInitialValues = [
-    'mealType',
-    'lowResolution',
-    'standardResolution',
-    'name',
-    'title',
-    'ingredients',
-    'method',
-    'difficulty',
-    'cost',
-    'hashtags',
-    'website',
-    'email',
-    'facebook',
-    'instagram',
-    'twitter'
+    { name: 'mealType', value: '' },
+    { name: 'lowResolution', value: '' },
+    { name: 'standardResolution', value: '' },
+    { name: 'name', value: '' },
+    { name: 'title', value: '' },
+    { name: 'ingredients', value: '' },
+    { name: 'method', value: '' },
+    { name: 'difficulty', value: '' },
+    { name: 'cost', value: '' },
+    { name: 'hashtags', value: '' },
+    { name: 'website', value: '' },
+    { name: 'email', value: '' },
+    { name: 'facebook', value: '' },
+    { name: 'instagram', value: '' },
+    { name: 'twitter', value: '' }
   ]
 
   const validationSchema = object().shape({
