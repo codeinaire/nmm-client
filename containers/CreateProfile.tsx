@@ -10,8 +10,8 @@ import DynamicForm from '../components/DynamicForm'
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
 
 export const CREATE_USER_PROFILE = gql`
-  mutation CreateUserProfile($userProfileInput: UserProfileInput) {
-    createUserProfile(userProfileInput: $userProfileInput) {
+  mutation CreateUserProfile($userProfileInputs: UserProfileInputs) {
+    createUserProfile(userProfileInputs: $userProfileInputs) {
       totalPoints
       username
       profilePic
@@ -184,7 +184,10 @@ export default function CreateProfile() {
         }
         values.motivations = motivations
       }
-      (values.challengeGoals as unknown as number) = parseInt(values.challengeGoals, 10)
+      ;((values.challengeGoals as unknown) as number) = parseInt(
+        values.challengeGoals,
+        10
+      )
 
       const createdProfile = await createUserProfile({
         variables: {
@@ -214,11 +217,15 @@ export default function CreateProfile() {
 
   const formInitialValues = [
     { name: 'environment', value: false },
+    { name: 'foodSecurity', value: false },
+    { name: 'animalWelfare', value: false },
+    { name: 'personalHealth', value: false },
     { name: 'challengeGoals', value: '' },
     { name: 'bio', value: '' },
     { name: 'challengeQuote', value: '' },
     { name: 'motivations', value: '' },
-    { name: 'profilePic', value: '' }
+    { name: 'profilePic', value: '' },
+    { name: 'username', value: '' }
   ]
 
   return (

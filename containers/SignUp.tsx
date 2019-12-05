@@ -24,18 +24,9 @@ export default function SignIn() {
       required: false,
       autocomplete: 'off',
       displayName: 'Password'
-    },
-    {
-      type: 'text',
-      name: 'username',
-      errorMessageId: 'usernameError',
-      required: false,
-      autocomplete: 'off',
-      displayName: 'Username'
     }
   ]
   const PASSWORD_REGEX = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])([^\s]){10,16}$/
-  const USERNAME_REGEX = /^[a-zA-Z0-9_+-.!#$'^`~@]*$/
   const validationSchema = object().shape({
     email: string()
       .email('Invalid email!')
@@ -48,12 +39,7 @@ export default function SignIn() {
         'Password must be at least 10 characters long with one (1) upper case, one (1) lower case, and one(1) special character(!@#$%^&*)'
       )
       .trim()
-      .required('Please enter a password!'),
-    username: string()
-      .max(15, 'Too long!')
-      .matches(USERNAME_REGEX, 'Username cannot contain any spaces.')
-      .trim()
-      .required('Please enter a username!')
+      .required('Please enter a password!')
   })
 
   const onSubmit = (
@@ -63,8 +49,7 @@ export default function SignIn() {
     try {
       signUp({
         email: values.email,
-        password: values.password,
-        username: values.username
+        password: values.password
       })
       resetForm()
       setStatus({ openModal: true, success: true })
@@ -77,12 +62,11 @@ export default function SignIn() {
 
   const submitType = 'Sign Up!'
   const failMessage = 'Sign Up failed! Please try again!'
-  const successMessage = 'You suceeded in Signing Up! Yay!'
+  const successMessage = 'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
 
   const formInitialValues = [
     { name: 'email', value: '' },
-    { name: 'password', value: '' },
-    { name: 'username', value: '' }
+    { name: 'password', value: '' }
   ]
 
   return (

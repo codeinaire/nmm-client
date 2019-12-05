@@ -1,7 +1,6 @@
 export interface ISignUpArgs {
   email: string
   password: string
-  username: string
 }
 
 export interface IUserMetadata {

@@ -63,18 +63,17 @@ export const signIn = (
   }
 }
 
-export const signUp = ({ email, password, username }: ISignUpArgs): Promise<void> => {
+export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
   logger.log({
     level: 'INFO',
-    description: `${username} with ${email} address, is signing up`
+    description: `A user with ${email} address, is signing up`
   })
   return new Promise((resolve, reject) => {
     webAuth.signup(
       {
         connection: DATABASE_CONNECTION,
         email,
-        password,
-        username
+        password
       },
       (error: Auth0Error | null, res: any) => {
         if (error) {

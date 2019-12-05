@@ -1,14 +1,15 @@
 import React from 'react'
 import { object, string } from 'yup'
 import { FormikActions } from 'formik'
-
 import { signIn } from '../utils/auth'
 import DynamicForm from '../components/DynamicForm'
+import Link from 'next/link'
 
 import { OnSubmitObject } from '../components/types'
 import { SignInTypes } from '../utils/types'
 
 export default function SignIn() {
+
   const formInput = [
     {
       type: 'email',
@@ -16,8 +17,7 @@ export default function SignIn() {
       errorMessageId: 'emailError',
       required: true,
       autocomplete: 'on',
-      displayName: 'Email',
-      hintText: 'this is working'
+      displayName: 'Email'
     },
     {
       type: 'password',
@@ -40,9 +40,10 @@ export default function SignIn() {
 
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
+    { resetForm, setStatus, setSubmitting }: FormikActions<OnSubmitObject>
   ) => {
     try {
+      localStorage.setItem('signed_in', 'true')
       await signIn(SignInTypes.auth0, values.email, values.password)
       resetForm()
       setStatus({ openModal: true, success: true })
@@ -62,10 +63,12 @@ export default function SignIn() {
     { name: 'password', value: '' }
   ]
 
-
   return (
     <div>
       <p>Please sign in</p>
+      <Link href="/">
+        <a>Index</a>
+      </Link>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
