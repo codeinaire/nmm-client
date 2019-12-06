@@ -48,6 +48,7 @@ export default function SignIn() {
       resetForm()
       setStatus({ openModal: true, success: true })
     } catch (error) {
+      localStorage.setItem('signed_in', 'false')
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
       resetForm()

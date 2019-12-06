@@ -85,7 +85,7 @@ export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
         } else {
           logger.log({
             level: 'INFO',
-            description: `${res.username}, has been successfully signed up`
+            description: `${res.email}, has been successfully signed up`
           })
           resolve(res)
         }

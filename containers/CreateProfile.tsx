@@ -1,17 +1,17 @@
 import React from 'react'
-import { object, number, boolean, ValidationError } from 'yup'
-import { FormikActions } from 'formik'
+import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-
 import logger from '../utils/logger'
+
 import DynamicForm from '../components/DynamicForm'
 
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
+import { FormikActions } from 'formik'
 
 export const CREATE_USER_PROFILE = gql`
-  mutation CreateUserProfile($userProfileInputs: UserProfileInputs) {
-    createUserProfile(userProfileInputs: $userProfileInputs) {
+  mutation CreateUserProfile($userProfileInput: UserProfileInput) {
+    createUserProfile(userProfileInput: $userProfileInput) {
       totalPoints
       username
       profilePic
@@ -21,8 +21,6 @@ export const CREATE_USER_PROFILE = gql`
 `
 
 export default function CreateProfile() {
-  const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
-
   const checkboxInput = [
     {
       type: 'checkbox',
@@ -65,8 +63,7 @@ export default function CreateProfile() {
       errorMessageId: 'usernameError',
       required: false,
       autocomplete: 'on',
-      displayName: 'Username',
-      disabled: true
+      displayName: 'Username'
     },
     {
       type: 'text',
@@ -117,27 +114,41 @@ export default function CreateProfile() {
           displayName: 'How many meals per week to make?'
         },
         {
-          value: 5,
+          value: '5',
           displayName: 'Five(5) meals per week'
         },
         {
-          value: 10,
+          value: '10',
           displayName: 'Ten(10) meals per week'
         },
         {
-          value: 15,
+          value: '15',
           displayName: 'Fifteen(15) meals per week'
         },
         {
-          value: 20,
+          value: '20',
           displayName: 'Twenty(20) meals per week'
         }
       ]
     }
   ]
 
+  const formInitialValues = [
+    { name: 'environment', value: false },
+    { name: 'foodSecurity', value: false },
+    { name: 'animalWelfare', value: false },
+    { name: 'personalHealth', value: false },
+    { name: 'challengeGoals', value: '' },
+    { name: 'bio', value: '' },
+    { name: 'challengeQuote', value: '' },
+    { name: 'motivations', value: '' },
+    { name: 'profilePic', value: '' },
+    { name: 'username', value: '' }
+  ]
+
   let validationSchema = object().shape({
-    challengeGoals: number().required(
+    username: string().required('Please enter a display to use in the app!'),
+    challengeGoals: string().required(
       'Please select challenges goals to work towards!'
     ),
     environment: boolean(),
@@ -165,12 +176,15 @@ export default function CreateProfile() {
     }
   })
 
+  const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
   const onSubmit = async (
     values: OnSubmitObject,
     { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
-      // N.B. convert checkbox values to string for DB
+      /**
+       * @remark convert checkbox values to string for DB
+       */
       let motivations: string = ''
       for (const valuesProperty in values) {
         if (
@@ -184,14 +198,14 @@ export default function CreateProfile() {
         }
         values.motivations = motivations
       }
-      ;((values.challengeGoals as unknown) as number) = parseInt(
+      ((values.challengeGoals as unknown) as number) = parseInt(
         values.challengeGoals,
         10
       )
 
       const createdProfile = await createUserProfile({
         variables: {
-          userProfileInputs: values
+          userProfileInput: values
         }
       })
       resetForm()
@@ -214,19 +228,6 @@ export default function CreateProfile() {
   const submitType = 'Create your profile!'
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
-
-  const formInitialValues = [
-    { name: 'environment', value: false },
-    { name: 'foodSecurity', value: false },
-    { name: 'animalWelfare', value: false },
-    { name: 'personalHealth', value: false },
-    { name: 'challengeGoals', value: '' },
-    { name: 'bio', value: '' },
-    { name: 'challengeQuote', value: '' },
-    { name: 'motivations', value: '' },
-    { name: 'profilePic', value: '' },
-    { name: 'username', value: '' }
-  ]
 
   return (
     <div>

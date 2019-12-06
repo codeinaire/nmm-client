@@ -2,17 +2,21 @@ import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
 import Link from 'next/link'
-
 import { webAuth } from '../utils/auth'
 import logger from '../utils/logger'
 
-// N.B. - this will show links to recipes, profile, etc
+
+/**
+ * @remark this page will show links to recipes, profile, etc
+ */
 export default function Home() {
   const apolloClient = useApolloClient()
 
+  // TODO - move these sign in details to a dead page that renders
+  // no content, that way index is free from it. I can
+  // redirect appropriately through the logic
   useEffect(() => {
     const signedIn = localStorage.getItem('signed_in')
-    console.log('signed_in', signedIn)
 
     if (signedIn == 'true') {
       webAuth.parseHash({ hash: window.location.hash }, (err, authResult) => {
@@ -25,6 +29,10 @@ export default function Home() {
         }
         if (authResult) {
           const userData = authResult.idTokenPayload
+          logger.log({
+            level: 'INFO',
+            description: 'Index - writing access token to cache.'
+          })
           apolloClient.writeData({
             data: {
               accessToken: authResult.accessToken
@@ -36,8 +44,27 @@ export default function Home() {
             userData[`${process.env.CLIENT_URI}/login_count`] ==
             FIRST_TIME_SIGNIN
           if (isFirstTimeLogin) {
-            Router.push('/create-profile')
+            logger.log({
+              level: 'INFO',
+              description: 'Index - redirect to create profile.'
+            })
+            Router.push({
+              pathname: '/create-profile',
+              query: {
+                userid: userData.sub
+              }
+            })
           } else {
+            logger.log({
+              level: 'INFO',
+              description: 'Index - redirect to another page.'
+            })
+            Router.push({
+              pathname: '/create-profile',
+              query: {
+                userid: userData.sub
+              }
+            })
             // TODO - send to recipe index page or last page user was on
           }
         }
@@ -49,7 +76,7 @@ export default function Home() {
       <Link href="/signin">
         <a>Index</a>
       </Link>
-      <h1>Welcome Home!</h1>
+      <h1>Redirecting...</h1>
     </div>
   )
 }
