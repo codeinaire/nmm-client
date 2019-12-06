@@ -100,7 +100,7 @@ export default function DynamicForm(props: DynamicFormProps) {
                         component={
                           inputItem.textArea
                             ? 'textarea'
-                            : inputItem.name == 'lowResolution'
+                            : inputItem.name == 'lowResolution' || inputItem.name == 'profilePic'
                             ? ImageUpload
                             : 'input'
                         }

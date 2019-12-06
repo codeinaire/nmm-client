@@ -51,7 +51,7 @@ export default function Home() {
             Router.push({
               pathname: '/create-profile',
               query: {
-                userid: userData.sub
+                userId: userData.sub
               }
             })
           } else {
@@ -62,7 +62,7 @@ export default function Home() {
             Router.push({
               pathname: '/create-profile',
               query: {
-                userid: userData.sub
+                userId: userData.sub
               }
             })
             // TODO - send to recipe index page or last page user was on

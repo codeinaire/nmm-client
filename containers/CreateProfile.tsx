@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -12,6 +13,7 @@ import { FormikActions } from 'formik'
 export const CREATE_USER_PROFILE = gql`
   mutation CreateUserProfile($userProfileInput: UserProfileInput) {
     createUserProfile(userProfileInput: $userProfileInput) {
+      id
       totalPoints
       username
       profilePic
@@ -100,6 +102,13 @@ export default function CreateProfile() {
       autocomplete: 'off',
       displayName: 'Profile Photo',
       hintText: 'Upload a photo for your profile for more points!'
+    },
+    {
+      type: 'hidden',
+      name: 'id',
+      errorMessageId: 'idError',
+      required: false,
+      autocomplete: 'off'
     }
   ]
 
@@ -133,6 +142,7 @@ export default function CreateProfile() {
     }
   ]
 
+  const router = useRouter()
   const formInitialValues = [
     { name: 'environment', value: false },
     { name: 'foodSecurity', value: false },
@@ -143,7 +153,8 @@ export default function CreateProfile() {
     { name: 'challengeQuote', value: '' },
     { name: 'motivations', value: '' },
     { name: 'profilePic', value: '' },
-    { name: 'username', value: '' }
+    { name: 'username', value: '' },
+    { name: 'id', value: router.query.userId }
   ]
 
   let validationSchema = object().shape({
@@ -154,7 +165,8 @@ export default function CreateProfile() {
     environment: boolean(),
     animalWelfare: boolean(),
     personalHealth: boolean(),
-    foodSecurity: boolean()
+    foodSecurity: boolean(),
+    profilePic: string()
   })
 
   const validationSchemaExtended = validationSchema.test({
@@ -179,11 +191,19 @@ export default function CreateProfile() {
   const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
+    {
+      resetForm,
+      setSubmitting,
+      setStatus,
+      setFieldValue
+    }: FormikActions<OnSubmitObject>
   ) => {
     try {
+      setFieldValue('id', router.query.userId)
+
       /**
-       * @remark convert checkbox values to string for DB
+       * @remark convert checkbox values to string for DB &
+       * remove empty keys with no value for CalculatePoints class
        */
       let motivations: string = ''
       for (const valuesProperty in values) {
@@ -193,11 +213,19 @@ export default function CreateProfile() {
           valuesProperty == 'foodSecurity' ||
           valuesProperty == 'animalWelfare'
         ) {
-          motivations = motivations.concat(',', valuesProperty)
+          if (values[valuesProperty]) {
+            motivations = motivations.concat(',', valuesProperty)
+          }
           delete values[valuesProperty]
         }
+        if (!values[valuesProperty]) delete values[valuesProperty]
+
         values.motivations = motivations
       }
+
+      /**
+       * @remark convert form string to int for db
+       */
       ((values.challengeGoals as unknown) as number) = parseInt(
         values.challengeGoals,
         10

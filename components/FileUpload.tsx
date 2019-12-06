@@ -11,6 +11,7 @@ export default (props: FileUploadProps) => {
       level: 'INFO',
       description: 'Starting file upload...'
     })
+    // TODO - fix this API call up to change the cloudinary folder it uses.
     if (!event.target.files) return
     const file = event.target.files[0]
 
@@ -39,9 +40,14 @@ export default (props: FileUploadProps) => {
       })
       return
     }
+    if (field.name == 'profilePic') {
+      console.log('uploading pic profile');
 
-    form.setFieldValue(field.name, files.secure_url)
-    form.setFieldValue('standardResolution', files.eager[0].secure_url)
+      form.setFieldValue(field.name, files.secure_url)
+    } else {
+      form.setFieldValue(field.name, files.secure_url)
+      form.setFieldValue('standardResolution', files.eager[0].secure_url)
+    }
     logger.log({
       level: 'INFO',
       description: 'Finished file upload!'
