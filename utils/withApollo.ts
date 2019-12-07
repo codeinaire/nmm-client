@@ -23,8 +23,5 @@ function initApollo(initialState: NormalizedCacheObject) {
 }
 
 export default nextWithApollo(({ initialState = {} }) => {
-  // console.log('CTX', ctx)
-  console.log('InitialState', initialState)
-
   return initApollo(initialState)
 })

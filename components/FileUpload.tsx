@@ -9,7 +9,7 @@ export default (props: FileUploadProps) => {
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     logger.log({
       level: 'INFO',
-      description: 'Starting file upload...'
+      description: `Starting file upload... for ${field.name}`
     })
     // TODO - fix this API call up to change the cloudinary folder it uses.
     if (!event.target.files) return
@@ -18,7 +18,11 @@ export default (props: FileUploadProps) => {
     let data = new FormData()
     data.append('file', file)
     // N.B. - Cloudinary settings for image transformation
-    data.append('upload_preset', 'nmm-recipes')
+    if (field.name == 'lowResProfile'){
+      data.append('upload_preset', 'nmm-profile-pics')
+    } else {
+      data.append('upload_preset', 'nmm-recipes')
+    }
 
     const res = await fetch(
       process.env.CLOUDINARY_API || '',
@@ -40,14 +44,9 @@ export default (props: FileUploadProps) => {
       })
       return
     }
-    if (field.name == 'profilePic') {
-      console.log('uploading pic profile');
 
-      form.setFieldValue(field.name, files.secure_url)
-    } else {
-      form.setFieldValue(field.name, files.secure_url)
-      form.setFieldValue('standardResolution', files.eager[0].secure_url)
-    }
+    form.setFieldValue(field.name, files.secure_url)
+    form.setFieldValue('standardResolution', files.eager[0].secure_url)
     logger.log({
       level: 'INFO',
       description: 'Finished file upload!'

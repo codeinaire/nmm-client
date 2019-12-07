@@ -96,8 +96,8 @@ export default function CreateProfile() {
     },
     {
       type: 'file',
-      name: 'profilePic',
-      errorMessageId: 'profilePicError',
+      name: 'lowResProfile',
+      errorMessageId: 'lowResProfileError',
       required: true,
       autocomplete: 'off',
       displayName: 'Profile Photo',
@@ -152,7 +152,8 @@ export default function CreateProfile() {
     { name: 'bio', value: '' },
     { name: 'challengeQuote', value: '' },
     { name: 'motivations', value: '' },
-    { name: 'profilePic', value: '' },
+    { name: 'lowResProfile', value: '' },
+    { name: 'standardResolution', value: '' },
     { name: 'username', value: '' },
     { name: 'id', value: router.query.userId }
   ]
@@ -166,7 +167,7 @@ export default function CreateProfile() {
     animalWelfare: boolean(),
     personalHealth: boolean(),
     foodSecurity: boolean(),
-    profilePic: string()
+    lowResProfile: string()
   })
 
   const validationSchemaExtended = validationSchema.test({

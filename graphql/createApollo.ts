@@ -37,7 +37,6 @@ export default (initialState: NormalizedCacheObject) => {
           description: 'CreateApollo - retrieving access token from cache.'
         })
         data = cache.readQuery({ query: ACCESS_TOKEN }) || {}
-        console.log('in context access token', data);
       }
     }
 
