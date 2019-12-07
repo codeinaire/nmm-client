@@ -1,56 +1,95 @@
-import auth0, { Auth0Error, Auth0Callback } from 'auth0-js';
-import logger from './logger';
+import auth0, { Auth0Error } from 'auth0-js'
+import logger from './logger'
 
-import { ISignUpArgs, SignInTypes } from './types';
+import { ISignUpArgs, SignInTypes } from './types'
 
 const DATABASE_CONNECTION = 'Username-Password-Authentication'
 const SOCIAL_MEDIA_SIGN_IN = 'facebook'
 
-const webAuth = new auth0.WebAuth({
+export const webAuth = new auth0.WebAuth({
   domain: process.env.APP_DOMAIN || '',
   clientID: process.env.APP_CLIENT_ID || '',
   redirectUri: process.env.REDIRECT_URL,
   responseType: 'token id_token',
   scope: 'openid profile email',
   audience: process.env.AUDIENCE
-});
+})
 
-const responseCallback: Auth0Callback<Auth0Error, any> = (error: Auth0Error, res: any): void => {
-  if (error) {
-    logger.log({
-      level: 'ERROR',
-      description: error.description
-    });
-  } else {
+// TODO - fix res: any type - find out what it returns
+export const signIn = (
+  type: SignInTypes,
+  email?: string,
+  password = ''
+): void | Promise<any | undefined> => {
+  if (type === SignInTypes.auth0) {
     logger.log({
       level: 'INFO',
-      description: `You, ${res.username}, have been successful`
+      description: `${email} address, is signing in with Auth0`
+    })
+    return new Promise((resolve, reject) => {
+      webAuth.login(
+        {
+          realm: DATABASE_CONNECTION,
+          email,
+          password
+        },
+        (error: Auth0Error | null, res: any) => {
+          if (error) {
+            logger.log({
+              level: 'ERROR',
+              description: `Auth0 Sign In Error - ${error.description}`
+            })
+            reject(error)
+          } else {
+            logger.log({
+              level: 'INFO',
+              description: `${res.username}, has been successfully signed in`
+            })
+            resolve(res)
+          }
+        }
+      )
     })
   }
-};
 
-export const signIn = (type: SignInTypes, email?: string, password = ''): void => {
-  if(type === SignInTypes.auth0) {
-    webAuth.login({
-      realm: DATABASE_CONNECTION,
-      email,
-      password
-    }, responseCallback)
-  }
-
-  if(type === SignInTypes.social) {
+  if (type === SignInTypes.social) {
+    logger.log({
+      level: 'INFO',
+      description: `${email} address, is signing in with Facebook`
+    })
     webAuth.authorize({
       connection: SOCIAL_MEDIA_SIGN_IN
     })
   }
 }
 
-export const signUp = ({ email, password, username }: ISignUpArgs): void => {
-  console.log('IN SIGNUP', email, password, username);
-  webAuth.signup({
-    connection: DATABASE_CONNECTION,
-    email,
-    password,
-    username
-  }, responseCallback);
+export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
+  logger.log({
+    level: 'INFO',
+    description: `A user with ${email} address, is signing up`
+  })
+  return new Promise((resolve, reject) => {
+    webAuth.signup(
+      {
+        connection: DATABASE_CONNECTION,
+        email,
+        password
+      },
+      (error: Auth0Error | null, res: any) => {
+        if (error) {
+          logger.log({
+            level: 'ERROR',
+            description: `Auth0 Sign Up Error - ${error.description}`
+          })
+          reject(error)
+        } else {
+          logger.log({
+            level: 'INFO',
+            description: `${res.email}, has been successfully signed up`
+          })
+          resolve(res)
+        }
+      }
+    )
+  })
 }

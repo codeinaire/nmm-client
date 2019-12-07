@@ -9,15 +9,20 @@ export default (props: FileUploadProps) => {
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     logger.log({
       level: 'INFO',
-      description: 'Starting file upload...'
+      description: `Starting file upload... for ${field.name}`
     })
+    // TODO - fix this API call up to change the cloudinary folder it uses.
     if (!event.target.files) return
     const file = event.target.files[0]
 
     let data = new FormData()
     data.append('file', file)
     // N.B. - Cloudinary settings for image transformation
-    data.append('upload_preset', 'nmm-recipes')
+    if (field.name == 'lowResProfile'){
+      data.append('upload_preset', 'nmm-profile-pics')
+    } else {
+      data.append('upload_preset', 'nmm-recipes')
+    }
 
     const res = await fetch(
       process.env.CLOUDINARY_API || '',

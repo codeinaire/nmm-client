@@ -7,7 +7,8 @@ import {
   DynamicFormProps,
   DynamicFormInputObject,
   DynamicFormSelectObject,
-  SelectOption
+  SelectOption,
+  InitialValues
 } from './types'
 
 // TODO - STYLING
@@ -16,31 +17,25 @@ export default function DynamicForm(props: DynamicFormProps) {
   const {
     failMessage,
     formInput,
+    formInitialValues,
     onSubmit,
     successMessage,
     submitType,
     validationSchema,
-    inputHints = false,
     formSelect = [],
-    formInitialValues = []
   } = props
 
   return (
     <>
       <Formik
-        initialValues={
-          formInitialValues.length
-            ? formInitialValues.reduce((acc: object, name: string) => {
-                return Object.assign(acc, {
-                  [name]: ''
-                })
-              }, {})
-            : formInput.reduce((acc: object, cur: DynamicFormInputObject) => {
-                return Object.assign(acc, {
-                  [cur.name]: ''
-                })
-              }, {})
-        }
+        initialValues={formInitialValues.reduce(
+          (acc: object, cur: InitialValues) => {
+            return Object.assign(acc, {
+              [cur.name]: cur.value
+            })
+          },
+          {}
+        )}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
@@ -62,26 +57,61 @@ export default function DynamicForm(props: DynamicFormProps) {
             <form onReset={handleReset} onSubmit={handleSubmit} method="POST">
               {formInput.map((inputItem: DynamicFormInputObject) => (
                 <React.Fragment key={inputItem.name}>
-                  <label htmlFor={inputItem.name}>
-                    <b>{inputItem.displayName}</b>:{' '}
-                  </label>
-                  <Field
-                    aria-errormessage={inputItem.errorMessageId}
-                    aria-invalid={!!errors[inputItem.name]}
-                    aria-required={inputItem.required}
-                    autoComplete={inputItem.autocomplete}
-                    component={
-                      inputItem.textArea
-                        ? 'textarea'
-                        : inputItem.name == 'lowResolution'
-                        ? ImageUpload
-                        : 'input'
-                    }
-                    data-testid={inputItem.name}
-                    id={inputItem.name}
-                    name={inputItem.name}
-                    type={inputItem.type}
-                  />
+                  {inputItem.checkbox ? (
+                    <fieldset name={inputItem.name}>
+                      <legend>{inputItem.legend}</legend>
+                      {inputItem.checkboxInput!.map(
+                        (checkboxItem: DynamicFormInputObject) => (
+                          <React.Fragment key={checkboxItem.name}>
+                            {errors[checkboxItem.name] && touched[checkboxItem.name] ? (
+                              <div
+                                id={checkboxItem.errorMessageId}
+                                data-testid={checkboxItem.errorMessageId}
+                              >
+                                {errors[checkboxItem.name]}
+                              </div>
+                            ) : null}
+                            <label htmlFor={checkboxItem.name}>
+                              <b>{checkboxItem.displayName}</b>:{' '}
+                              <Field
+                                aria-errormessage={checkboxItem.errorMessageId}
+                                aria-invalid={!!errors[checkboxItem.name]}
+                                aria-required={checkboxItem.required}
+                                autoComplete={checkboxItem.autocomplete}
+                                data-testid={checkboxItem.name}
+                                disabled={checkboxItem.disabled}
+                                id={checkboxItem.name}
+                                name={checkboxItem.name}
+                                type={checkboxItem.type}
+                              />
+                            </label>
+                          </React.Fragment>
+                        )
+                      )}
+                    </fieldset>
+                  ) : (
+                    <label htmlFor={inputItem.name}>
+                      <b>{inputItem.displayName}</b>:{' '}
+                      <Field
+                        aria-errormessage={inputItem.errorMessageId}
+                        aria-invalid={!!errors[inputItem.name]}
+                        aria-required={inputItem.required}
+                        autoComplete={inputItem.autocomplete}
+                        component={
+                          inputItem.textArea
+                            ? 'textarea'
+                            : inputItem.type == 'file'
+                            ? ImageUpload
+                            : 'input'
+                        }
+                        data-testid={inputItem.name}
+                        disabled={inputItem.disabled}
+                        id={inputItem.name}
+                        name={inputItem.name}
+                        type={inputItem.type}
+                      />
+                    </label>
+                  )}
                   {errors[inputItem.name] && touched[inputItem.name] ? (
                     <div
                       id={inputItem.errorMessageId}
@@ -90,7 +120,7 @@ export default function DynamicForm(props: DynamicFormProps) {
                       {errors[inputItem.name]}
                     </div>
                   ) : null}
-                  {inputHints ? (
+                  {inputItem.hintText ? (
                     <span>
                       <p>
                         <i>{inputItem.hintText}</i>
@@ -104,23 +134,26 @@ export default function DynamicForm(props: DynamicFormProps) {
                 ? formSelect.map((selectItem: DynamicFormSelectObject) => (
                     <React.Fragment key={selectItem.name}>
                       <br />
-                      <Field
-                        component="select"
-                        name={selectItem.name}
-                        id={`${selectItem.name}-select`}
-                        key={selectItem.name}
-                      >
-                        {selectItem.options.map(
-                          (selectOption: SelectOption) => (
-                            <option
-                              value={selectOption.value}
-                              key={selectOption.value}
-                            >
-                              {selectOption.displayName}
-                            </option>
-                          )
-                        )}
-                      </Field>
+                      <label htmlFor={selectItem.name}>
+                        <b>{selectItem.title}</b>:{' '}
+                        <Field
+                          component="select"
+                          name={selectItem.name}
+                          id={`${selectItem.name}-select`}
+                          key={selectItem.name}
+                        >
+                          {selectItem.options.map(
+                            (selectOption: SelectOption) => (
+                              <option
+                                value={selectOption.value}
+                                key={selectOption.value}
+                              >
+                                {selectOption.displayName}
+                              </option>
+                            )
+                          )}
+                        </Field>
+                      </label>
                       {errors[selectItem.name] && touched[selectItem.name] ? (
                         <div
                           id={selectItem.errorMessageId}
