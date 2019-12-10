@@ -4,6 +4,7 @@ import { FaceRecogProperties } from '../components/types'
 
 export async function loadModels() {
   try {
+    // TODO - maybe change the paths when going into prod.
     await faceapi.loadTinyFaceDetectorModel('/models')
     await faceapi.loadFaceExpressionModel('/models')
   } catch (error) {
