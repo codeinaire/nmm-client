@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import Webcam from 'react-webcam'
 import ImagePreview from './ImagePreview'
-import { loadModels, getFullFaceExpression } from '../utils/faceRecog'
+import { loadModels, detectFacesAndExpression } from '../utils/faceRecog'
 
 const videoConstraints = {
-  width: 1280,
-  height: 720,
+  width: 640,
+  height: 480,
   facingMode: 'user'
 }
 
+const SET_FACE_INIT_STATE: any = {
+  expressions: null,
+  detection: null
+}
+
+const SET_IMAGE_INFO_INIT_STATE: any = {
+  dataUri: null,
+  loading: null
+}
+
 export default () => {
-  const [dataUri, setDataUri] = useState('')
+  const [faceInfo, setFaceInfo] = useState(SET_FACE_INIT_STATE)
+  const [imageInfo, setImageInfo] = useState(SET_IMAGE_INFO_INIT_STATE)
 
   const webcamRef: any = React.useRef(null)
   async function loadModelsFunc() {
@@ -25,13 +36,23 @@ export default () => {
     const imageSrc = webcamRef.current.getScreenshot()
     console.log(imageSrc)
     dataURItoBlob(imageSrc)
-    setDataUri(imageSrc)
   }, [webcamRef])
 
-  async function dataURItoBlob(dataURI:any) {
-    const result = await getFullFaceExpression(dataURI)
+  async function dataURItoBlob(dataUri:any) {
+    var t0 = performance.now();
+    const result = await detectFacesAndExpression(dataUri)
+    var t1 = performance.now();
+    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
     console.log('result of face', result);
-    let byteString = atob(dataURI.split(',')[1]);
+    setFaceInfo({
+      expressions: result[0].expressions,
+      detection: result[0].detection
+    })
+    setImageInfo({
+      dataUri,
+      loading: true
+    })
+    let byteString = atob(dataUri.split(',')[1]);
     let arrayBuffer = new ArrayBuffer(byteString.length);
     let unSignedInts = new Uint8Array(arrayBuffer);
     for (let i = 0; i < byteString.length; i++) {
@@ -46,10 +67,11 @@ export default () => {
 
   return (
     <>
-    {dataUri ? (
-        <ImagePreview dataUri={dataUri} />
+    {imageInfo.dataUri ? (
+        <ImagePreview dataUri={imageInfo.dataUri} expressions={faceInfo.expressions} detection={faceInfo.detection} />
       ) : (
       <Webcam
+        id='video'
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"

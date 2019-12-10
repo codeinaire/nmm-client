@@ -1,27 +1,31 @@
 import * as faceapi from 'face-api.js'
 
+import { FaceRecogProperties } from '../components/types'
+
 export async function loadModels() {
-  await faceapi.loadTinyFaceDetectorModel('/models')
-  await faceapi.loadFaceExpressionModel('/models')
+  try {
+    await faceapi.loadTinyFaceDetectorModel('/models')
+    await faceapi.loadFaceExpressionModel('/models')
+  } catch (error) {
+    console.error('This is error', error)
+  }
 }
 
-export async function getFullFaceExpression(blob: any, inputSize = 512) {
+export async function detectFacesAndExpression(dataUri: string, inputSize = 320) {
   // tiny_face_detector options
-  let scoreThreshold = 0.5;
+  const scoreThreshold = 0.5
   const OPTION = new faceapi.TinyFaceDetectorOptions({
     inputSize,
     scoreThreshold
-  });
-  const useTinyModel = true;
+  })
 
-  // fetch image to api
-  let img = await faceapi.fetchImage(blob);
+  // convert dataUri into html image element
+  let img: HTMLImageElement = await faceapi.fetchImage(dataUri)
 
-  // detect all faces and generate full description from image
-  // including landmark and descriptor of each face
-  let fullDesc = await faceapi
+  // detect all faces and generate expressions
+  const facesAndExpressionDetected: Array<FaceRecogProperties> = await faceapi
     .detectAllFaces(img, OPTION)
     .withFaceExpressions()
 
-  return fullDesc;
+  return facesAndExpressionDetected
 }
