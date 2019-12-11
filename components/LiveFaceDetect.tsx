@@ -9,6 +9,7 @@ import Webcam from 'react-webcam'
 import { loadModels, detectFacesAndExpression } from '../utils/faceRecog'
 import { dataUriToBlob } from '../utils/dataUriToBlob'
 import ImagePreview from './ImagePreview'
+import logger from '../utils/logger'
 
 import { FaceRecogProperties } from './types'
 
@@ -27,6 +28,11 @@ export default () => {
   let interval: any
 
   useEffect(() => {
+    // TODO - do I need put setInputDevice in useEffect? It may be a bit inefficient
+    logger.log({
+      level: 'INFO',
+      description: 'Running setInputDevice()'
+    })
     setInputDevice()
     /**
      * @remark used to prevent fetching when SSR which causes error
@@ -56,14 +62,25 @@ export default () => {
       } else {
         setFacingMode('environment')
       }
+      logger.log({
+        level: 'INFO',
+        description: 'Running startCapture().'
+      })
       startCapture()
     } catch (error) {
-      console.error('this is error', error)
+      logger.log({
+        level: 'ERROR',
+        description: error
+      })
     }
   }
 
   function startCapture() {
     interval = setInterval(() => {
+      logger.log({
+        level: 'INFO',
+        description: 'Running capture()'
+      })
       capture()
     }, 100)
   }
@@ -83,8 +100,16 @@ export default () => {
   }
 
   const captureImage = useCallback(() => {
+    logger.log({
+      level: 'INFO',
+      description: 'Running getScreenShot()'
+    })
     const imageSrc = webcamRef.current.getScreenshot()
     setDataUri(imageSrc)
+    logger.log({
+      level: 'INFO',
+      description: 'Running dataUriToBlod()'
+    })
     dataUriToBlob(imageSrc)
   }, [webcamRef])
 
