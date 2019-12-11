@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "https": "nodemon server.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -60,6 +61,7 @@
     "jest": "^24.9.0",
     "mock-jwks": "^0.2.0",
     "nock": "^11.7.0",
+    "nodemon": "^2.0.1",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1",
     "react-test-renderer": "^16.12.0",

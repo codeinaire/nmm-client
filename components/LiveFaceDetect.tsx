@@ -45,13 +45,12 @@ export default () => {
 
   async function setInputDevice() {
     try {
-      // TODO This crashes in android browser
-      // maybe b/c the connection isn't HTTPS or localhost
       const devices = await navigator.mediaDevices.enumerateDevices()
 
       const inputDevice = await devices.filter(
         (device: MediaDeviceInfo) => device.kind == 'videoinput'
       )
+      // TODO - find a way to change camera from front to back
       if (inputDevice.length < 2) {
         setFacingMode('user')
       } else {
