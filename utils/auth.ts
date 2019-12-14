@@ -19,7 +19,7 @@ export const webAuth = new auth0.WebAuth({
 export const signIn = (
   type: SignInTypes,
   email?: string,
-  password = ''
+  password?: string
 ): void | Promise<any | undefined> => {
   if (type === SignInTypes.auth0) {
     logger.log({
@@ -31,16 +31,18 @@ export const signIn = (
         {
           realm: DATABASE_CONNECTION,
           email,
-          password
+          password: password || ''
         },
         (error: Auth0Error | null, res: any) => {
           if (error) {
+            localStorage.setItem('signed_in', 'false')
             logger.log({
               level: 'ERROR',
               description: `Auth0 Sign In Error - ${error.description}`
             })
             reject(error)
           } else {
+            localStorage.setItem('signed_in', 'true')
             logger.log({
               level: 'INFO',
               description: `${res.username}, has been successfully signed in`
@@ -55,8 +57,9 @@ export const signIn = (
   if (type === SignInTypes.social) {
     logger.log({
       level: 'INFO',
-      description: `${email} address, is signing in with Facebook`
+      description: `Signing in with Facebook`
     })
+    localStorage.setItem('signed_in', 'true')
     webAuth.authorize({
       connection: SOCIAL_MEDIA_SIGN_IN
     })

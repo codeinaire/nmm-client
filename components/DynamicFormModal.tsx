@@ -28,20 +28,19 @@ export default (props: ModalProps) => {
     setStatus
    } = props
 
-   function closeModal() {
-     setStatus({
+  function closeModal() {
+    setStatus({
        openModal: false
-      })
-   }
+    })
+  }
 
   return (
     <div>
       <Modal
         isOpen={status.openModal}
         closeTimeoutMS={2}
-        onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel={failMessage || successMessage}
         shouldCloseOnOverlayClick={true}
       >
         <button onClick={closeModal}>close</button>

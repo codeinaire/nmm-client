@@ -1,7 +1,7 @@
 import React from 'react'
 import { Formik, Field } from 'formik'
 import ImageUpload from './FileUpload'
-import Modal from '../components/Modal'
+import Modal from './DynamicFormModal'
 
 import {
   DynamicFormProps,

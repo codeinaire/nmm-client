@@ -73,7 +73,7 @@ export interface FileUploadProps extends FieldProps {
 // MODAL TYPES
 export interface ModalProps {
   status: ModalStatus
-  successMessage: string
+  successMessage?: string
   failMessage: string
   setStatus: (arg: ModalStatus) => void
 }
@@ -94,33 +94,3 @@ export interface FaceRecogProperties {
   detection: FaceDetection
   expressions: FaceExpressions
 }
-
-// interface ExpressionProperties {
-//   neutral: number
-//   happy: number
-//   sad: number
-//   angry: number
-//   fearful: number
-//   disgusted: number
-//   surprised: number
-// }
-
-// interface DetectionProperties {
-//   _imageDims: ImageDimensions
-//   _score: number
-//   _classScore: number
-//   _className: string
-//   _box: BoxDimensions
-// }
-
-// interface ImageDimensions {
-//   _width: number
-//   _height: number
-// }
-
-// interface BoxDimensions {
-//   _x: number
-//   _y: number
-//   _width: number
-//   _height: number
-// }
