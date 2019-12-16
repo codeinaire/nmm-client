@@ -66,7 +66,7 @@ export default function Home() {
               description: 'Index - redirect to another page.'
             })
             Router.push({
-              pathname: '/create-profile',
+              pathname: '/home',
               query: {
                 userId: userData.sub
               }

@@ -1,10 +1,10 @@
-import React from 'react';
-import App from 'next/app';
-import { ApolloProvider } from '@apollo/react-hooks';
-import nextWithApollo from '../utils/withApollo';
+import React from 'react'
+import App from 'next/app'
+import { ApolloProvider } from '@apollo/react-hooks'
+import nextWithApollo from '../utils/withApollo'
 import '../styles.css'
 
-import { Props } from './types';
+import { Props } from './types'
 
 class MyApp extends App<Props> {
   // Only uncomment this method if you have blocking data requirements for
@@ -23,15 +23,14 @@ class MyApp extends App<Props> {
   // }
 
   render() {
-    const { Component, pageProps, apollo } = this.props;
+    const { Component, pageProps, apollo } = this.props
 
     return (
       <ApolloProvider client={apollo}>
         <Component {...pageProps} />
       </ApolloProvider>
-    );
+    )
   }
 }
 
-export default nextWithApollo(MyApp);
-
+export default nextWithApollo(MyApp)
