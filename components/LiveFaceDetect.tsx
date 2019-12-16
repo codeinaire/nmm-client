@@ -10,6 +10,9 @@ import { loadModels, detectFacesAndExpression } from '../utils/faceRecog'
 import { dataUriToBlob } from '../utils/dataUriToBlob'
 import ImagePreview from './ImagePreview'
 import logger from '../utils/logger'
+import { isServer } from '../utils/misc'
+import FbInitAndToken from '../containers/FbInitAndToken'
+import FbGroupShare from '../components/FbGroupShare'
 
 import { FaceRecogProperties } from './types'
 
@@ -18,7 +21,13 @@ const HEIGHT = 420
 const INPUT_SIZE = 160
 const LIVE_VID_INIT_STATE: Array<FaceRecogProperties> = []
 
-const isServer = typeof window === 'undefined'
+
+/**
+ * @remark used to prevent fetching when SSR which causes error
+ */
+if (!isServer()) {
+  loadModels()
+}
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
 export default () => {
   const [liveVid, setLiveVid] = useState(LIVE_VID_INIT_STATE)
@@ -34,20 +43,10 @@ export default () => {
       description: 'Running setInputDevice()'
     })
     setInputDevice()
-    /**
-     * @remark used to prevent fetching when SSR which causes error
-     */
-    if (!isServer) {
-      loadModelsFunc()
-    }
     return function cleanup() {
       clearInterval(interval)
     }
   })
-
-  async function loadModelsFunc() {
-    await loadModels()
-  }
 
   async function setInputDevice() {
     try {
@@ -77,21 +76,20 @@ export default () => {
 
   function startCapture() {
     interval = setInterval(() => {
-      logger.log({
-        level: 'INFO',
-        description: 'Running capture()'
-      })
-      capture()
+      // logger.log({
+      //   level: 'INFO',
+      //   description: 'Running capture()'
+      // })
+      detectFaceAndExpression()
     }, 100)
   }
 
-  async function capture() {
+  async function detectFaceAndExpression() {
     if (webcamRef.current) {
       const result = await detectFacesAndExpression(
         webcamRef.current.getScreenshot(),
         INPUT_SIZE
       )
-      console.log('result', result)
 
       if (result.length) {
         setLiveVid(result)
@@ -110,7 +108,6 @@ export default () => {
       level: 'INFO',
       description: 'Running dataUriToBlod()'
     })
-    dataUriToBlob(imageSrc)
   }, [webcamRef])
 
   let videoConstraints
@@ -149,7 +146,14 @@ export default () => {
   return (
     <>
       {dataUri ? (
-        <ImagePreview dataUri={dataUri} liveVid={liveVid} />
+        <>
+          <ImagePreview dataUri={dataUri} liveVid={liveVid} />
+          <FbInitAndToken>
+          {() => (
+            <FbGroupShare imageSrc={dataUri} />
+          )}
+          </FbInitAndToken>
+        </>
       ) : (
         <div>
           <div

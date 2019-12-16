@@ -94,3 +94,20 @@ export interface FaceRecogProperties {
   detection: FaceDetection
   expressions: FaceExpressions
 }
+
+export interface GroupPostImageSuccess {
+  id: string
+  post_id: string
+}
+
+export interface GroupPostImageFailure {
+  error: GroupPostErrorObject
+}
+
+interface GroupPostErrorObject {
+  message: string
+  type: string
+  code: number
+  error_subcode: number
+  fbtrace_id: number
+}

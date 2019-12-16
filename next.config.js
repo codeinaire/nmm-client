@@ -3,6 +3,7 @@ const withCSS = require('@zeit/next-css')
 module.exports = withCSS({
   env: {
     // HTTPS: true,
+    FB_GROUP_ID: '548965739271455',
     FB_APP_ID: '695528800971318',
     APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
