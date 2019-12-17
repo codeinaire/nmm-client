@@ -5,6 +5,13 @@ import logger from '../utils/logger'
 export default ({ imageSrc }: { imageSrc: string }) => {
   function handleShareImage() {
     FB.getLoginStatus(async (res: fb.StatusResponse) => {
+    if(res.status != 'connected') {
+      logger.log({
+        level: 'ERROR',
+        description: `Couldn't authorize b/c ${res.status}`
+      })
+      return
+    }
     const formData = new FormData()
     formData.append('file', imageSrc)
     formData.append('upload_preset', 'nmm-profile-pics')
@@ -15,7 +22,6 @@ export default ({ imageSrc }: { imageSrc: string }) => {
     })
 
     const files = await uploadedPhoto.json()
-
     FB.api(
       `/${process.env.FB_GROUP_ID}/photos`,
       'post',

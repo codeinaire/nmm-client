@@ -111,3 +111,6 @@ interface GroupPostErrorObject {
   error_subcode: number
   fbtrace_id: number
 }
+
+export type SuccessOrFailure = GroupPostImageSuccess | GroupPostImageFailure
+
