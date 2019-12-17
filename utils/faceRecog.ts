@@ -32,10 +32,6 @@ export async function detectFacesAndExpression(dataUri: string, inputSize = 320)
   // convert dataUri into html image element
   let img: HTMLImageElement = await faceapi.fetchImage(dataUri)
 
-  logger.log({
-    level: 'INFO',
-    description: 'Running detection & expression analysis'
-  })
   // detect all faces and generate expressions
   const facesAndExpressionDetected: Array<FaceRecogProperties> = await faceapi
     .detectAllFaces(img, OPTION)
