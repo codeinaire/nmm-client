@@ -16,7 +16,11 @@ export default function Home() {
   // no content, that way index is free from it. I can
   // redirect appropriately through the logic
   useEffect(() => {
+    console.log('use effect');
+
     const signedIn = localStorage.getItem('signed_in')
+    console.log('signedIn',signedIn);
+
 
     if (signedIn == 'true') {
       webAuth.parseHash({ hash: window.location.hash }, (err, authResult) => {
@@ -27,6 +31,8 @@ export default function Home() {
             description: `Auth0 Parsing Error - ${err.errorDescription}`
           })
         }
+        console.log('testing');
+
         if (authResult) {
           const userData = authResult.idTokenPayload
           logger.log({
@@ -60,7 +66,7 @@ export default function Home() {
               description: 'Index - redirect to another page.'
             })
             Router.push({
-              pathname: '/create-profile',
+              pathname: '/home',
               query: {
                 userId: userData.sub
               }

@@ -73,7 +73,7 @@ export interface FileUploadProps extends FieldProps {
 // MODAL TYPES
 export interface ModalProps {
   status: ModalStatus
-  successMessage: string
+  successMessage?: string
   failMessage: string
   setStatus: (arg: ModalStatus) => void
 }
@@ -95,32 +95,22 @@ export interface FaceRecogProperties {
   expressions: FaceExpressions
 }
 
-// interface ExpressionProperties {
-//   neutral: number
-//   happy: number
-//   sad: number
-//   angry: number
-//   fearful: number
-//   disgusted: number
-//   surprised: number
-// }
+export interface GroupPostImageSuccess {
+  id: string
+  post_id: string
+}
 
-// interface DetectionProperties {
-//   _imageDims: ImageDimensions
-//   _score: number
-//   _classScore: number
-//   _className: string
-//   _box: BoxDimensions
-// }
+export interface GroupPostImageFailure {
+  error: GroupPostErrorObject
+}
 
-// interface ImageDimensions {
-//   _width: number
-//   _height: number
-// }
+interface GroupPostErrorObject {
+  message: string
+  type: string
+  code: number
+  error_subcode: number
+  fbtrace_id: number
+}
 
-// interface BoxDimensions {
-//   _x: number
-//   _y: number
-//   _width: number
-//   _height: number
-// }
+export type SuccessOrFailure = GroupPostImageSuccess | GroupPostImageFailure
+
