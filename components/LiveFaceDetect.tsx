@@ -2,7 +2,7 @@ import React, {
   useCallback,
   useState,
   useEffect,
-  createRef,
+  useRef,
   RefObject
 } from 'react'
 import Webcam from 'react-webcam'
@@ -20,26 +20,24 @@ const HEIGHT = 420
 const INPUT_SIZE = 160
 const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
-
-/**
- * @remark used to prevent fetching when SSR which causes error
- */
-if (!isServer()) {
-  loadModels()
-}
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
 export default () => {
   const [faceRecog, setFaceRecog] = useState(FACE_RECOG_INITIAL_STATE)
   const [cameraFacingMode, setCameraFacingMode] = useState('')
   const [dataUri, setDataUri] = useState('')
-  const webcamRef: RefObject<any> = createRef()
+  let webcamRef: RefObject<any> = useRef(null)
   let interval: any
 
   useEffect(() => {
-    // TODO - do I need put setInputDevice in useEffect? It may be a bit inefficient
+    /**
+     * @remark used to prevent fetching when SSR which causes error
+     */
+    if (!isServer()) {
+      loadModels()
+    }
     logger.log({
       level: 'INFO',
-      description: 'Running setInputDevice()'
+      description: 'Starting setInputDevice()'
     })
     setInputDevice()
     return function cleanup() {
@@ -62,7 +60,7 @@ export default () => {
       }
       logger.log({
         level: 'INFO',
-        description: 'Running startCapture().'
+        description: 'Starting startCapture().'
       })
       startCapture()
     } catch (error) {
@@ -80,11 +78,7 @@ export default () => {
   }
 
   async function detectFaceAndExpression() {
-    console.log('detectFace',webcamRef.current);
-
-    if (!!webcamRef.current) {
-      console.log('inside IF of detectFace',!!webcamRef.current);
-
+    if (webcamRef.current) {
       const result = await detectFacesAndExpression(
         webcamRef.current.getScreenshot(),
         INPUT_SIZE
@@ -115,7 +109,8 @@ export default () => {
     videoConstraints = {
       width: WIDTH,
       height: HEIGHT,
-      facingMode: cameraFacingMode == 'user' ? 'user' : { exact: cameraFacingMode }
+      facingMode:
+        cameraFacingMode == 'user' ? 'user' : { exact: cameraFacingMode }
     }
     if (cameraFacingMode === 'user') {
       camera = 'Front'
@@ -148,15 +143,13 @@ export default () => {
         <>
           <ImagePreview dataUri={dataUri} faceRecog={faceRecog} />
           <FbInitAndToken>
-          {() => (
-            <FbGroupShare imageSrc={dataUri} />
-          )}
+            {() => <FbGroupShare imageSrc={dataUri} />}
           </FbInitAndToken>
         </>
       ) : (
         <div>
           <div
-            className="Camera"
+            className='Camera'
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -176,7 +169,7 @@ export default () => {
                     <Webcam
                       audio={false}
                       ref={webcamRef}
-                      screenshotFormat="image/jpeg"
+                      screenshotFormat='image/jpeg'
                       videoConstraints={videoConstraints}
                     />
                   </div>
