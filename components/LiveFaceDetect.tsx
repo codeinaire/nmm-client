@@ -7,11 +7,10 @@ import React, {
 } from 'react'
 import Webcam from 'react-webcam'
 import { loadModels, detectFacesAndExpression } from '../utils/faceRecog'
-import { dataUriToBlob } from '../utils/dataUriToBlob'
 import ImagePreview from './ImagePreview'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
-import FbInitAndToken from '../containers/FbInitAndToken'
+import FbInitAndToken from '../containers/FbInitParent'
 import FbGroupShare from '../components/FbGroupShare'
 
 import { FaceRecogProperties } from './types'
@@ -19,7 +18,7 @@ import { FaceRecogProperties } from './types'
 const WIDTH = 420
 const HEIGHT = 420
 const INPUT_SIZE = 160
-const LIVE_VID_INIT_STATE: Array<FaceRecogProperties> = []
+const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
 
 /**
@@ -30,8 +29,8 @@ if (!isServer()) {
 }
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
 export default () => {
-  const [liveVid, setLiveVid] = useState(LIVE_VID_INIT_STATE)
-  const [facingMode, setFacingMode] = useState('')
+  const [faceRecog, setFaceRecog] = useState(FACE_RECOG_INITIAL_STATE)
+  const [cameraFacingMode, setCameraFacingMode] = useState('')
   const [dataUri, setDataUri] = useState('')
   const webcamRef: RefObject<any> = createRef()
   let interval: any
@@ -46,7 +45,7 @@ export default () => {
     return function cleanup() {
       clearInterval(interval)
     }
-  })
+  }, [])
 
   async function setInputDevice() {
     try {
@@ -57,9 +56,9 @@ export default () => {
       )
       // TODO - find a way to change camera from front to back
       if (inputDevice.length < 2) {
-        setFacingMode('user')
+        setCameraFacingMode('user')
       } else {
-        setFacingMode('environment')
+        setCameraFacingMode('environment')
       }
       logger.log({
         level: 'INFO',
@@ -76,23 +75,23 @@ export default () => {
 
   function startCapture() {
     interval = setInterval(() => {
-      // logger.log({
-      //   level: 'INFO',
-      //   description: 'Running capture()'
-      // })
       detectFaceAndExpression()
     }, 100)
   }
 
   async function detectFaceAndExpression() {
-    if (webcamRef.current) {
+    console.log('detectFace',webcamRef.current);
+
+    if (!!webcamRef.current) {
+      console.log('inside IF of detectFace',!!webcamRef.current);
+
       const result = await detectFacesAndExpression(
         webcamRef.current.getScreenshot(),
         INPUT_SIZE
       )
 
       if (result.length) {
-        setLiveVid(result)
+        setFaceRecog(result)
       }
     }
   }
@@ -112,13 +111,13 @@ export default () => {
 
   let videoConstraints
   let camera
-  if (facingMode) {
+  if (cameraFacingMode) {
     videoConstraints = {
       width: WIDTH,
       height: HEIGHT,
-      facingMode: facingMode == 'user' ? 'user' : { exact: facingMode }
+      facingMode: cameraFacingMode == 'user' ? 'user' : { exact: cameraFacingMode }
     }
-    if (facingMode === 'user') {
+    if (cameraFacingMode === 'user') {
       camera = 'Front'
     } else {
       camera = 'Back'
@@ -126,8 +125,8 @@ export default () => {
   }
 
   let drawBox
-  if (liveVid.length) {
-    drawBox = liveVid.map((faceObj: any) => (
+  if (faceRecog.length) {
+    drawBox = faceRecog.map((faceObj: any) => (
       <div>
         <div
           style={{
@@ -147,7 +146,7 @@ export default () => {
     <>
       {dataUri ? (
         <>
-          <ImagePreview dataUri={dataUri} liveVid={liveVid} />
+          <ImagePreview dataUri={dataUri} faceRecog={faceRecog} />
           <FbInitAndToken>
           {() => (
             <FbGroupShare imageSrc={dataUri} />
