@@ -1,8 +1,9 @@
 import React from 'react'
 
-import VidCam from '../components/LiveFaceDetect'
+// import VidCam from '../components/LiveFaceDetect'
 // import FbInitParent from '../containers/FbInitParent'
 // import FbUserShare from '../components/FbUserShare'
+import FieldArray from '../containers/FieldArray'
 
 export default function HomePage() {
   return (
@@ -14,7 +15,7 @@ export default function HomePage() {
         <FbUserShare href='https://myapp.example:3000/create-recipe' quote='This is absolutely amazing!!' />
       )}
       </FbInitParent> */}
-      <VidCam />
+      <FieldArray />
     </div>
   )
 }

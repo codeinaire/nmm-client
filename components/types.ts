@@ -1,6 +1,10 @@
 import { ObjectSchema } from 'yup'
 import { FormikActions, FieldProps } from 'formik'
-import { FaceDetection, WithFaceExpressions, FaceExpressions } from 'face-api.js'
+import {
+  FaceDetection,
+  WithFaceExpressions,
+  FaceExpressions
+} from 'face-api.js'
 
 // DYNAMIC FORM TYPES
 export interface DynamicFormProps {
@@ -46,6 +50,8 @@ interface DynamicFormCheckboxInputObject {
   autocomplete: string
   displayName: string
 }
+
+export type DynamicFormSelectArray = Array<DynamicFormSelectObject>
 
 export interface DynamicFormSelectObject {
   name: string
@@ -113,4 +119,3 @@ interface GroupPostErrorObject {
 }
 
 export type SuccessOrFailure = GroupPostImageSuccess | GroupPostImageFailure
-
