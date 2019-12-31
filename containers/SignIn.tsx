@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { object, string } from 'yup'
 import { FormikActions } from 'formik'
-import Modal from 'react-modal'
+import FacebookSignInFailModal from 'react-modal'
 import Link from 'next/link'
 
 import { signIn } from '../utils/auth'
@@ -52,30 +52,6 @@ export default function SignIn() {
     }
   }
 
-  // TODO - fix styles
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)'
-    }
-  }
-  const [modalState, setModalState] = useState(false)
-  function closeModal() {
-    setModalState(false)
-  }
-  const facebookSignIn = () => {
-    try {
-      signIn(SignInTypes.social)
-    } catch (error) {
-      localStorage.setItem('signed_in', 'false')
-      setModalState(true)
-    }
-  }
-
   const submitType = 'Sign In!'
   const failMessage = 'Failed to Sign In. Please try again!'
   const successMessage = 'You signed in onward to awesomeness! Yay!'
@@ -85,10 +61,37 @@ export default function SignIn() {
     { name: 'password', value: '' }
   ]
 
+  // N.B. - Facebook sign-in
+  // TODO - fix styles
+  const facebookModalCustomStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  }
+  const [facebookSignInModalState, setFacebookSignInModalState] = useState(
+    false
+  )
+  function closeModal() {
+    setFacebookSignInModalState(false)
+  }
+  const facebookSignIn = () => {
+    try {
+      signIn(SignInTypes.social)
+    } catch (error) {
+      localStorage.setItem('signed_in', 'false')
+      setFacebookSignInModalState(true)
+    }
+  }
+
   return (
     <div>
       <p>Please sign in</p>
-      <Link href="/">
+      <Link href='/'>
         <a>Index</a>
       </Link>
       <DynamicForm
@@ -101,16 +104,16 @@ export default function SignIn() {
         formInitialValues={formInitialValues}
       />
       <button onClick={facebookSignIn}>Facebook Sign In</button>
-      <Modal
-        isOpen={modalState}
+      <FacebookSignInFailModal
+        isOpen={facebookSignInModalState}
         closeTimeoutMS={2}
-        style={customStyles}
+        style={facebookModalCustomStyles}
         contentLabel={failMessage}
         shouldCloseOnOverlayClick={true}
       >
         <button onClick={closeModal}>close</button>
         <h3>{failMessage}</h3>
-      </Modal>
+      </FacebookSignInFailModal>
     </div>
   )
 }

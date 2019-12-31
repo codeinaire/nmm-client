@@ -105,10 +105,7 @@ export default function CreateProfile() {
     },
     {
       type: 'hidden',
-      name: 'id',
-      errorMessageId: 'idError',
-      required: false,
-      autocomplete: 'off'
+      name: 'id'
     }
   ]
 
