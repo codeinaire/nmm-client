@@ -1,9 +1,10 @@
 import React from 'react'
-import { Formik, Field, Form, FieldArray, FormikProps } from 'formik'
+import { Formik, Form, FormikProps } from 'formik'
 import Modal from './DynamicFormModal'
 import DynamicFormCheckbox from './DynamicFormCheckbox'
 import DynamicFormSelect from './DynamicFormSelect'
 import DynamicFormInput from './DynamicFormInput'
+import DynamicFormFieldArray from './DynamicFormFieldArray'
 
 import {
   DynamicFormProps,
@@ -38,7 +39,13 @@ export default function DynamicForm(props: DynamicFormProps) {
         )}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
-        render={({ errors, status, setStatus, touched }: FormikProps<any>) => (
+        render={({
+          errors,
+          status,
+          setStatus,
+          touched,
+          values
+        }: FormikProps<any>) => (
           <Form>
             <Modal
               failMessage={failMessage}
@@ -53,6 +60,12 @@ export default function DynamicForm(props: DynamicFormProps) {
                     inputItem={inputItem}
                     errors={errors}
                     touched={touched}
+                  />
+                ) : inputItem.fieldArray ? (
+                  <DynamicFormFieldArray
+                    inputItem={inputItem}
+
+                    values={values}
                   />
                 ) : (
                   <DynamicFormInput

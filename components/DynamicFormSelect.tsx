@@ -31,7 +31,10 @@ export default ({
                   {...field}
                 >
                   {selectItem.options.map((selectOption: SelectOption) => (
-                    <option value={selectOption.value} key={selectOption.value}>
+                    <option
+                      value={selectOption.value}
+                      key={selectOption.displayName}
+                    >
                       {selectOption.displayName}
                     </option>
                   ))}
