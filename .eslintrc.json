@@ -14,7 +14,7 @@
       }
     ],
     "curly": ["error", "multi-line"],
-    "camelcase": 2,
+    "camelcase": 1,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   },
@@ -22,7 +22,7 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true // Allows for the parsing of JSX
+      "jsx": true
     }
   }
 }

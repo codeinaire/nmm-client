@@ -23,22 +23,14 @@ export default function SignIn() {
   const formInput = [
     {
       type: 'text',
-      name: 'title',
-      errorMessageId: 'titleError',
-      required: true,
-      autocomplete: 'off',
-      displayName: 'Recipe Title',
-      hintText: 'The name of the recipe.'
-    },
-    {
-      type: 'text',
       name: 'ingredients',
       errorMessageId: 'ingredientsError',
       required: true,
       autocomplete: 'off',
       displayName: 'Ingredients',
       textArea: true,
-      hintText: 'Comma separated ingredient items, please.'
+      hintText: 'Add one ingredient per input box.',
+      fieldArray: true
     },
     {
       type: 'text',
@@ -49,7 +41,8 @@ export default function SignIn() {
       displayName: 'Method',
       textArea: true,
       hintText:
-        'Comma separated, numbered steps please e.g. 1) This is a step,2) This is a step'
+        'Add one numbered method per input box e.g. 1) step one in recipe',
+      fieldArray: true
     },
     {
       type: 'text',
@@ -58,8 +51,17 @@ export default function SignIn() {
       required: true,
       autocomplete: 'off',
       displayName: 'Hashtags',
-      hintText:
-        'Comma separated, spaceless hashtags e.g. #hashtag1,#hashtag2,#hashTag3.'
+      hintText: 'Add one hashtag per input box e.g. #hashtag',
+      fieldArray: true
+    },
+    {
+      type: 'text',
+      name: 'title',
+      errorMessageId: 'titleError',
+      required: true,
+      autocomplete: 'off',
+      displayName: 'Recipe Title',
+      hintText: 'The name of the recipe.'
     },
     {
       type: 'file',
@@ -153,6 +155,7 @@ export default function SignIn() {
     {
       name: 'cost',
       errorMessageId: 'costError',
+      title: 'How costly is the recipe?',
       options: [
         {
           value: '',
@@ -175,6 +178,7 @@ export default function SignIn() {
     {
       name: 'mealType',
       errorMessageId: 'mealTypeError',
+      title: 'What meal type is it?',
       options: [
         {
           value: '',
@@ -204,16 +208,16 @@ export default function SignIn() {
   // to return a low & standard resolution size. All the inputs in
   // formInitialvalues are sent to the lambda.
   const formInitialValues = [
+    { name: 'ingredients', value: [''] },
+    { name: 'method', value: [''] },
+    { name: 'hashtags', value: [''] },
     { name: 'mealType', value: '' },
     { name: 'lowResolution', value: '' },
     { name: 'standardResolution', value: '' },
     { name: 'name', value: '' },
     { name: 'title', value: '' },
-    { name: 'ingredients', value: '' },
-    { name: 'method', value: '' },
     { name: 'difficulty', value: '' },
     { name: 'cost', value: '' },
-    { name: 'hashtags', value: '' },
     { name: 'website', value: '' },
     { name: 'email', value: '' },
     { name: 'facebook', value: '' },
@@ -243,6 +247,8 @@ export default function SignIn() {
     { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
   ) => {
     try {
+      console.log('values', values)
+
       const recipe = await createRecipe({
         variables: {
           recipe: values
