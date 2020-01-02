@@ -3,7 +3,7 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { typeDefs } from './schema'
-import { resolvers, ACCESS_TOKEN } from './resolvers';
+import { resolvers, ACCESS_TOKEN } from './resolvers'
 import logger from '../utils/logger'
 
 import { AccessTokenObject } from './types'
@@ -24,8 +24,8 @@ export default (initialState: NormalizedCacheObject) => {
      * api on server side
      */
     const isBrowser: boolean = typeof window !== 'undefined'
-    let signedIn: string,
-      data: AccessTokenObject
+    let signedIn: string
+    let data: AccessTokenObject = {}
 
     // TODO - update signed_in when user logs out or refreshes page
     // TODO - need to remove signed in value from local storage.
@@ -43,7 +43,7 @@ export default (initialState: NormalizedCacheObject) => {
     return {
       headers: {
         ...previousContext.headers,
-        authorization: data!.accessToken ? `Bearer ${data!.accessToken}` : '',
+        authorization: data?.accessToken ? `Bearer ${data!.accessToken}` : '',
         'Access-Control-Allow-Origin': process.env.CLIENT_URI
       }
     }
@@ -61,5 +61,3 @@ export default (initialState: NormalizedCacheObject) => {
     resolvers
   })
 }
-
-
