@@ -7,7 +7,7 @@ import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 // TYPES
 import { OnSubmitObject } from '../components/types'
-import { FormikActions } from 'formik'
+import { FormikHelpers } from 'formik'
 
 const CREATE_RECIPE = gql`
   mutation createRecipe($recipe: RecipeInput!) {
@@ -244,7 +244,7 @@ export default function SignIn() {
   const [createRecipe] = useMutation(CREATE_RECIPE)
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
       console.log('values', values)

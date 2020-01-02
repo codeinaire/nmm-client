@@ -4,7 +4,7 @@ import { signUp } from '../utils/auth'
 
 import DynamicForm from '../components/DynamicForm'
 
-import { FormikActions } from 'formik'
+import { FormikHelpers } from 'formik'
 import { OnSubmitObject } from '../components/types'
 
 export default function SignIn() {
@@ -44,7 +44,7 @@ export default function SignIn() {
 
   const onSubmit = (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus}: FormikActions<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus}: FormikHelpers<OnSubmitObject>
   ) => {
     try {
       signUp({

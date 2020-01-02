@@ -8,7 +8,7 @@ import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
-import { FormikActions } from 'formik'
+import { FormikHelpers } from 'formik'
 
 export const CREATE_USER_PROFILE = gql`
   mutation CreateUserProfile($userProfileInput: UserProfileInput) {
@@ -194,7 +194,7 @@ export default function CreateProfile() {
       setSubmitting,
       setStatus,
       setFieldValue
-    }: FormikActions<OnSubmitObject>
+    }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
       setFieldValue('id', router.query.userId)
