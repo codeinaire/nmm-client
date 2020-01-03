@@ -1,21 +1,15 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
-// import VidCam from '../components/LiveFaceDetect'
-// import FbInitParent from '../containers/FbInitParent'
-// import FbUserShare from '../components/FbUserShare'
-import FieldArray from '../containers/FieldArray'
+const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
+  ssr: false
+})
 
 export default function HomePage() {
   return (
     <div>
       <h1>Take a photo</h1>
-      <h4>Facebook stuff</h4>
-      {/* <FbInitParent>
-      {() => (
-        <FbUserShare href='https://myapp.example:3000/create-recipe' quote='This is absolutely amazing!!' />
-      )}
-      </FbInitParent> */}
-      <FieldArray />
+      <LiveFaceDetect />
     </div>
   )
 }

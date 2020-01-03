@@ -204,9 +204,11 @@ export default function SignIn() {
     }
   ]
 
-  // N.B. used for create-recipe b/c one photo is made sent to cloudinary
-  // to return a low & standard resolution size. All the inputs in
-  // formInitialvalues are sent to the lambda.
+  /**
+   * @remark used for create-recipe b/c one photo is made sent to cloudinary
+   * to return a low & standard resolution size. All the inputs in
+   * formInitialvalues are sent to the lambda.
+   */
   const formInitialValues = [
     { name: 'ingredients', value: [''] },
     { name: 'method', value: [''] },
@@ -247,8 +249,6 @@ export default function SignIn() {
     { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
-      console.log('values', values)
-
       const recipe = await createRecipe({
         variables: {
           recipe: values

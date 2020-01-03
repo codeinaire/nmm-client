@@ -22,11 +22,12 @@ const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
 export default () => {
-  const [faceRecog, setFaceRecog] = useState(FACE_RECOG_INITIAL_STATE)
+  const [faceRecogAttributes, setFaceRecogAttributes] = useState(
+    FACE_RECOG_INITIAL_STATE
+  )
   const [cameraFacingMode, setCameraFacingMode] = useState('')
   const [dataUri, setDataUri] = useState('')
   let webcamRef: RefObject<any> = useRef(null)
-  let interval: any
 
   useEffect(() => {
     /**
@@ -40,9 +41,10 @@ export default () => {
       description: 'Starting setInputDevice()'
     })
     setInputDevice()
-    return function cleanup() {
-      clearInterval(interval)
-    }
+    const intervalId = setInterval(() => {
+      detectFaceAndExpression()
+    }, 100)
+    return () => clearInterval(intervalId)
   }, [])
 
   async function setInputDevice() {
@@ -60,32 +62,32 @@ export default () => {
       }
       logger.log({
         level: 'INFO',
-        description: 'Starting startCapture().'
+        description: 'Starting capture.'
       })
-      startCapture()
     } catch (error) {
       logger.log({
         level: 'ERROR',
-        description: error
+        description: `Error in setInputDevice: ${error}`
       })
     }
   }
 
-  function startCapture() {
-    interval = setInterval(() => {
-      detectFaceAndExpression()
-    }, 100)
-  }
-
   async function detectFaceAndExpression() {
     if (webcamRef.current) {
-      const result = await detectFacesAndExpression(
-        webcamRef.current.getScreenshot(),
-        INPUT_SIZE
-      )
+      try {
+        const result = await detectFacesAndExpression(
+          webcamRef.current.getScreenshot(),
+          INPUT_SIZE
+        )
 
-      if (result.length) {
-        setFaceRecog(result)
+        if (result.length) {
+          setFaceRecogAttributes(result)
+        }
+      } catch (error) {
+        logger.log({
+          level: 'ERROR',
+          description: `Error in detectFaceAndExpression: ${error}`
+        })
       }
     }
   }
@@ -120,8 +122,8 @@ export default () => {
   }
 
   let drawBox
-  if (faceRecog.length) {
-    drawBox = faceRecog.map((faceObj: any) => (
+  if (faceRecogAttributes.length) {
+    drawBox = faceRecogAttributes.map((faceObj: any) => (
       <div>
         <div
           style={{
@@ -141,7 +143,10 @@ export default () => {
     <>
       {dataUri ? (
         <>
-          <ImagePreview dataUri={dataUri} faceRecog={faceRecog} />
+          <ImagePreview
+            dataUri={dataUri}
+            faceRecogAttributes={faceRecogAttributes}
+          />
           <FbInitAndToken>
             {() => <FbGroupShare imageSrc={dataUri} />}
           </FbInitAndToken>

@@ -11,17 +11,22 @@ export async function loadModels() {
       description: 'Loading models'
     })
     // TODO - maybe change the paths when going into prod.
-    await faceapi.loadTinyFaceDetectorModel('/models')
-    await faceapi.loadFaceExpressionModel('/models')
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/models')
+    await faceapi.nets.faceExpressionNet.loadFromUri('/models')
+    // await faceapi.loadTinyFaceDetectorModel('/models')
+    // await faceapi.loadFaceExpressionModel('/models')
   } catch (error) {
     logger.log({
       level: 'ERROR',
-      description: error
+      description: `Loading models error: ${error}`
     })
   }
 }
 
-export async function detectFacesAndExpression(dataUri: string, inputSize = 320) {
+export async function detectFacesAndExpression(
+  dataUri: string,
+  inputSize = 320
+) {
   // tiny_face_detector options
   const scoreThreshold = 0.5
   const OPTION = new faceapi.TinyFaceDetectorOptions({

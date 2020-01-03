@@ -224,7 +224,7 @@ export default function CreateProfile() {
       /**
        * @remark convert form string to int for db
        */
-      ((values.challengeGoals as unknown) as number) = parseInt(
+      ;((values.challengeGoals as unknown) as number) = parseInt(
         values.challengeGoals,
         10
       )
