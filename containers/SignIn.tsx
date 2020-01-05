@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { object, string } from 'yup'
-import { FormikActions } from 'formik'
+import { FormikHelpers } from 'formik'
 import FacebookSignInFailModal from 'react-modal'
 import Link from 'next/link'
 
@@ -41,7 +41,7 @@ export default function SignIn() {
 
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setStatus, setSubmitting }: FormikActions<OnSubmitObject>
+    { resetForm, setStatus, setSubmitting }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
       await signIn(SignInTypes.auth0, values.email, values.password)

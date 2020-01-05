@@ -7,7 +7,7 @@ import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 // TYPES
 import { OnSubmitObject } from '../components/types'
-import { FormikActions } from 'formik'
+import { FormikHelpers } from 'formik'
 
 const CREATE_RECIPE = gql`
   mutation createRecipe($recipe: RecipeInput!) {
@@ -204,9 +204,11 @@ export default function SignIn() {
     }
   ]
 
-  // N.B. used for create-recipe b/c one photo is made sent to cloudinary
-  // to return a low & standard resolution size. All the inputs in
-  // formInitialvalues are sent to the lambda.
+  /**
+   * @remark used for create-recipe b/c one photo is made sent to cloudinary
+   * to return a low & standard resolution size. All the inputs in
+   * formInitialvalues are sent to the lambda.
+   */
   const formInitialValues = [
     { name: 'ingredients', value: [''] },
     { name: 'method', value: [''] },
@@ -244,11 +246,9 @@ export default function SignIn() {
   const [createRecipe] = useMutation(CREATE_RECIPE)
   const onSubmit = async (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus }: FormikActions<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
-      console.log('values', values)
-
       const recipe = await createRecipe({
         variables: {
           recipe: values

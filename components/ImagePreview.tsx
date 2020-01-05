@@ -1,9 +1,16 @@
 import React from 'react'
+import { FaceRecogProperties } from './types'
 
-export default (props: any) => {
+export default ({
+  dataUri,
+  faceRecogAttributes
+}: {
+  dataUri: string
+  faceRecogAttributes: FaceRecogProperties[]
+}) => {
   let drawBox = null
-  if (props.liveVid.length) {
-    drawBox = props.liveVid.map((faceObj: any) => (
+  if (faceRecogAttributes.length) {
+    drawBox = faceRecogAttributes.map((faceObj: FaceRecogProperties) => (
       <div>
         <div
           style={{
@@ -12,7 +19,7 @@ export default (props: any) => {
             borderColor: 'blue',
             height: faceObj.detection.box.height,
             width: faceObj.detection.box.width,
-            transform: `translate(${faceObj.detection.box._x}px,${faceObj.detection.box._y}px)`
+            transform: `translate(${faceObj.detection.box.x}px,${faceObj.detection.box.y}px)`
           }}
         ></div>
       </div>
@@ -23,17 +30,18 @@ export default (props: any) => {
     <div>
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute' }}>
-          <img src={props.dataUri} alt="imageURL" />
-          {!!drawBox ? (props.liveVid.map((faceObj: any) => (
-            <div>
-            <p>Neutral:{faceObj.expressions.neutral}</p>
-            <p>Happy:{faceObj.expressions.happy}</p>
-            <p>Sad:{faceObj.expressions.sad}</p>
-            <p>Angry:{faceObj.expressions.angry}</p>
-            <p>Surprised:{faceObj.expressions.surprised}</p>
-          </div>
-          ))
-          ) : null}
+          <img src={dataUri} alt='imageURL' />
+          {!!drawBox
+            ? faceRecogAttributes.map((faceObj: any) => (
+                <div>
+                  <p>Neutral:{faceObj.expressions.neutral}</p>
+                  <p>Happy:{faceObj.expressions.happy}</p>
+                  <p>Sad:{faceObj.expressions.sad}</p>
+                  <p>Angry:{faceObj.expressions.angry}</p>
+                  <p>Surprised:{faceObj.expressions.surprised}</p>
+                </div>
+              ))
+            : null}
         </div>
         {!!drawBox ? drawBox : null}
       </div>

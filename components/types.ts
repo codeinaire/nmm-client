@@ -1,5 +1,5 @@
 import { ObjectSchema } from 'yup'
-import { FormikActions, FieldProps } from 'formik'
+import { FormikHelpers, FieldProps } from 'formik'
 import { FaceDetection, FaceExpressions } from 'face-api.js'
 
 // DYNAMIC FORM TYPES
@@ -7,7 +7,7 @@ export interface DynamicFormProps {
   failMessage: string
   formInput: Array<DynamicFormInputObject>
   formInitialValues: Array<InitialValues>
-  onSubmit: (arg0: OnSubmitObject, arg1: FormikActions<OnSubmitObject>) => void
+  onSubmit: (arg0: OnSubmitObject, arg1: FormikHelpers<OnSubmitObject>) => void
   submitType: string
   successMessage: string
   validationSchema: ObjectSchema
@@ -39,7 +39,7 @@ export interface DynamicFormInputObject {
   fieldArray?: boolean
 }
 
-interface DynamicFormCheckboxInputObject {
+export interface DynamicFormCheckboxInputObject {
   type: string
   name: string
   errorMessageId: string
