@@ -6,6 +6,14 @@ import { withRouter, Router } from 'next/router'
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
 
+// These are the inputs I need for challenge
+// type: TypeEnum!
+//     sectionsCompleted: [SectionsCompletedEnum!]!
+//     difficulty: ChallengeDifficultyEnum!
+//     lowResSharedFriendsImage: String
+//     standardResolution: String
+//     recipeId: Int!
+
 const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
   ssr: false
 })
@@ -39,6 +47,26 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     variables: { recipeId }
   })
 
+  const formInput = [
+    {
+      recipeCheckbox: true,
+      legend: 'Ingredients',
+      name: 'ingredients',
+      errorMessageId: 'ingredientsError',
+      list: data.recipe.ingredients,
+      hintText:
+        'Once all ingredients are collected click on the ingredients box!'
+    },
+    {
+      recipeCheckbox: true,
+      legend: 'Method',
+      name: 'method',
+      errorMessageId: 'methodsError',
+      list: data.recipe.method,
+      hintText: 'Once the steps are all complete click on the method box!'
+    }
+  ]
+
   if (error) return <h1>`Error! ${error.message}`</h1>
   if (loading) return <h1>'Loading...'</h1>
 
@@ -58,7 +86,7 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
       ))}
       <div>{takePhoto ? <LiveFaceDetect /> : null}</div>
       <button onClick={() => setTakePhoto(true)}>Take photo!</button>
-      {console.log('router.route', router.asPath)}
+      {/* TODO - maybe get quote from the recipe? */}
       <FbInitAndToken>
         {() => (
           <FbUserShare

@@ -39,7 +39,7 @@ export interface DynamicFormInputObject {
   fieldArray?: boolean
 }
 
-interface DynamicFormCheckboxInputObject {
+export interface DynamicFormCheckboxInputObject {
   type: string
   name: string
   errorMessageId: string

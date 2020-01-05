@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, FormikErrors, FormikTouched } from 'formik'
-import { DynamicFormInputObject } from './types'
+import { DynamicFormInputObject, DynamicFormCheckboxInputObject } from './types'
 
 export default ({
   errors,
@@ -18,7 +18,7 @@ export default ({
           <fieldset name={inputItem.name}>
             <legend>{inputItem.legend}</legend>
             {inputItem.checkboxInput!.map(
-              (checkboxItem: DynamicFormInputObject) => (
+              (checkboxItem: DynamicFormCheckboxInputObject) => (
                 <React.Fragment key={checkboxItem.name}>
                   {errors[checkboxItem.name] && touched[checkboxItem.name] ? (
                     <div
@@ -36,7 +36,6 @@ export default ({
                       aria-required={checkboxItem.required}
                       autoComplete={checkboxItem.autocomplete}
                       data-testid={checkboxItem.name}
-                      disabled={checkboxItem.disabled}
                       id={checkboxItem.name}
                       type={checkboxItem.type}
                       name={checkboxItem.name}
