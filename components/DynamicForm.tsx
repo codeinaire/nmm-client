@@ -64,7 +64,6 @@ export default function DynamicForm(props: DynamicFormProps) {
                 ) : inputItem.fieldArray ? (
                   <DynamicFormFieldArray
                     inputItem={inputItem}
-
                     values={values}
                   />
                 ) : (

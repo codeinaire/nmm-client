@@ -21,7 +21,7 @@ const INPUT_SIZE = 160
 const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
-export default () => {
+export default function LiveFaceDetect() {
   const [faceRecogAttributes, setFaceRecogAttributes] = useState(
     FACE_RECOG_INITIAL_STATE
   )

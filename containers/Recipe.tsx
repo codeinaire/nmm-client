@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import dynamic from 'next/dynamic'
 import { withRouter, Router } from 'next/router'
+import logger from '../utils/logger'
+
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
 
+import { OnSubmitObject } from '../components/types'
+import { FormikHelpers } from 'formik'
 // These are the inputs I need for challenge
 // type: TypeEnum!
 //     sectionsCompleted: [SectionsCompletedEnum!]!
@@ -41,47 +45,90 @@ const GET_RECIPE = gql`
   }
 `
 
+const GET_CHALLENGE = gql`
+  query challenge($recipeId: ID!) {
+    challenge(recipeId: $recipeId) {
+      id
+      sectionsCompleted
+      sharedFriendsImages {
+        standardResolution
+      }
+    }
+  }
+`
+
+const CREATE_UPDATE_CHALLENGE = gql`
+  mutation createOrUpdateChallenge($challengeInput: ChallengeInput) {
+    createOrUpdateChallenge(challengeInput: $challengeInput) {
+      id
+    }
+  }
+`
+
 const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   const [takePhoto, setTakePhoto] = useState(false)
-  const { loading, error, data } = useQuery(GET_RECIPE, {
+  const {
+    loading: recipeLoading,
+    error: recipeError,
+    data: recipeData
+  } = useQuery(GET_RECIPE, {
     variables: { recipeId }
   })
+  const {
+    loading: challengeLoading,
+    error: challengeError,
+    data: challengeData
+  } = useQuery(GET_CHALLENGE, {
+    variables: { recipeId }
+  })
+  const [
+    createOrUpdateChallenge,
+    { loading: mutationLoading, error: mutationError, data: mutationData }
+  ] = useMutation(CREATE_UPDATE_CHALLENGE)
+  // state for createOrUpdateChallenge containing type, sectionsCompleted,
+  // difficulty, lowsResSharedFriendsImage, standardResolution, recipeId
+  const [
+    createOrUpdateChallengeState,
+    setcreateOrUpdateChallengeState
+  ] = useState({
+    type: 'Recipe',
+    sectionsCompleted: [],
+    difficulty: recipeData.recipe.difficulty,
+    lowsResSharedFriendsImage: '',
+    standardResolution: '',
+    recipeId
+  })
+  // state for GET_CHALLENGE containing sectionsCompleted, and
+  // lowResSharedFriendsImage
 
-  const formInput = [
-    {
-      recipeCheckbox: true,
-      legend: 'Ingredients',
-      name: 'ingredients',
-      errorMessageId: 'ingredientsError',
-      list: data.recipe.ingredients,
-      hintText:
-        'Once all ingredients are collected click on the ingredients box!'
-    },
-    {
-      recipeCheckbox: true,
-      legend: 'Method',
-      name: 'method',
-      errorMessageId: 'methodsError',
-      list: data.recipe.method,
-      hintText: 'Once the steps are all complete click on the method box!'
-    }
-  ]
+  // const formInitialValues = [
+  //   { name: 'type', value: 'Recipe' },
+  //   { name: 'sectionsCompleted', value: [] },
+  //   { name: 'difficulty', value: data.recipe.difficulty },
+  //   { name: 'lowResSharedFriendsImage', value: '' },
+  //   { name: 'standardResolution', value: '' },
+  //   { name: 'recipeId', value: recipeId }
+  // ]
 
-  if (error) return <h1>`Error! ${error.message}`</h1>
-  if (loading) return <h1>'Loading...'</h1>
+  console.log('data', recipeData)
+
+  if (recipeError) return <h1>`Error! ${recipeError.message}`</h1>
+  if (recipeLoading) return <h1>'Loading...'</h1>
 
   return (
     <>
-      <h1>Title: {data.recipe.title}</h1>
-      <h2>Meal Type: {data.recipe.mealType}</h2>
-      <h2>Difficulty: {data.recipe.difficulty}</h2>
-      <h2>Budget: {data.recipe.cost}</h2>
+      <h1>Title: {recipeData.recipe.title}</h1>
+      <h2>Meal Type: {recipeData.recipe.mealType}</h2>
+      <h2>Difficulty: {recipeData.recipe.difficulty}</h2>
+      <h2>Budget: {recipeData.recipe.cost}</h2>
       <h3>Ingredients</h3>
-      {data.recipe.ingredients.map((ingredient: string) => (
-        <p>{ingredient}</p>
-      ))}
+      <div onClick={() => console.log('testing')}>
+        {recipeData.recipe.ingredients.map((ingredient: string) => (
+          <p>{ingredient}</p>
+        ))}
+      </div>
       <h4>Method</h4>
-      {data.recipe.method.map((step: string) => (
+      {recipeData.recipe.method.map((step: string) => (
         <li>{step}</li>
       ))}
       <div>{takePhoto ? <LiveFaceDetect /> : null}</div>
