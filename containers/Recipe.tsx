@@ -1,4 +1,10 @@
-import React, { useState } from 'react'
+import React, {
+  useState,
+  useReducer,
+  createContext,
+  useEffect,
+  useContext
+} from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import dynamic from 'next/dynamic'
@@ -8,13 +14,20 @@ import logger from '../utils/logger'
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
 
-import { OnSubmitObject } from '../components/types'
 import { FormikHelpers } from 'formik'
+import { OnSubmitObject } from '../components/types'
+import {
+  DispatchCreateOrUpdateChallengeState,
+  CreateUpdateChallengeState,
+  ActionType,
+  ImageUrls
+} from '../containers/types'
+
 // These are the inputs I need for challenge
 // type: TypeEnum!
 //     sectionsCompleted: [SectionsCompletedEnum!]!
 //     difficulty: ChallengeDifficultyEnum!
-//     lowResSharedFriendsImage: String
+//     lowsResSharedFriendsImage: String
 //     standardResolution: String
 //     recipeId: Int!
 
@@ -65,6 +78,48 @@ const CREATE_UPDATE_CHALLENGE = gql`
   }
 `
 
+function reducerCreateOrUpdateChallengeState(
+  state: CreateUpdateChallengeState,
+  action: ActionType,
+  imageUrls?: ImageUrls
+): CreateUpdateChallengeState {
+  switch (action.type) {
+    case 'ingredients':
+      return {
+        ...state,
+        sectionsCompleted: state.sectionsCompleted.concat(['Ingredients'])
+      }
+    case 'method':
+      return {
+        ...state,
+        sectionsCompleted: state.sectionsCompleted.concat(['Method'])
+      }
+    case 'SharedFriendsImage':
+      return {
+        ...state,
+        standardResolution: imageUrls?.standardResolution || '',
+        lowsResSharedFriendsImage: imageUrls?.lowsResSharedFriendsImage || ''
+      }
+    default:
+      throw new Error('Failed to update recipe challenge state!')
+  }
+}
+const CreateUpdateChallengeDispatch = createContext<
+  DispatchCreateOrUpdateChallengeState | undefined
+>(undefined)
+
+export function useCreateUpdateChallengeDispatch() {
+  const dispatchCreateOrUpdateChallengeState = useContext(
+    CreateUpdateChallengeDispatch
+  )
+  if (dispatchCreateOrUpdateChallengeState === undefined) {
+    throw new Error(
+      'useCreateUpdateChallengeDispatch must be used within a CreateUpdateChallengeDispatch.Provider'
+    )
+  }
+  return dispatchCreateOrUpdateChallengeState
+}
+
 const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   const [takePhoto, setTakePhoto] = useState(false)
   const {
@@ -81,56 +136,84 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   } = useQuery(GET_CHALLENGE, {
     variables: { recipeId }
   })
-  const [
-    createOrUpdateChallenge,
-    { loading: mutationLoading, error: mutationError, data: mutationData }
-  ] = useMutation(CREATE_UPDATE_CHALLENGE)
-  // state for createOrUpdateChallenge containing type, sectionsCompleted,
-  // difficulty, lowsResSharedFriendsImage, standardResolution, recipeId
+  // CreateOrUpdate apollo and react state
+  const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
+    sectionsCompleted: [],
+    lowsResSharedFriendsImage: '',
+    standardResolution: ''
+  }
   const [
     createOrUpdateChallengeState,
-    setcreateOrUpdateChallengeState
-  ] = useState({
-    type: 'Recipe',
-    sectionsCompleted: [],
-    difficulty: recipeData.recipe.difficulty,
-    lowsResSharedFriendsImage: '',
-    standardResolution: '',
+    dispatchCreateOrUpdateChallengeState
+  ] = useReducer(
+    reducerCreateOrUpdateChallengeState,
+    INITIAL_CREATE_UPDATE_CHALLENGE_STATE
+  )
+  const [createOrUpdateChallenge] = useMutation(CREATE_UPDATE_CHALLENGE)
+  useEffect(() => {
+    async function createUpdateChallengeApi(values: any) {
+      try {
+        const challenge = await createOrUpdateChallenge({
+          variables: {
+            challengeInput: values
+          }
+        })
+        logger.log({
+          level: 'INFO',
+          description: `Challenge ${challenge.data.createOrUpdateChallenge.id} with title in being created or updated!`
+        })
+      } catch (err) {
+        logger.log({
+          level: 'ERROR',
+          description: `Error creating or updating challenge: ${err}`
+        })
+      }
+    }
+    const values = {
+      type: 'Recipe',
+      difficulty: recipeData?.recipe.difficulty,
+      recipeId,
+      ...createOrUpdateChallengeState
+    }
+    createUpdateChallengeApi(values)
+    console.log('values', values)
+  }, [
+    createOrUpdateChallenge,
+    createOrUpdateChallengeState,
+    recipeData,
     recipeId
-  })
-  // state for GET_CHALLENGE containing sectionsCompleted, and
-  // lowResSharedFriendsImage
-
-  // const formInitialValues = [
-  //   { name: 'type', value: 'Recipe' },
-  //   { name: 'sectionsCompleted', value: [] },
-  //   { name: 'difficulty', value: data.recipe.difficulty },
-  //   { name: 'lowResSharedFriendsImage', value: '' },
-  //   { name: 'standardResolution', value: '' },
-  //   { name: 'recipeId', value: recipeId }
-  // ]
-
-  console.log('data', recipeData)
+  ])
+  console.log('data', recipeData, createOrUpdateChallengeState)
 
   if (recipeError) return <h1>`Error! ${recipeError.message}`</h1>
   if (recipeLoading) return <h1>'Loading...'</h1>
 
   return (
-    <>
+    <CreateUpdateChallengeDispatch.Provider
+      value={dispatchCreateOrUpdateChallengeState}
+    >
       <h1>Title: {recipeData.recipe.title}</h1>
       <h2>Meal Type: {recipeData.recipe.mealType}</h2>
       <h2>Difficulty: {recipeData.recipe.difficulty}</h2>
       <h2>Budget: {recipeData.recipe.cost}</h2>
       <h3>Ingredients</h3>
-      <div onClick={() => console.log('testing')}>
+      <div
+        onClick={() =>
+          dispatchCreateOrUpdateChallengeState({ type: 'ingredients' })
+        }
+      >
         {recipeData.recipe.ingredients.map((ingredient: string) => (
           <p>{ingredient}</p>
         ))}
       </div>
       <h4>Method</h4>
-      {recipeData.recipe.method.map((step: string) => (
-        <li>{step}</li>
-      ))}
+      <div
+        onClick={() => dispatchCreateOrUpdateChallengeState({ type: 'method' })}
+      >
+        {recipeData.recipe.method.map((step: string) => (
+          <li>{step}</li>
+        ))}
+      </div>
       <div>{takePhoto ? <LiveFaceDetect /> : null}</div>
       <button onClick={() => setTakePhoto(true)}>Take photo!</button>
       {/* TODO - maybe get quote from the recipe? */}
@@ -142,7 +225,7 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
           />
         )}
       </FbInitAndToken>
-    </>
+    </CreateUpdateChallengeDispatch.Provider>
   )
 }
 

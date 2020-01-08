@@ -12,13 +12,24 @@ class MyApp extends App<Props> {
   // perform automatic static optimization, causing every page in your app to
   // be server-side rendered.
   //
-  // static async getInitialProps({ Component, ctx }) {
-  //   let pageProps = {}
-  //
+  // static async getInitialProps({
+  //   Component,
+  //   ctx
+  // }: {
+  //   Component: any
+  //   ctx: any
+  // }) {
+  //   let pageProps: any = {}
+
   //   if (Component.getInitialProps) {
   //     pageProps = await Component.getInitialProps(ctx)
   //   }
-  //
+
+  //   console.log('pageProps', pageProps)
+  //   console.log('ctx', ctx.query)
+
+  //   pageProps.query = ctx.query
+
   //   return { pageProps }
   // }
 
