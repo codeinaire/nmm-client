@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { webAuth } from '../utils/auth'
 import logger from '../utils/logger'
 
-
 /**
  * @remark this page will show links to recipes, profile, etc
  */
@@ -16,11 +15,7 @@ export default function Home() {
   // no content, that way index is free from it. I can
   // redirect appropriately through the logic
   useEffect(() => {
-    console.log('use effect');
-
     const signedIn = localStorage.getItem('signed_in')
-    console.log('signedIn',signedIn);
-
 
     if (signedIn == 'true') {
       webAuth.parseHash({ hash: window.location.hash }, (err, authResult) => {
@@ -31,7 +26,7 @@ export default function Home() {
             description: `Auth0 Parsing Error - ${err.errorDescription}`
           })
         }
-        console.log('testing');
+        console.log('testing', authResult)
 
         if (authResult) {
           const userData = authResult.idTokenPayload
@@ -79,7 +74,7 @@ export default function Home() {
   })
   return (
     <div>
-      <Link href="/signin">
+      <Link href='/signin'>
         <a>Index</a>
       </Link>
       <h1>Redirecting...</h1>

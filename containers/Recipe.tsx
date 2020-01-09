@@ -134,7 +134,6 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   const [getChallengeQuery, setGetChallengeQuery] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
-
   // Apollo
   const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
   const {
@@ -161,7 +160,10 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     setGetChallengeQuery(challengeData?.data.challenge.sectionsCompleted)
     setSharedFriendsImage(challengeData?.data.challenge.sharedFriendsImages)
   }, [challengeData, challengeError])
-
+  console.log(
+    'recipeData?.recipe.difficulty OUTSIDE useEffect',
+    recipeData?.recipe.difficulty
+  )
   useEffect(() => {
     async function createUpdateChallengeApi(values: any) {
       try {
@@ -181,6 +183,11 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
         })
       }
     }
+    console.log(
+      'recipeData?.recipe.difficulty in use effect',
+      recipeData?.recipe.difficulty
+    )
+
     const values = {
       type: 'Recipe',
       difficulty: recipeData?.recipe.difficulty,

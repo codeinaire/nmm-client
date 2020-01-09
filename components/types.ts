@@ -7,7 +7,10 @@ export interface DynamicFormProps {
   failMessage: string
   formInput: Array<DynamicFormInputObject>
   formInitialValues: Array<InitialValues>
-  onSubmit: (arg0: OnSubmitObject, arg1: FormikHelpers<OnSubmitObject>) => void
+  onSubmit: (
+    arg0: OnSubmitObject | OnSubmitCreateProfileObject,
+    arg1: FormikHelpers<OnSubmitObject>
+  ) => void
   submitType: string
   successMessage: string
   validationSchema: ObjectSchema
@@ -21,6 +24,16 @@ export interface InitialValues {
 
 export interface OnSubmitObject {
   [key: string]: string
+}
+
+export interface OnSubmitCreateProfileObject {
+  motivations: Array<string>
+  challengeGoals: string
+  username: string
+  id: string
+  bio?: string
+  lowResProfile?: string
+  standardResolution?: string
 }
 
 export interface DynamicFormInputObject {

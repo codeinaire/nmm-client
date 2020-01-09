@@ -35,14 +35,12 @@ export const signIn = (
         },
         (error: Auth0Error | null, res: any) => {
           if (error) {
-            localStorage.setItem('signed_in', 'false')
             logger.log({
               level: 'ERROR',
               description: `Auth0 Sign In Error - ${error.description}`
             })
             reject(error)
           } else {
-            localStorage.setItem('signed_in', 'true')
             logger.log({
               level: 'INFO',
               description: `${res.username}, has been successfully signed in`

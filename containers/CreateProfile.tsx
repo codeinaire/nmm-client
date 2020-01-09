@@ -7,7 +7,10 @@ import logger from '../utils/logger'
 
 import DynamicForm from '../components/DynamicForm'
 
-import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
+import {
+  OnSubmitCreateProfileObject,
+  CheckboxSchemaObj
+} from '../components/types'
 import { FormikHelpers } from 'formik'
 
 export const CREATE_USER_PROFILE = gql`
@@ -16,7 +19,8 @@ export const CREATE_USER_PROFILE = gql`
       id
       totalPoints
       username
-      profilePic
+      lowResProfile
+      standardResolution
       challengeQuote
     }
   }
@@ -188,22 +192,22 @@ export default function CreateProfile() {
 
   const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
   const onSubmit = async (
-    values: OnSubmitObject,
+    values: OnSubmitCreateProfileObject,
     {
       resetForm,
       setSubmitting,
       setStatus,
       setFieldValue
-    }: FormikHelpers<OnSubmitObject>
+    }: FormikHelpers<OnSubmitCreateProfileObject>
   ) => {
     try {
       setFieldValue('id', router.query.userId)
 
       /**
-       * @remark convert checkbox values to string for DB &
+       * @remark convert checkbox values to Array<string> for DB &
        * remove empty keys with no value for CalculatePoints class
        */
-      let motivations: string = ''
+      let motivations: Array<string> = []
       for (const valuesProperty in values) {
         if (
           valuesProperty == 'environment' ||
@@ -212,7 +216,7 @@ export default function CreateProfile() {
           valuesProperty == 'animalWelfare'
         ) {
           if (values[valuesProperty]) {
-            motivations = motivations.concat(',', valuesProperty)
+            motivations = motivations.concat([valuesProperty])
           }
           delete values[valuesProperty]
         }
@@ -225,7 +229,7 @@ export default function CreateProfile() {
        * @remark convert form string to int for db
        */
       ;((values.challengeGoals as unknown) as number) = parseInt(
-        values.challengeGoals,
+        values.challengeGoals as string,
         10
       )
 

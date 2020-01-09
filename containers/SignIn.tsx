@@ -44,8 +44,10 @@ export default function SignIn() {
     { resetForm, setStatus, setSubmitting }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
+      localStorage.setItem('signed_in', 'true')
       await signIn(SignInTypes.auth0, values.email, values.password)
     } catch (err) {
+      localStorage.setItem('signed_in', 'false')
       resetForm()
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
