@@ -1,7 +1,5 @@
 export interface CreateUpdateChallengeState {
   sectionsCompleted: Array<string>
-  lowsResSharedFriendsImage: string
-  standardResolution: string
 }
 
 export interface ActionType {
@@ -14,3 +12,5 @@ export type ImageUrls = {
 }
 
 export type DispatchCreateOrUpdateChallengeState = (action: ActionType) => void
+
+export type handleSharedFriendsImage = (imageUrls: ImageUrls) => void

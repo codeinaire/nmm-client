@@ -1,9 +1,16 @@
 import React from 'react'
 import { useCreateUpdateChallengeDispatch } from '../containers/Recipe'
-
 import logger from '../utils/logger'
 
-export default ({ imageSrc }: { imageSrc: string }) => {
+import { handleSharedFriendsImage } from '../containers/types'
+
+export default function FbGroupShare({
+  imageSrc,
+  handleSharedFriendsImage
+}: {
+  imageSrc: string
+  handleSharedFriendsImage: handleSharedFriendsImage
+}) {
   const dispatchCreateOrUpdateChallengeState = useCreateUpdateChallengeDispatch()
   function handleShareImage() {
     FB.getLoginStatus(async (res: fb.StatusResponse) => {
@@ -49,6 +56,10 @@ export default ({ imageSrc }: { imageSrc: string }) => {
               description: res.error.message
             })
           } else {
+            handleSharedFriendsImage({
+              standardResolution: files.secure_url,
+              lowsResSharedFriendsImage: files.eager[0].secure_url
+            })
             dispatchCreateOrUpdateChallengeState({ type: 'SharedFriendsImage' })
             logger.log({
               level: 'INFO',

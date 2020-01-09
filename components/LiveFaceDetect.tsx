@@ -14,6 +14,7 @@ import FbInitAndToken from '../containers/FbInitParent'
 import FbGroupShare from '../components/FbGroupShare'
 
 import { FaceRecogProperties } from './types'
+import { handleSharedFriendsImage } from '../containers/types'
 
 const WIDTH = 420
 const HEIGHT = 420
@@ -21,7 +22,11 @@ const INPUT_SIZE = 160
 const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
-export default function LiveFaceDetect() {
+export default function LiveFaceDetect({
+  handleSharedFriendsImage
+}: {
+  handleSharedFriendsImage: handleSharedFriendsImage
+}) {
   const [faceRecogAttributes, setFaceRecogAttributes] = useState(
     FACE_RECOG_INITIAL_STATE
   )
@@ -148,7 +153,12 @@ export default function LiveFaceDetect() {
             faceRecogAttributes={faceRecogAttributes}
           />
           <FbInitAndToken>
-            {() => <FbGroupShare imageSrc={dataUri} />}
+            {() => (
+              <FbGroupShare
+                imageSrc={dataUri}
+                handleSharedFriendsImage={handleSharedFriendsImage}
+              />
+            )}
           </FbInitAndToken>
         </>
       ) : (

@@ -14,22 +14,12 @@ import logger from '../utils/logger'
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
 
-import { FormikHelpers } from 'formik'
-import { OnSubmitObject } from '../components/types'
 import {
   DispatchCreateOrUpdateChallengeState,
   CreateUpdateChallengeState,
   ActionType,
   ImageUrls
 } from '../containers/types'
-
-// These are the inputs I need for challenge
-// type: TypeEnum!
-//     sectionsCompleted: [SectionsCompletedEnum!]!
-//     difficulty: ChallengeDifficultyEnum!
-//     lowsResSharedFriendsImage: String
-//     standardResolution: String
-//     recipeId: Int!
 
 const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
   ssr: false
@@ -80,16 +70,15 @@ const CREATE_UPDATE_CHALLENGE = gql`
 
 function reducerCreateOrUpdateChallengeState(
   state: CreateUpdateChallengeState,
-  action: ActionType,
-  imageUrls?: ImageUrls
+  action: ActionType
 ): CreateUpdateChallengeState {
   switch (action.type) {
-    case 'ingredients':
+    case 'Ingredients':
       return {
         ...state,
         sectionsCompleted: state.sectionsCompleted.concat(['Ingredients'])
       }
-    case 'method':
+    case 'Method':
       return {
         ...state,
         sectionsCompleted: state.sectionsCompleted.concat(['Method'])
@@ -97,8 +86,14 @@ function reducerCreateOrUpdateChallengeState(
     case 'SharedFriendsImage':
       return {
         ...state,
-        standardResolution: imageUrls?.standardResolution || '',
-        lowsResSharedFriendsImage: imageUrls?.lowsResSharedFriendsImage || ''
+        sectionsCompleted: state.sectionsCompleted.concat([
+          'SharedFriendsImage'
+        ])
+      }
+    case 'SharedRecipe':
+      return {
+        ...state,
+        sectionsCompleted: state.sectionsCompleted.concat(['SharedRecipe'])
       }
     default:
       throw new Error('Failed to update recipe challenge state!')
@@ -121,27 +116,12 @@ export function useCreateUpdateChallengeDispatch() {
 }
 
 const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
-  const [takePhoto, setTakePhoto] = useState(false)
-  const {
-    loading: recipeLoading,
-    error: recipeError,
-    data: recipeData
-  } = useQuery(GET_RECIPE, {
-    variables: { recipeId }
-  })
-  const {
-    loading: challengeLoading,
-    error: challengeError,
-    data: challengeData
-  } = useQuery(GET_CHALLENGE, {
-    variables: { recipeId }
-  })
-  // CreateOrUpdate apollo and react state
+  // TODO - find a way to make sure they can add each item to the
+  // array once only!
   const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
-    sectionsCompleted: [],
-    lowsResSharedFriendsImage: '',
-    standardResolution: ''
+    sectionsCompleted: []
   }
+  // State
   const [
     createOrUpdateChallengeState,
     dispatchCreateOrUpdateChallengeState
@@ -149,11 +129,43 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     reducerCreateOrUpdateChallengeState,
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
-  const [createOrUpdateChallenge] = useMutation(CREATE_UPDATE_CHALLENGE)
+  const [takePhoto, setTakePhoto] = useState(false)
+  const [sharedFriendsImage, setSharedFriendsImage] = useState()
+  const [getChallengeQuery, setGetChallengeQuery] = useState(
+    INITIAL_CREATE_UPDATE_CHALLENGE_STATE
+  )
+
+  // Apollo
+  const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
+  const {
+    loading: recipeLoading,
+    error: recipeError,
+    data: recipeData
+  } = useQuery(GET_RECIPE, {
+    variables: { recipeId }
+  })
+  const { error: challengeError, data: challengeData } = useQuery(
+    GET_CHALLENGE,
+    {
+      variables: { recipeId }
+    }
+  )
+
+  useEffect(() => {
+    if (challengeError) {
+      logger.log({
+        level: 'ERROR',
+        description: `Error querying for challenge: ${challengeError}`
+      })
+    }
+    setGetChallengeQuery(challengeData?.data.challenge.sectionsCompleted)
+    setSharedFriendsImage(challengeData?.data.challenge.sharedFriendsImages)
+  }, [challengeData, challengeError])
+
   useEffect(() => {
     async function createUpdateChallengeApi(values: any) {
       try {
-        const challenge = await createOrUpdateChallenge({
+        const challenge = await createOrUpdateChallengeMutation({
           variables: {
             challengeInput: values
           }
@@ -173,17 +185,35 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
       type: 'Recipe',
       difficulty: recipeData?.recipe.difficulty,
       recipeId,
-      ...createOrUpdateChallengeState
+      ...createOrUpdateChallengeState,
+      ...sharedFriendsImage
     }
     createUpdateChallengeApi(values)
-    console.log('values', values)
   }, [
-    createOrUpdateChallenge,
+    createOrUpdateChallengeMutation,
     createOrUpdateChallengeState,
     recipeData,
-    recipeId
+    recipeId,
+    sharedFriendsImage
   ])
-  console.log('data', recipeData, createOrUpdateChallengeState)
+
+  function handleSharedFriendsImage(imageUrls: ImageUrls) {
+    setSharedFriendsImage(imageUrls)
+  }
+
+  const ingredientsCompleted =
+    createOrUpdateChallengeState.sectionsCompleted.includes('Ingredients') ||
+    getChallengeQuery?.sectionsCompleted.includes('Ingredients')
+  const methodCompleted =
+    createOrUpdateChallengeState.sectionsCompleted.includes('Method') ||
+    getChallengeQuery?.sectionsCompleted.includes('Method')
+  const sharedFriendsImageCompleted =
+    createOrUpdateChallengeState.sectionsCompleted.includes(
+      'SharedFriendsImage'
+    ) || getChallengeQuery?.sectionsCompleted.includes('SharedFriendsImage')
+  const sharedRecipeCompleted =
+    createOrUpdateChallengeState.sectionsCompleted.includes('SharedRecipe') ||
+    getChallengeQuery?.sectionsCompleted.includes('SharedRecipe')
 
   if (recipeError) return <h1>`Error! ${recipeError.message}`</h1>
   if (recipeLoading) return <h1>'Loading...'</h1>
@@ -197,34 +227,72 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
       <h2>Difficulty: {recipeData.recipe.difficulty}</h2>
       <h2>Budget: {recipeData.recipe.cost}</h2>
       <h3>Ingredients</h3>
-      <div
-        onClick={() =>
-          dispatchCreateOrUpdateChallengeState({ type: 'ingredients' })
-        }
-      >
-        {recipeData.recipe.ingredients.map((ingredient: string) => (
-          <p>{ingredient}</p>
-        ))}
-      </div>
+      {/* TODO -  1) add styling */}
+      {ingredientsCompleted ? (
+        <span>
+          <p>You've completed this section!</p>
+        </span>
+      ) : (
+        <div
+          onClick={() =>
+            dispatchCreateOrUpdateChallengeState({ type: 'Ingredients' })
+          }
+        >
+          {recipeData.recipe.ingredients.map((ingredient: string) => (
+            <p>{ingredient}</p>
+          ))}
+        </div>
+      )}
       <h4>Method</h4>
-      <div
-        onClick={() => dispatchCreateOrUpdateChallengeState({ type: 'method' })}
-      >
-        {recipeData.recipe.method.map((step: string) => (
-          <li>{step}</li>
-        ))}
-      </div>
-      <div>{takePhoto ? <LiveFaceDetect /> : null}</div>
-      <button onClick={() => setTakePhoto(true)}>Take photo!</button>
+      {methodCompleted ? (
+        <span>
+          <p>You've completed this section!</p>
+        </span>
+      ) : (
+        <div
+          onClick={() =>
+            dispatchCreateOrUpdateChallengeState({ type: 'Method' })
+          }
+        >
+          {recipeData.recipe.method.map((step: string) => (
+            <li>{step}</li>
+          ))}
+        </div>
+      )}
+      {sharedFriendsImageCompleted ? (
+        <div>
+          <p>You've completed this section! Take a look at your photo!</p>
+          <img
+            src={sharedFriendsImage.standardResolution}
+            alt='Image of friends'
+          ></img>
+        </div>
+      ) : (
+        <div>
+          {takePhoto ? (
+            <LiveFaceDetect
+              handleSharedFriendsImage={handleSharedFriendsImage}
+            />
+          ) : (
+            <button onClick={() => setTakePhoto(true)}>Take photo!</button>
+          )}
+        </div>
+      )}
       {/* TODO - maybe get quote from the recipe? */}
-      <FbInitAndToken>
-        {() => (
-          <FbUserShare
-            href={`${process.env.CLIENT_URI}${router.asPath}`}
-            quote='This is an amazing recipe!'
-          />
-        )}
-      </FbInitAndToken>
+      {sharedRecipeCompleted ? (
+        <span>
+          <p>You've completed this section!</p>
+        </span>
+      ) : (
+        <FbInitAndToken>
+          {() => (
+            <FbUserShare
+              href={`${process.env.CLIENT_URI}${router.asPath}`}
+              quote='This is an amazing recipe!'
+            />
+          )}
+        </FbInitAndToken>
+      )}
     </CreateUpdateChallengeDispatch.Provider>
   )
 }
