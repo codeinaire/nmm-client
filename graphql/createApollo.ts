@@ -43,7 +43,7 @@ export default (initialState: NormalizedCacheObject) => {
     return {
       headers: {
         ...previousContext.headers,
-        authorization: data?.accessToken ? `Bearer ${data!.accessToken}` : '',
+        authorization: data.accessToken ? `Bearer ${data.accessToken}` : '',
         'Access-Control-Allow-Origin': process.env.CLIENT_URI
       }
     }

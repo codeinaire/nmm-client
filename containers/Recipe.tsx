@@ -3,7 +3,8 @@ import React, {
   useReducer,
   createContext,
   useEffect,
-  useContext
+  useContext,
+  useRef
 } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -115,12 +116,14 @@ export function useCreateUpdateChallengeDispatch() {
   return dispatchCreateOrUpdateChallengeState
 }
 
+const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
+  sectionsCompleted: []
+}
+
 const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
+  const firstUpdate = useRef(true)
   // TODO - find a way to make sure they can add each item to the
   // array once only!
-  const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
-    sectionsCompleted: []
-  }
   // State
   const [
     createOrUpdateChallengeState,
@@ -131,11 +134,10 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   )
   const [takePhoto, setTakePhoto] = useState(false)
   const [sharedFriendsImage, setSharedFriendsImage] = useState()
-  const [getChallengeQuery, setGetChallengeQuery] = useState(
+  const [challengeQueryState, setChallengeQueryState] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
   // Apollo
-  const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
   const {
     loading: recipeLoading,
     error: recipeError,
@@ -149,21 +151,30 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
       variables: { recipeId }
     }
   )
-
+  const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
+  // To set the state if there's data for the challenge
   useEffect(() => {
     if (challengeError) {
       logger.log({
         level: 'ERROR',
         description: `Error querying for challenge: ${challengeError}`
       })
+      return
     }
-    setGetChallengeQuery(challengeData?.data.challenge.sectionsCompleted)
-    setSharedFriendsImage(challengeData?.data.challenge.sharedFriendsImages)
+    if (challengeData == undefined || challengeData.challenge == null) {
+      console.log('3)INSIDE IF challengeData in use effect', challengeData)
+      return
+    }
+    console.log('3) challengeData in use effect', challengeData)
+
+    setChallengeQueryState({
+      sectionsCompleted: challengeData.challenge.sectionsCompleted
+    })
+    setSharedFriendsImage(challengeData.challenge.sharedFriendsImages)
   }, [challengeData, challengeError])
-  console.log(
-    'recipeData?.recipe.difficulty OUTSIDE useEffect',
-    recipeData?.recipe.difficulty
-  )
+
+  // I'm using this to update the challenge on each update but may
+  // I can use a different method
   useEffect(() => {
     async function createUpdateChallengeApi(values: any) {
       try {
@@ -183,19 +194,28 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
         })
       }
     }
-    console.log(
-      'recipeData?.recipe.difficulty in use effect',
-      recipeData?.recipe.difficulty
-    )
+    if (recipeData == undefined) {
+      console.log('1) INSIDE IF createUpdateChallenge')
+
+      return
+    }
 
     const values = {
       type: 'Recipe',
-      difficulty: recipeData?.recipe.difficulty,
+      difficulty: recipeData.recipe.difficulty,
       recipeId,
       ...createOrUpdateChallengeState,
       ...sharedFriendsImage
     }
-    createUpdateChallengeApi(values)
+    if (firstUpdate.current == false) {
+      console.log('1)$$$$$inside firstUp date FALSE')
+
+      createUpdateChallengeApi(values)
+    } else {
+      console.log('1)######inside firstUpdate TRUE')
+      firstUpdate.current = false
+      return
+    }
   }, [
     createOrUpdateChallengeMutation,
     createOrUpdateChallengeState,
@@ -207,34 +227,36 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   function handleSharedFriendsImage(imageUrls: ImageUrls) {
     setSharedFriendsImage(imageUrls)
   }
+  console.log('2) challengeQueryState b/f checks', challengeQueryState)
 
   const ingredientsCompleted =
     createOrUpdateChallengeState.sectionsCompleted.includes('Ingredients') ||
-    getChallengeQuery?.sectionsCompleted.includes('Ingredients')
+    challengeQueryState.sectionsCompleted.includes('Ingredients')
   const methodCompleted =
     createOrUpdateChallengeState.sectionsCompleted.includes('Method') ||
-    getChallengeQuery?.sectionsCompleted.includes('Method')
+    challengeQueryState.sectionsCompleted.includes('Method')
   const sharedFriendsImageCompleted =
     createOrUpdateChallengeState.sectionsCompleted.includes(
       'SharedFriendsImage'
-    ) || getChallengeQuery?.sectionsCompleted.includes('SharedFriendsImage')
+    ) || challengeQueryState.sectionsCompleted.includes('SharedFriendsImage')
   const sharedRecipeCompleted =
     createOrUpdateChallengeState.sectionsCompleted.includes('SharedRecipe') ||
-    getChallengeQuery?.sectionsCompleted.includes('SharedRecipe')
+    challengeQueryState.sectionsCompleted.includes('SharedRecipe')
 
-  if (recipeError) return <h1>`Error! ${recipeError.message}`</h1>
-  if (recipeLoading) return <h1>'Loading...'</h1>
+  if (recipeError) return <h1>Error! {recipeError.message}</h1>
+  if (recipeLoading) return <h1>Loading...</h1>
 
   return (
     <CreateUpdateChallengeDispatch.Provider
       value={dispatchCreateOrUpdateChallengeState}
     >
+      {console.log('4) %%%%inside render%%%%')}
       <h1>Title: {recipeData.recipe.title}</h1>
       <h2>Meal Type: {recipeData.recipe.mealType}</h2>
       <h2>Difficulty: {recipeData.recipe.difficulty}</h2>
       <h2>Budget: {recipeData.recipe.cost}</h2>
       <h3>Ingredients</h3>
-      {/* TODO -  1) add styling */}
+      {/* TODO -  1) add styling 2) make sure the non-signed in user doesn't have access to clicking on the items */}
       {ingredientsCompleted ? (
         <span>
           <p>You've completed this section!</p>

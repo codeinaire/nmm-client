@@ -61,7 +61,7 @@ export default function Home() {
               description: 'Index - redirect to another page.'
             })
             Router.push({
-              pathname: '/home',
+              pathname: '/recipes',
               query: {
                 userId: userData.sub
               }

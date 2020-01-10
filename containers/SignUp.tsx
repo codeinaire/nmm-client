@@ -44,7 +44,7 @@ export default function SignIn() {
 
   const onSubmit = (
     values: OnSubmitObject,
-    { resetForm, setSubmitting, setStatus}: FormikHelpers<OnSubmitObject>
+    { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
       signUp({
@@ -62,7 +62,8 @@ export default function SignIn() {
 
   const submitType = 'Sign Up!'
   const failMessage = 'Sign Up failed! Please try again!'
-  const successMessage = 'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
+  const successMessage =
+    'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
 
   const formInitialValues = [
     { name: 'email', value: '' },

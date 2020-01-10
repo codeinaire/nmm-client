@@ -7,10 +7,7 @@ export interface DynamicFormProps {
   failMessage: string
   formInput: Array<DynamicFormInputObject>
   formInitialValues: Array<InitialValues>
-  onSubmit: (
-    arg0: OnSubmitObject | OnSubmitCreateProfileObject,
-    arg1: FormikHelpers<OnSubmitObject>
-  ) => void
+  onSubmit: (arg0: OnSubmitObject, arg1: FormikHelpers<OnSubmitObject>) => void
   submitType: string
   successMessage: string
   validationSchema: ObjectSchema
@@ -100,10 +97,10 @@ export interface ModalStatus {
 }
 
 export interface CheckboxSchemaObj {
-  environment: boolean
-  animalWelfare: boolean
-  personalHealth: boolean
-  foodSecurity: boolean
+  Environment: boolean
+  AnimalWelfare: boolean
+  PersonalHealth: boolean
+  FoodSecurity: boolean
 }
 
 export interface FaceRecogProperties {
