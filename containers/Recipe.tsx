@@ -189,6 +189,9 @@ const Recipe = ({ router }: { router: Router }) => {
     setChallengeQueryState({
       sectionsCompleted: challengeData.challenge.sectionsCompleted
     })
+    challengeData.challenge.sectionsCompleted.map((section: string) =>
+      dispatchCreateOrUpdateChallengeState({ type: section })
+    )
     const sharedFriendsImageState = challengeData.challenge.sharedFriendsImages
       ? challengeData.challenge.sharedFriendsImages.standardResolution
       : ''
