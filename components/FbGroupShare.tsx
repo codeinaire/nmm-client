@@ -58,7 +58,7 @@ export default function FbGroupShare({
           } else {
             handleSharedFriendsImage({
               standardResolution: files.secure_url,
-              lowsResSharedFriendsImage: files.eager[0].secure_url
+              lowResSharedFriendsImage: files.eager[0].secure_url
             })
             dispatchCreateOrUpdateChallengeState({ type: 'SharedFriendsImage' })
             logger.log({

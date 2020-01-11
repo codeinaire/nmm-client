@@ -73,27 +73,25 @@ function reducerCreateOrUpdateChallengeState(
   state: CreateUpdateChallengeState,
   action: ActionType
 ): CreateUpdateChallengeState {
+  console.log('state in dispatch', state)
+
   switch (action.type) {
     case 'Ingredients':
       return {
-        ...state,
         sectionsCompleted: state.sectionsCompleted.concat(['Ingredients'])
       }
     case 'Method':
       return {
-        ...state,
         sectionsCompleted: state.sectionsCompleted.concat(['Method'])
       }
     case 'SharedFriendsImage':
       return {
-        ...state,
         sectionsCompleted: state.sectionsCompleted.concat([
           'SharedFriendsImage'
         ])
       }
     case 'SharedRecipe':
       return {
-        ...state,
         sectionsCompleted: state.sectionsCompleted.concat(['SharedRecipe'])
       }
     default:
@@ -122,7 +120,7 @@ const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
 }
 const INITIAL_SHARED_FRIENDS_IMAGE_STATE: SharedFriendsImage = {
   standardResolution: '',
-  lowsResSharedFriendsImage: ''
+  lowResSharedFriendsImage: ''
 }
 
 const Recipe = ({ router }: { router: Router }) => {
@@ -143,6 +141,7 @@ const Recipe = ({ router }: { router: Router }) => {
   const [sharedFriendsImage, setSharedFriendsImage] = useState(
     INITIAL_SHARED_FRIENDS_IMAGE_STATE
   )
+  const [showSharedFriendsImage, setShowSharedFriendsImage] = useState('')
   const [takePhoto, setTakePhoto] = useState(false)
   console.group('STATE')
   console.log('@@@@createOrUpdateChallengeState', createOrUpdateChallengeState)
@@ -150,7 +149,7 @@ const Recipe = ({ router }: { router: Router }) => {
   console.log('@@@@challengeQueryState', challengeQueryState)
   console.groupEnd()
   const typedTitleId = router.query['title-id'] as string
-  const recipeId = typedTitleId.split('-')[1]
+  const recipeId = parseInt(typedTitleId.split('-')[1])
 
   // Apollo
   const {
@@ -191,9 +190,9 @@ const Recipe = ({ router }: { router: Router }) => {
       sectionsCompleted: challengeData.challenge.sectionsCompleted
     })
     const sharedFriendsImageState = challengeData.challenge.sharedFriendsImages
-      ? challengeData.challenge.sharedFriendsImages
-      : INITIAL_SHARED_FRIENDS_IMAGE_STATE
-    setSharedFriendsImage(sharedFriendsImageState)
+      ? challengeData.challenge.sharedFriendsImages.standardResolution
+      : ''
+    setShowSharedFriendsImage(sharedFriendsImageState)
   }, [challengeData, challengeError])
 
   // I'm using this to update the challenge on each update but may
@@ -310,10 +309,7 @@ const Recipe = ({ router }: { router: Router }) => {
       {sharedFriendsImageCompleted ? (
         <div>
           <p>You've completed this section! Take a look at your photo!</p>
-          <img
-            src={sharedFriendsImage.standardResolution}
-            alt='Image of friends'
-          ></img>
+          <img src={showSharedFriendsImage} alt='Image of friends'></img>
         </div>
       ) : (
         <div>

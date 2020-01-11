@@ -8,7 +8,7 @@ export interface ActionType {
 
 export type SharedFriendsImage = {
   standardResolution: string
-  lowsResSharedFriendsImage: string
+  lowResSharedFriendsImage: string
 }
 
 export type DispatchCreateOrUpdateChallengeState = (action: ActionType) => void
