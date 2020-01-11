@@ -6,11 +6,13 @@ export interface ActionType {
   type: string
 }
 
-export type ImageUrls = {
+export type SharedFriendsImage = {
   standardResolution: string
   lowsResSharedFriendsImage: string
 }
 
 export type DispatchCreateOrUpdateChallengeState = (action: ActionType) => void
 
-export type handleSharedFriendsImage = (imageUrls: ImageUrls) => void
+export type handleSharedFriendsImage = (
+  sharedFriendsImage: SharedFriendsImage
+) => void

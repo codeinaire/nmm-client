@@ -26,7 +26,6 @@ export default function Home() {
             description: `Auth0 Parsing Error - ${err.errorDescription}`
           })
         }
-        console.log('testing', authResult)
 
         if (authResult) {
           const userData = authResult.idTokenPayload

@@ -19,7 +19,7 @@ import {
   DispatchCreateOrUpdateChallengeState,
   CreateUpdateChallengeState,
   ActionType,
-  ImageUrls
+  SharedFriendsImage
 } from '../containers/types'
 
 const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
@@ -100,9 +100,6 @@ function reducerCreateOrUpdateChallengeState(
       throw new Error('Failed to update recipe challenge state!')
   }
 }
-const CreateUpdateChallengeDispatch = createContext<
-  DispatchCreateOrUpdateChallengeState | undefined
->(undefined)
 
 export function useCreateUpdateChallengeDispatch() {
   const dispatchCreateOrUpdateChallengeState = useContext(
@@ -116,11 +113,19 @@ export function useCreateUpdateChallengeDispatch() {
   return dispatchCreateOrUpdateChallengeState
 }
 
+const CreateUpdateChallengeDispatch = createContext<
+  DispatchCreateOrUpdateChallengeState | undefined
+>(undefined)
+
 const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
   sectionsCompleted: []
 }
+const INITIAL_SHARED_FRIENDS_IMAGE_STATE: SharedFriendsImage = {
+  standardResolution: '',
+  lowsResSharedFriendsImage: ''
+}
 
-const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
+const Recipe = ({ router }: { router: Router }) => {
   const firstUpdate = useRef(true)
   // TODO - find a way to make sure they can add each item to the
   // array once only!
@@ -132,11 +137,21 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     reducerCreateOrUpdateChallengeState,
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
-  const [takePhoto, setTakePhoto] = useState(false)
-  const [sharedFriendsImage, setSharedFriendsImage] = useState()
   const [challengeQueryState, setChallengeQueryState] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
+  const [sharedFriendsImage, setSharedFriendsImage] = useState(
+    INITIAL_SHARED_FRIENDS_IMAGE_STATE
+  )
+  const [takePhoto, setTakePhoto] = useState(false)
+  console.group('STATE')
+  console.log('@@@@createOrUpdateChallengeState', createOrUpdateChallengeState)
+  console.log('@@@@sharedFriendsImage', sharedFriendsImage)
+  console.log('@@@@challengeQueryState', challengeQueryState)
+  console.groupEnd()
+  const typedTitleId = router.query['title-id'] as string
+  const recipeId = typedTitleId.split('-')[1]
+
   // Apollo
   const {
     loading: recipeLoading,
@@ -152,6 +167,11 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     }
   )
   const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
+  console.group('APOLLO')
+  console.log('!!!!!recipeData', recipeData)
+  console.log('!!!!!challengeData', challengeData)
+  console.groupEnd()
+
   // To set the state if there's data for the challenge
   useEffect(() => {
     if (challengeError) {
@@ -170,7 +190,10 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
     setChallengeQueryState({
       sectionsCompleted: challengeData.challenge.sectionsCompleted
     })
-    setSharedFriendsImage(challengeData.challenge.sharedFriendsImages)
+    const sharedFriendsImageState = challengeData.challenge.sharedFriendsImages
+      ? challengeData.challenge.sharedFriendsImages
+      : INITIAL_SHARED_FRIENDS_IMAGE_STATE
+    setSharedFriendsImage(sharedFriendsImageState)
   }, [challengeData, challengeError])
 
   // I'm using this to update the challenge on each update but may
@@ -185,7 +208,7 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
         })
         logger.log({
           level: 'INFO',
-          description: `Challenge ${challenge.data.createOrUpdateChallenge.id} with title in being created or updated!`
+          description: `Challenge ${challenge.data.createOrUpdateChallenge.id} by userid in being created or updated!`
         })
       } catch (err) {
         logger.log({
@@ -194,15 +217,10 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
         })
       }
     }
-    if (recipeData == undefined) {
-      console.log('1) INSIDE IF createUpdateChallenge')
-
-      return
-    }
 
     const values = {
       type: 'Recipe',
-      difficulty: recipeData.recipe.difficulty,
+      difficulty: router.query.difficulty,
       recipeId,
       ...createOrUpdateChallengeState,
       ...sharedFriendsImage
@@ -219,13 +237,13 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
   }, [
     createOrUpdateChallengeMutation,
     createOrUpdateChallengeState,
-    recipeData,
+    router.query.difficulty,
     recipeId,
     sharedFriendsImage
   ])
 
-  function handleSharedFriendsImage(imageUrls: ImageUrls) {
-    setSharedFriendsImage(imageUrls)
+  function handleSharedFriendsImage(sharedFriendsImage: SharedFriendsImage) {
+    setSharedFriendsImage(sharedFriendsImage)
   }
   console.log('2) challengeQueryState b/f checks', challengeQueryState)
 
@@ -251,6 +269,7 @@ const Recipe = ({ recipeId, router }: { recipeId: number; router: Router }) => {
       value={dispatchCreateOrUpdateChallengeState}
     >
       {console.log('4) %%%%inside render%%%%')}
+      <h1>You've choosen {recipeData.recipe.id}</h1>
       <h1>Title: {recipeData.recipe.title}</h1>
       <h2>Meal Type: {recipeData.recipe.mealType}</h2>
       <h2>Difficulty: {recipeData.recipe.difficulty}</h2>
