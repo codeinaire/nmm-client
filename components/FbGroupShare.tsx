@@ -1,17 +1,23 @@
 import React from 'react'
-import { useCreateUpdateChallengeDispatch } from '../containers/Recipe'
 import logger from '../utils/logger'
 
-import { handleSharedFriendsImage } from '../containers/types'
+import {
+  HandleSharedFriendsImage,
+  HandleCreateUpdateChallengeApi,
+  CreateUpdateMutationValues
+} from '../containers/types'
 
 export default function FbGroupShare({
   imageSrc,
-  handleSharedFriendsImage
+  handleSharedFriendsImage,
+  handleCreateUpdateChallengeApi,
+  values
 }: {
   imageSrc: string
-  handleSharedFriendsImage: handleSharedFriendsImage
+  handleSharedFriendsImage: HandleSharedFriendsImage
+  handleCreateUpdateChallengeApi: HandleCreateUpdateChallengeApi
+  values: CreateUpdateMutationValues
 }) {
-  const dispatchCreateOrUpdateChallengeState = useCreateUpdateChallengeDispatch()
   function handleShareImage() {
     FB.getLoginStatus(async (res: fb.StatusResponse) => {
       if (res.status != 'connected') {
@@ -56,11 +62,11 @@ export default function FbGroupShare({
               description: res.error.message
             })
           } else {
+            handleCreateUpdateChallengeApi(values, ['SharedFriendsImage'])
             handleSharedFriendsImage({
               standardResolution: files.secure_url,
               lowResSharedFriendsImage: files.eager[0].secure_url
             })
-            dispatchCreateOrUpdateChallengeState({ type: 'SharedFriendsImage' })
             logger.log({
               level: 'INFO',
               description: `Successfully posted image to group with post_id: ${res.post_id} `

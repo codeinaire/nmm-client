@@ -1,12 +1,24 @@
 import React from 'react'
-
-import { useCreateUpdateChallengeDispatch } from '../containers/Recipe'
 import logger from '../utils/logger'
+
+import {
+  HandleCreateUpdateChallengeApi,
+  CreateUpdateMutationValues
+} from '../containers/types'
 
 // TODO - styling for the button
 // TODO - logic for the challenge
-export default ({ href, quote }: { href: string; quote: string }) => {
-  const dispatchCreateOrUpdateChallengeState = useCreateUpdateChallengeDispatch()
+export default ({
+  href,
+  quote,
+  handleCreateUpdateChallengeApi,
+  values
+}: {
+  href: string
+  quote: string
+  handleCreateUpdateChallengeApi: HandleCreateUpdateChallengeApi
+  values: CreateUpdateMutationValues
+}) => {
   function handleShareItem() {
     FB.ui(
       {
@@ -31,7 +43,7 @@ export default ({ href, quote }: { href: string; quote: string }) => {
             description: `Couldn't post to user timeline b/c ${res.error_message}`
           })
         } else {
-          dispatchCreateOrUpdateChallengeState({ type: 'SharedRecipe' })
+          handleCreateUpdateChallengeApi(values, ['SharedRecipe'])
           logger.log({
             level: 'INFO',
             description: 'Successfully posted to timeline'
