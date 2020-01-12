@@ -9,7 +9,6 @@ import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
 
 import {
-  DispatchCreateOrUpdateChallengeState,
   CreateUpdateChallengeState,
   SharedFriendsImage,
   CreateUpdateMutationValues
@@ -50,6 +49,8 @@ const GET_CHALLENGE = gql`
       sharedFriendsImages {
         standardResolution
       }
+      userProfileId
+      recipeId
     }
   }
 `
@@ -58,6 +59,12 @@ const CREATE_UPDATE_CHALLENGE = gql`
   mutation createOrUpdateChallenge($challengeInput: ChallengeInput) {
     createOrUpdateChallenge(challengeInput: $challengeInput) {
       id
+      sectionsCompleted
+      sharedFriendsImages {
+        standardResolution
+      }
+      userProfileId
+      recipeId
     }
   }
 `
@@ -71,7 +78,6 @@ const INITIAL_SHARED_FRIENDS_IMAGE_STATE: SharedFriendsImage = {
 }
 
 const Recipe = ({ router }: { router: Router }) => {
-  const firstUpdate = useRef(true)
   // TODO - find a way to make sure they can add each item to the
   // array once only!
   // State
@@ -98,16 +104,22 @@ const Recipe = ({ router }: { router: Router }) => {
   } = useQuery(GET_RECIPE, {
     variables: { recipeId }
   })
-  const { error: challengeError, data: challengeData } = useQuery(
-    GET_CHALLENGE,
-    {
-      variables: { recipeId }
-    }
-  )
+  const {
+    error: challengeError,
+    data: challengeData,
+    loading: challengeLoading
+  } = useQuery(GET_CHALLENGE, {
+    variables: { recipeId }
+  })
   const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
   console.group('APOLLO')
   console.log('!!!!!recipeData', recipeData)
-  console.log('!!!!!challengeData', challengeData)
+  console.log(
+    '!!!!!challengeData',
+    challengeData,
+    challengeError,
+    challengeLoading
+  )
   console.groupEnd()
 
   // To set the state if there's data for the challenge
@@ -155,6 +167,10 @@ const Recipe = ({ router }: { router: Router }) => {
         level: 'INFO',
         description: `Challenge ${challenge.data.createOrUpdateChallenge.id} by userid in being created or updated!`
       })
+      setChallengeQueryState({
+        sectionsCompleted:
+          challenge.data.createOrUpdateChallenge.sectionsCompleted
+      })
     } catch (err) {
       logger.log({
         level: 'ERROR',
@@ -171,9 +187,6 @@ const Recipe = ({ router }: { router: Router }) => {
     section: Array<string>
   ) {
     createUpdateChallengeApi(values, section)
-    setChallengeQueryState({
-      sectionsCompleted: challengeQueryState.sectionsCompleted.concat(section)
-    })
   }
   console.log('2) challengeQueryState b/f checks', challengeQueryState)
 
@@ -209,14 +222,9 @@ const Recipe = ({ router }: { router: Router }) => {
         </span>
       ) : (
         <div
-          onClick={() => {
-            createUpdateChallengeApi(values, ['Ingredients'])
-            setChallengeQueryState({
-              sectionsCompleted: challengeQueryState.sectionsCompleted.concat([
-                'Ingredients'
-              ])
-            })
-          }}
+          onClick={() =>
+            handleCreateUpdateChallengeApi(values, ['Ingredients'])
+          }
         >
           {recipeData.recipe.ingredients.map((ingredient: string) => (
             <p>{ingredient}</p>
@@ -229,16 +237,7 @@ const Recipe = ({ router }: { router: Router }) => {
           <p>You've completed this section!</p>
         </span>
       ) : (
-        <div
-          onClick={() => {
-            createUpdateChallengeApi(values, ['Method'])
-            setChallengeQueryState({
-              sectionsCompleted: challengeQueryState.sectionsCompleted.concat([
-                'Method'
-              ])
-            })
-          }}
-        >
+        <div onClick={() => handleCreateUpdateChallengeApi(values, ['Method'])}>
           {recipeData.recipe.method.map((step: string) => (
             <li>{step}</li>
           ))}

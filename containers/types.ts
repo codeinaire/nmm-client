@@ -11,8 +11,6 @@ export interface SharedFriendsImage {
   lowResSharedFriendsImage: string
 }
 
-export type DispatchCreateOrUpdateChallengeState = (action: ActionType) => void
-
 export type HandleSharedFriendsImage = (
   sharedFriendsImage: SharedFriendsImage
 ) => void

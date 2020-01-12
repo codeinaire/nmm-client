@@ -1,5 +1,9 @@
 import { ApolloClient } from 'apollo-client'
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
+import {
+  InMemoryCache,
+  NormalizedCacheObject,
+  defaultDataIdFromObject
+} from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { typeDefs } from './schema'
@@ -11,7 +15,16 @@ import { AccessTokenObject } from './types'
 const isServer = () => typeof window === 'undefined'
 
 export default (initialState: NormalizedCacheObject) => {
-  const cache: InMemoryCache = new InMemoryCache().restore(initialState)
+  const cache: InMemoryCache = new InMemoryCache({
+    dataIdFromObject: (object: any) => {
+      switch (object.__typename) {
+        case 'Challenge':
+          return `${object.userProfileId}-${object.recipeId}`
+        default:
+          return defaultDataIdFromObject(object)
+      }
+    }
+  }).restore(initialState)
 
   const httpLink: HttpLink = new HttpLink({
     uri: process.env.SERVER_URI,
