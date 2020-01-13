@@ -80,7 +80,7 @@ const INITIAL_SHARED_FRIENDS_IMAGE_STATE: SharedFriendsImage = {
 const Recipe = ({ router }: { router: Router }) => {
   // TODO - find a way to make sure they can add each item to the
   // array once only!
-  // State
+  // STATE
   const [challengeQueryState, setChallengeQueryState] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
   )
@@ -89,14 +89,10 @@ const Recipe = ({ router }: { router: Router }) => {
   )
   const [showSharedFriendsImage, setShowSharedFriendsImage] = useState('')
   const [takePhoto, setTakePhoto] = useState(false)
-  console.group('STATE')
-  console.log('@@@@sharedFriendsImage', sharedFriendsImage)
-  console.log('@@@@challengeQueryState', challengeQueryState)
-  console.groupEnd()
+
+  // APOLLO
   const typedTitleId = router.query['title-id'] as string
   const recipeId = parseInt(typedTitleId.split('-')[1])
-
-  // Apollo
   const {
     loading: recipeLoading,
     error: recipeError,
@@ -111,16 +107,17 @@ const Recipe = ({ router }: { router: Router }) => {
   } = useQuery(GET_CHALLENGE, {
     variables: { recipeId }
   })
-  const [createOrUpdateChallengeMutation] = useMutation(CREATE_UPDATE_CHALLENGE)
-  console.group('APOLLO')
-  console.log('!!!!!recipeData', recipeData)
-  console.log(
-    '!!!!!challengeData',
-    challengeData,
-    challengeError,
-    challengeLoading
+  const [createOrUpdateChallengeMutation] = useMutation(
+    CREATE_UPDATE_CHALLENGE,
+    {
+      refetchQueries: [
+        {
+          query: GET_CHALLENGE,
+          variables: { recipeId }
+        }
+      ]
+    }
   )
-  console.groupEnd()
 
   // To set the state if there's data for the challenge
   useEffect(() => {
@@ -131,11 +128,7 @@ const Recipe = ({ router }: { router: Router }) => {
       })
       return
     }
-    if (challengeData == undefined || challengeData.challenge == null) {
-      console.log('3)INSIDE IF challengeData in use effect', challengeData)
-      return
-    }
-    console.log('3) challengeData in use effect', challengeData)
+    if (challengeData == undefined || challengeData.challenge == null) return
 
     setChallengeQueryState({
       sectionsCompleted: challengeData.challenge.sectionsCompleted
@@ -153,7 +146,6 @@ const Recipe = ({ router }: { router: Router }) => {
     ...challengeQueryState,
     ...sharedFriendsImage
   }
-  console.log('values', values)
 
   async function createUpdateChallengeApi(values: any, section: string[]) {
     try {
@@ -188,7 +180,6 @@ const Recipe = ({ router }: { router: Router }) => {
   ) {
     createUpdateChallengeApi(values, section)
   }
-  console.log('2) challengeQueryState b/f checks', challengeQueryState)
 
   const ingredientsCompleted = challengeQueryState.sectionsCompleted.includes(
     'Ingredients'
@@ -208,7 +199,6 @@ const Recipe = ({ router }: { router: Router }) => {
 
   return (
     <div>
-      {console.log('4) %%%%inside render%%%%')}
       <h1>You've choosen {recipeData.recipe.id}</h1>
       <h1>Title: {recipeData.recipe.title}</h1>
       <h2>Meal Type: {recipeData.recipe.mealType}</h2>

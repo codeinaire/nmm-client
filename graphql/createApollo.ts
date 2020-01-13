@@ -15,16 +15,7 @@ import { AccessTokenObject } from './types'
 const isServer = () => typeof window === 'undefined'
 
 export default (initialState: NormalizedCacheObject) => {
-  const cache: InMemoryCache = new InMemoryCache({
-    dataIdFromObject: (object: any) => {
-      switch (object.__typename) {
-        case 'Challenge':
-          return `${object.userProfileId}-${object.recipeId}`
-        default:
-          return defaultDataIdFromObject(object)
-      }
-    }
-  }).restore(initialState)
+  const cache: InMemoryCache = new InMemoryCache().restore(initialState)
 
   const httpLink: HttpLink = new HttpLink({
     uri: process.env.SERVER_URI,
