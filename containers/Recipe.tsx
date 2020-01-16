@@ -10,7 +10,6 @@ import FbInitAndToken from '../containers/FbInitParent'
 
 import {
   CreateUpdateChallengeState,
-  SharedFriendsImage,
   CreateUpdateMutationValues
 } from '../containers/types'
 
@@ -48,6 +47,7 @@ const GET_CHALLENGE = gql`
       sectionsCompleted
       sharedFriendsImages {
         standardResolution
+        lowResSharedFriendsImage
       }
       userProfileId
       recipeId
@@ -62,6 +62,7 @@ const CREATE_UPDATE_CHALLENGE = gql`
       sectionsCompleted
       sharedFriendsImages {
         standardResolution
+        lowResSharedFriendsImage
       }
       userProfileId
       recipeId
@@ -70,29 +71,20 @@ const CREATE_UPDATE_CHALLENGE = gql`
 `
 
 const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
-  sectionsCompleted: []
-}
-const INITIAL_SHARED_FRIENDS_IMAGE_STATE: SharedFriendsImage = {
+  sectionsCompleted: [],
   standardResolution: '',
   lowResSharedFriendsImage: ''
 }
 
 const Recipe = ({ router }: { router: Router }) => {
-  // TODO - find a way to make sure they can add each item to the
-  // array once only!
-  // STATE
-  const [challengeQueryState, setChallengeQueryState] = useState(
-    INITIAL_CREATE_UPDATE_CHALLENGE_STATE
-  )
-  const [sharedFriendsImage, setSharedFriendsImage] = useState(
-    INITIAL_SHARED_FRIENDS_IMAGE_STATE
-  )
-  const [showSharedFriendsImage, setShowSharedFriendsImage] = useState('')
-  const [takePhoto, setTakePhoto] = useState(false)
-
-  // APOLLO
   const typedTitleId = router.query['title-id'] as string
   const recipeId = parseInt(typedTitleId.split('-')[1])
+  // State
+  const [challengeState, setChallengeState] = useState(
+    INITIAL_CREATE_UPDATE_CHALLENGE_STATE
+  )
+  const [takePhoto, setTakePhoto] = useState(false)
+  // Apollo
   const {
     loading: recipeLoading,
     error: recipeError,
@@ -130,25 +122,26 @@ const Recipe = ({ router }: { router: Router }) => {
     }
     if (challengeData == undefined || challengeData.challenge == null) return
 
-    setChallengeQueryState({
-      sectionsCompleted: challengeData.challenge.sectionsCompleted
+    setChallengeState({
+      sectionsCompleted: challengeData.challenge.sectionsCompleted,
+      standardResolution:
+        challengeData.challenge.sharedFriendsImages.standardResolution,
+      lowResSharedFriendsImage:
+        challengeData.challenge.sharedFriendsImages.lowResSharedFriendsImage
     })
-    const sharedFriendsImageState = challengeData.challenge.sharedFriendsImages
-      ? challengeData.challenge.sharedFriendsImages.standardResolution
-      : ''
-    setShowSharedFriendsImage(sharedFriendsImageState)
   }, [challengeData, challengeError])
 
   const values: CreateUpdateMutationValues = {
     type: 'Recipe',
     difficulty: router.query.difficulty as string,
     recipeId,
-    ...challengeQueryState,
-    ...sharedFriendsImage
+    ...challengeState
   }
 
   async function createUpdateChallengeApi(values: any, section: string[]) {
     try {
+      if (challengeState.sectionsCompleted.includes(section[0])) return
+
       values.sectionsCompleted = values.sectionsCompleted.concat(section)
       const challenge = await createOrUpdateChallengeMutation({
         variables: {
@@ -159,9 +152,14 @@ const Recipe = ({ router }: { router: Router }) => {
         level: 'INFO',
         description: `Challenge ${challenge.data.createOrUpdateChallenge.id} by userid in being created or updated!`
       })
-      setChallengeQueryState({
+      setChallengeState({
         sectionsCompleted:
-          challenge.data.createOrUpdateChallenge.sectionsCompleted
+          challenge.data.createOrUpdateChallenge.sectionsCompleted,
+        standardResolution:
+          challenge.data.createOrUpdateChallenge.sharedFriendsImages
+            .standardResolution,
+        lowResSharedFriendsImage:
+          challengeData.challenge.sharedFriendsImages.lowResSharedFriendsImage
       })
     } catch (err) {
       logger.log({
@@ -171,9 +169,6 @@ const Recipe = ({ router }: { router: Router }) => {
     }
   }
 
-  function handleSharedFriendsImage(sharedFriendsImage: SharedFriendsImage) {
-    setSharedFriendsImage(sharedFriendsImage)
-  }
   function handleCreateUpdateChallengeApi(
     values: CreateUpdateMutationValues,
     section: Array<string>
@@ -181,22 +176,19 @@ const Recipe = ({ router }: { router: Router }) => {
     createUpdateChallengeApi(values, section)
   }
 
-  const ingredientsCompleted = challengeQueryState.sectionsCompleted.includes(
+  const ingredientsCompleted = challengeState.sectionsCompleted.includes(
     'Ingredients'
   )
-  const methodCompleted = challengeQueryState.sectionsCompleted.includes(
-    'Method'
-  )
-  const sharedFriendsImageCompleted = challengeQueryState.sectionsCompleted.includes(
+  const methodCompleted = challengeState.sectionsCompleted.includes('Method')
+  const sharedFriendsImageCompleted = challengeState.sectionsCompleted.includes(
     'SharedFriendsImage'
   )
-  const sharedRecipeCompleted = challengeQueryState.sectionsCompleted.includes(
+  const sharedRecipeCompleted = challengeState.sectionsCompleted.includes(
     'SharedRecipe'
   )
 
   if (recipeError) return <h1>Error! {recipeError.message}</h1>
   if (recipeLoading) return <h1>Loading...</h1>
-
   return (
     <div>
       <h1>You've choosen {recipeData.recipe.id}</h1>
@@ -236,13 +228,15 @@ const Recipe = ({ router }: { router: Router }) => {
       {sharedFriendsImageCompleted ? (
         <div>
           <p>You've completed this section! Take a look at your photo!</p>
-          <img src={showSharedFriendsImage} alt='Image of friends'></img>
+          <img
+            src={challengeState.standardResolution}
+            alt='Image of friends'
+          ></img>
         </div>
       ) : (
         <div>
           {takePhoto ? (
             <LiveFaceDetect
-              handleSharedFriendsImage={handleSharedFriendsImage}
               handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
               values={values}
             />
@@ -251,7 +245,6 @@ const Recipe = ({ router }: { router: Router }) => {
           )}
         </div>
       )}
-      {/* TODO - maybe get quote from the recipe? */}
       {sharedRecipeCompleted ? (
         <span>
           <p>You've completed this section!</p>
@@ -260,8 +253,8 @@ const Recipe = ({ router }: { router: Router }) => {
         <FbInitAndToken>
           {() => (
             <FbUserShare
-              href={`${process.env.CLIENT_URI}${router.asPath}`}
-              quote='This is an amazing recipe!'
+              href={`${process.env.CLIENT_URL}${router.asPath}`}
+              quote='By eating less animal products, or going meat free, you can protect our planet, your health, and save living beings, both human and animal from suffering.'
               handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
               values={values}
             />

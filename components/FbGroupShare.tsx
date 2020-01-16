@@ -2,19 +2,16 @@ import React from 'react'
 import logger from '../utils/logger'
 
 import {
-  HandleSharedFriendsImage,
   HandleCreateUpdateChallengeApi,
   CreateUpdateMutationValues
 } from '../containers/types'
 
 export default function FbGroupShare({
   imageSrc,
-  handleSharedFriendsImage,
   handleCreateUpdateChallengeApi,
   values
 }: {
   imageSrc: string
-  handleSharedFriendsImage: HandleSharedFriendsImage
   handleCreateUpdateChallengeApi: HandleCreateUpdateChallengeApi
   values: CreateUpdateMutationValues
 }) {
@@ -62,8 +59,7 @@ export default function FbGroupShare({
               description: res.error.message
             })
           } else {
-            handleCreateUpdateChallengeApi(values, ['SharedFriendsImage'])
-            handleSharedFriendsImage({
+            handleCreateUpdateChallengeApi(values, ['SharedFriendsImage'], {
               standardResolution: files.secure_url,
               lowResSharedFriendsImage: files.eager[0].secure_url
             })

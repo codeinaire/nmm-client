@@ -1,24 +1,23 @@
 export interface CreateUpdateChallengeState {
   sectionsCompleted: Array<string>
+  standardResolution: string
+  lowResSharedFriendsImage: string
 }
 
 export interface ActionType {
   type: string
 }
 
-export interface SharedFriendsImage {
+export type HandleCreateUpdateChallengeApi = (
+  values: CreateUpdateMutationValues,
+  section: Array<string>,
+  sharedFriendsImage?: SharedFriendsImage
+) => void
+
+interface SharedFriendsImage {
   standardResolution: string
   lowResSharedFriendsImage: string
 }
-
-export type HandleSharedFriendsImage = (
-  sharedFriendsImage: SharedFriendsImage
-) => void
-
-export type HandleCreateUpdateChallengeApi = (
-  values: CreateUpdateMutationValues,
-  section: Array<string>
-) => void
 
 export interface CreateUpdateMutationValues {
   type: string
