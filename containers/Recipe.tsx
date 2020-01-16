@@ -208,9 +208,11 @@ const Recipe = ({ router }: { router: Router }) => {
             handleCreateUpdateChallengeApi(values, ['Ingredients'])
           }
         >
-          {recipeData.recipe.ingredients.map((ingredient: string) => (
-            <p>{ingredient}</p>
-          ))}
+          {recipeData.recipe.ingredients.map(
+            (ingredient: string, index: number) => (
+              <p key={index}>{ingredient}</p>
+            )
+          )}
         </div>
       )}
       <h4>Method</h4>
@@ -220,8 +222,8 @@ const Recipe = ({ router }: { router: Router }) => {
         </span>
       ) : (
         <div onClick={() => handleCreateUpdateChallengeApi(values, ['Method'])}>
-          {recipeData.recipe.method.map((step: string) => (
-            <li>{step}</li>
+          {recipeData.recipe.method.map((step: string, index: number) => (
+            <li key={index}>{step}</li>
           ))}
         </div>
       )}

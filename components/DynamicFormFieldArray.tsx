@@ -20,7 +20,7 @@ export default ({
             </label>
             {values[inputItem.name] && values[inputItem.name].length > 0 ? (
               values[inputItem.name].map((_: any, index: number) => (
-                <div key={index}>
+                <div key={`${inputItem.name}.${index}`}>
                   <Field name={`${inputItem.name}.${index}`} />
                   <button
                     type='button'

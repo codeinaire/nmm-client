@@ -133,7 +133,7 @@ export default function LiveFaceDetect({
 
   let drawBox
   if (faceRecogAttributes.length) {
-    drawBox = faceRecogAttributes.map((faceObj: any) => (
+    drawBox = faceRecogAttributes.map((faceObj: FaceRecogProperties) => (
       <div>
         <div
           style={{
@@ -142,7 +142,7 @@ export default function LiveFaceDetect({
             borderColor: 'blue',
             height: faceObj.detection.box.height,
             width: faceObj.detection.box.width,
-            transform: `translate(${faceObj.detection.box._x}px,${faceObj.detection.box._y}px)`
+            transform: `translate(${faceObj.detection.box.x}px,${faceObj.detection.box.y}px)`
           }}
         ></div>
       </div>

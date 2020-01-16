@@ -11,18 +11,17 @@ export default ({
   let drawBox = null
   if (faceRecogAttributes.length) {
     drawBox = faceRecogAttributes.map((faceObj: FaceRecogProperties) => (
-      <div>
-        <div
-          style={{
-            position: 'absolute',
-            border: 'solid',
-            borderColor: 'blue',
-            height: faceObj.detection.box.height,
-            width: faceObj.detection.box.width,
-            transform: `translate(${faceObj.detection.box.x}px,${faceObj.detection.box.y}px)`
-          }}
-        ></div>
-      </div>
+      <div
+        key={faceObj.detection.box.height}
+        style={{
+          position: 'absolute',
+          border: 'solid',
+          borderColor: 'blue',
+          height: faceObj.detection.box.height,
+          width: faceObj.detection.box.width,
+          transform: `translate(${faceObj.detection.box.x}px,${faceObj.detection.box.y}px)`
+        }}
+      ></div>
     ))
   }
 
@@ -32,7 +31,7 @@ export default ({
         <div style={{ position: 'absolute' }}>
           <img src={dataUri} alt='imageURL' />
           {!!drawBox
-            ? faceRecogAttributes.map((faceObj: any) => (
+            ? faceRecogAttributes.map((faceObj: FaceRecogProperties) => (
                 <div>
                   <p>Neutral:{faceObj.expressions.neutral}</p>
                   <p>Happy:{faceObj.expressions.happy}</p>
