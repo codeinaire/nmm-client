@@ -14,6 +14,10 @@ import FbInitAndToken from '../containers/FbInitParent'
 import FbGroupShare from '../components/FbGroupShare'
 
 import { FaceRecogProperties } from './types'
+import {
+  HandleCreateUpdateChallengeApi,
+  CreateUpdateMutationValues
+} from '../containers/types'
 
 const WIDTH = 420
 const HEIGHT = 420
@@ -21,7 +25,13 @@ const INPUT_SIZE = 160
 const FACE_RECOG_INITIAL_STATE: Array<FaceRecogProperties> = []
 
 // TODO fix up the styling for the camera and if I want the box or some kind of notice that is nicer than a box
-export default () => {
+export default function LiveFaceDetect({
+  handleCreateUpdateChallengeApi,
+  values
+}: {
+  handleCreateUpdateChallengeApi: HandleCreateUpdateChallengeApi
+  values: CreateUpdateMutationValues
+}) {
   const [faceRecogAttributes, setFaceRecogAttributes] = useState(
     FACE_RECOG_INITIAL_STATE
   )
@@ -123,7 +133,7 @@ export default () => {
 
   let drawBox
   if (faceRecogAttributes.length) {
-    drawBox = faceRecogAttributes.map((faceObj: any) => (
+    drawBox = faceRecogAttributes.map((faceObj: FaceRecogProperties) => (
       <div>
         <div
           style={{
@@ -132,7 +142,7 @@ export default () => {
             borderColor: 'blue',
             height: faceObj.detection.box.height,
             width: faceObj.detection.box.width,
-            transform: `translate(${faceObj.detection.box._x}px,${faceObj.detection.box._y}px)`
+            transform: `translate(${faceObj.detection.box.x}px,${faceObj.detection.box.y}px)`
           }}
         ></div>
       </div>
@@ -148,7 +158,13 @@ export default () => {
             faceRecogAttributes={faceRecogAttributes}
           />
           <FbInitAndToken>
-            {() => <FbGroupShare imageSrc={dataUri} />}
+            {() => (
+              <FbGroupShare
+                imageSrc={dataUri}
+                handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
+                values={values}
+              />
+            )}
           </FbInitAndToken>
         </>
       ) : (

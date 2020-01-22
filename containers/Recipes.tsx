@@ -27,7 +27,13 @@ export default () => {
       <h2>testing</h2>
       {data.recipes.map((recipe: any) => (
         <div key={recipe.title}>
-          <Link href='/recipe/[id]' as={`/recipe/${recipe.id}`}>
+          <Link
+            href={{
+              pathname: '/recipe/[title-id]',
+              query: { difficulty: recipe.difficulty, recipeId: recipe.id }
+            }}
+            as={`/recipe/${recipe.title}-${recipe.id}`}
+          >
             <a>
               <p>
                 {recipe.id} {recipe.title} {recipe.mealType}

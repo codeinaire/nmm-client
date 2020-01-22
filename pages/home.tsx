@@ -1,15 +1,13 @@
 import React from 'react'
-import dynamic from 'next/dynamic'
-
-const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
-  ssr: false
-})
+import Link from 'next/link'
 
 export default function HomePage() {
   return (
     <div>
-      <h1>Take a photo</h1>
-      <LiveFaceDetect />
+      <h1>Welcome to home page!</h1>
+      <Link href='/recipes'>
+        <a>Recipes</a>
+      </Link>
     </div>
   )
 }

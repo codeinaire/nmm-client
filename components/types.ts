@@ -23,6 +23,16 @@ export interface OnSubmitObject {
   [key: string]: string
 }
 
+export interface OnSubmitCreateProfileObject {
+  motivations: Array<string>
+  challengeGoals: string
+  username: string
+  id: string
+  bio?: string
+  lowResProfile?: string
+  standardResolution?: string
+}
+
 export interface DynamicFormInputObject {
   name: string
   type?: string
@@ -87,10 +97,10 @@ export interface ModalStatus {
 }
 
 export interface CheckboxSchemaObj {
-  environment: boolean
-  animalWelfare: boolean
-  personalHealth: boolean
-  foodSecurity: boolean
+  Environment: boolean
+  AnimalWelfare: boolean
+  PersonalHealth: boolean
+  FoodSecurity: boolean
 }
 
 export interface FaceRecogProperties {

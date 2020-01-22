@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -16,7 +17,8 @@ export const CREATE_USER_PROFILE = gql`
       id
       totalPoints
       username
-      profilePic
+      lowResProfile
+      standardResolution
       challengeQuote
     }
   }
@@ -26,7 +28,7 @@ export default function CreateProfile() {
   const checkboxInput = [
     {
       type: 'checkbox',
-      name: 'environment',
+      name: 'Environment',
       errorMessageId: 'environmentError',
       required: false,
       autocomplete: 'off',
@@ -34,7 +36,7 @@ export default function CreateProfile() {
     },
     {
       type: 'checkbox',
-      name: 'animalWelfare',
+      name: 'AnimalWelfare',
       errorMessageId: 'animalWelfareError',
       required: false,
       autocomplete: 'off',
@@ -42,7 +44,7 @@ export default function CreateProfile() {
     },
     {
       type: 'checkbox',
-      name: 'personalHealth',
+      name: 'PersonalHealth',
       errorMessageId: 'personalHealthError',
       required: false,
       autocomplete: 'off',
@@ -50,7 +52,7 @@ export default function CreateProfile() {
     },
     {
       type: 'checkbox',
-      name: 'foodSecurity',
+      name: 'FoodSecurity',
       errorMessageId: 'foodSecurityError',
       required: false,
       autocomplete: 'off',
@@ -141,10 +143,10 @@ export default function CreateProfile() {
 
   const router = useRouter()
   const formInitialValues = [
-    { name: 'environment', value: false },
-    { name: 'foodSecurity', value: false },
-    { name: 'animalWelfare', value: false },
-    { name: 'personalHealth', value: false },
+    { name: 'Environment', value: false },
+    { name: 'FoodSecurity', value: false },
+    { name: 'AnimalWelfare', value: false },
+    { name: 'PersonalHealth', value: false },
     { name: 'challengeGoals', value: '' },
     { name: 'bio', value: '' },
     { name: 'challengeQuote', value: '' },
@@ -160,10 +162,10 @@ export default function CreateProfile() {
     challengeGoals: string().required(
       'Please select challenges goals to work towards!'
     ),
-    environment: boolean(),
-    animalWelfare: boolean(),
-    personalHealth: boolean(),
-    foodSecurity: boolean(),
+    Environment: boolean(),
+    AnimalWelfare: boolean(),
+    PersonalHealth: boolean(),
+    FoodSecurity: boolean(),
     lowResProfile: string()
   })
 
@@ -171,17 +173,17 @@ export default function CreateProfile() {
     name: 'motivationsCheckboxTest',
     test: (checkboxObj: CheckboxSchemaObj) => {
       if (
-        checkboxObj.environment ||
-        checkboxObj.animalWelfare ||
-        checkboxObj.personalHealth ||
-        checkboxObj.foodSecurity
+        checkboxObj.Environment ||
+        checkboxObj.AnimalWelfare ||
+        checkboxObj.PersonalHealth ||
+        checkboxObj.FoodSecurity
       ) {
         return true
       }
       return new ValidationError(
         'Check at least one motivation please!',
         null,
-        'environment'
+        'Environment'
       )
     }
   })
@@ -200,32 +202,31 @@ export default function CreateProfile() {
       setFieldValue('id', router.query.userId)
 
       /**
-       * @remark convert checkbox values to string for DB &
+       * @remark convert checkbox values to Array<string> for DB &
        * remove empty keys with no value for CalculatePoints class
        */
-      let motivations: string = ''
+      let motivations: Array<string> = []
       for (const valuesProperty in values) {
         if (
-          valuesProperty == 'environment' ||
-          valuesProperty == 'personalHealth' ||
-          valuesProperty == 'foodSecurity' ||
-          valuesProperty == 'animalWelfare'
+          valuesProperty == 'Environment' ||
+          valuesProperty == 'PersonalHealth' ||
+          valuesProperty == 'FoodSecurity' ||
+          valuesProperty == 'AnimalWelfare'
         ) {
           if (values[valuesProperty]) {
-            motivations = motivations.concat(',', valuesProperty)
+            motivations = motivations.concat([valuesProperty])
           }
           delete values[valuesProperty]
         }
         if (!values[valuesProperty]) delete values[valuesProperty]
-
-        values.motivations = motivations
+        ;((values.motivations as unknown) as Array<string>) = motivations
       }
 
       /**
        * @remark convert form string to int for db
        */
       ;((values.challengeGoals as unknown) as number) = parseInt(
-        values.challengeGoals,
+        values.challengeGoals as string,
         10
       )
 
@@ -257,6 +258,9 @@ export default function CreateProfile() {
 
   return (
     <div>
+      <Link href='/recipes'>
+        <a>Recipes page</a>
+      </Link>
       <h1>Fill it out please!</h1>
       <DynamicForm
         failMessage={failMessage}

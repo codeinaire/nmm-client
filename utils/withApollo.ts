@@ -1,6 +1,6 @@
 import nextWithApollo from 'next-with-apollo'
 import createApollo from '../graphql/createApollo'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 
 /**
  * Always creates a new apollo client on the server
