@@ -6,7 +6,7 @@ import {
   SelectOption
 } from './types'
 
-export default ({
+export default function DynamicFormSelect({
   formSelect,
   errors,
   touched
@@ -14,16 +14,17 @@ export default ({
   formSelect: DynamicFormSelectArray
   errors: FormikErrors<DynamicFormSelectObject>
   touched: FormikTouched<DynamicFormSelectObject>
-}) => {
+}) {
   return (
     <>
       {formSelect.map((selectItem: DynamicFormSelectObject) => (
-        <Field name={selectItem.name}>
+        <Field key={selectItem.name} name={selectItem.name}>
           {({ field }: { field: any }) => (
             <React.Fragment key={selectItem.name}>
               <br />
               <label htmlFor={selectItem.name}>
-                <b>{selectItem.title}</b>:{' '}
+                <b>{selectItem.title}</b>:<br />
+                <br />
                 <Field
                   component='select'
                   id={`${selectItem.name}-select`}

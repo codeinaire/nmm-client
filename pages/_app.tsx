@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import nextWithApollo from '../utils/withApollo'
 import '../styles.css'
 
-import { Props } from './types'
+import { Props } from '../types'
 
 class MyApp extends App<Props> {
   // Only uncomment this method if you have blocking data requirements for

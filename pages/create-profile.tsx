@@ -1,11 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import CreateProfile from '../containers/CreateProfile';
-
+import CreateProfile from '../containers/CreateProfile'
 
 export default function CreateProfilePage() {
-
-  return(
+  return (
     <div>
       <h1>Welcome to create profile page!</h1>
       <CreateProfile />

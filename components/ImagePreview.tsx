@@ -1,13 +1,13 @@
 import React from 'react'
 import { FaceRecogProperties } from './types'
 
-export default ({
+export default function ImagePreview({
   dataUri,
   faceRecogAttributes
 }: {
   dataUri: string
   faceRecogAttributes: FaceRecogProperties[]
-}) => {
+}) {
   let drawBox = null
   if (faceRecogAttributes.length) {
     drawBox = faceRecogAttributes.map((faceObj: FaceRecogProperties) => (

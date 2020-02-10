@@ -1,9 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import {
-  InMemoryCache,
-  NormalizedCacheObject,
-  defaultDataIdFromObject
-} from 'apollo-cache-inmemory'
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { typeDefs } from './schema'
