@@ -1,4 +1,4 @@
-import auth0, { Auth0Error } from 'auth0-js'
+import auth0, { Auth0Error, Auth0DecodedHash } from 'auth0-js'
 import logger from './logger'
 
 import { ISignUpArgs, SignInTypes } from './types'
@@ -94,3 +94,60 @@ export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
     )
   })
 }
+
+export const checkSession = () => {
+  logger.log({
+    level: 'INFO',
+    description: 'Checking if user is signed in'
+  })
+  return new Promise<Auth0DecodedHash | null>((resolve, reject) => {
+    webAuth.checkSession(
+      {},
+      (error: Auth0Error | null, res: Auth0DecodedHash | null) => {
+        if (error) {
+          logger.log({
+            level: 'ERROR',
+            description: `Auth0 Sign In check Error - ${error.description}`
+          })
+          reject(error)
+        } else {
+          logger.log({
+            level: 'INFO',
+            description: 'Sign in check successful'
+          })
+          resolve(res)
+        }
+      }
+    )
+  })
+}
+
+export const parseAuthHash = () => {
+  logger.log({
+    level: 'INFO',
+    description: 'Parsing hash'
+  })
+  return new Promise<Auth0DecodedHash | null>((resolve, reject) => {
+    webAuth.parseHash(
+      { hash: window.location.hash },
+      (error: Auth0Error | null, res: Auth0DecodedHash | null) => {
+        if (error) {
+          logger.log({
+            level: 'ERROR',
+            description: `Parsing failed with error - ${error.description}`
+          })
+          reject(error)
+        } else {
+          logger.log({
+            level: 'INFO',
+            description: 'Parsing successful!'
+          })
+          resolve(res)
+        }
+      }
+    )
+  })
+}
+
+export const logout = () =>
+  webAuth.logout({ clientID: process.env.APP_CLIENT_ID || '' })

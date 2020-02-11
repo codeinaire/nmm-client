@@ -1,2 +1,6 @@
 myNextApplication:
   component: serverless-next.js
+  # inputs:
+  #   domain: [ 'app', 'nomeatmay.net']
+  #   timeout:
+  #     defaultLambda: 30
