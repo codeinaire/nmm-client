@@ -7,7 +7,9 @@ export default function CreateProfilePage() {
     <div>
       <h1>Welcome to create profile page!</h1>
       <PleaseSignIn message='Please sign up and/or sign in to create your profile'>
-        <CreateProfile />
+        {(userProfileId: string) => (
+          <CreateProfile userProfileId={userProfileId} />
+        )}
       </PleaseSignIn>
     </div>
   )
