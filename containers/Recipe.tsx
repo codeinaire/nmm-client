@@ -7,6 +7,7 @@ import logger from '../utils/logger'
 
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
+import UnAuthRecipeDeets from '../components/UnAuthRecipeDeets'
 
 import {
   CreateUpdateChallengeState,
@@ -195,13 +196,16 @@ const Recipe = ({
   const sharedRecipeCompleted = challengeState.sectionsCompleted.includes(
     'SharedRecipe'
   )
+  if (recipeLoading) return <h1>Loading...</h1>
   if (recipeData == undefined) {
-    return <h1>There was an error loading the recipe. Try againg</h1>
+    return <h1>There was an error loading the recipe. Try again!</h1>
   }
   if (recipeError != undefined && recipeError) {
     return <h1>Error! {recipeError.message}</h1>
   }
-  if (recipeLoading) return <h1>Loading...</h1>
+  if (userProfileId == undefined) {
+    return <UnAuthRecipeDeets recipe={recipeData.recipe} />
+  }
   return (
     <div>
       <h1>You've choosen {recipeData.recipe.id}</h1>

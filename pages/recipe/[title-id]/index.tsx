@@ -1,6 +1,6 @@
 import React from 'react'
 import Recipe from '../../../containers/Recipe'
-import PleaseSignIn from '../../containers/PleaseSignIn'
+import PleaseSignIn from '../../../containers/PleaseSignIn'
 
 export default function RecipePage() {
   return (

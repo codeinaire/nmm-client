@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { checkSession } from '../utils/auth'
 
@@ -23,27 +23,28 @@ export default function PleaseSignIn({
   children: any
   message: string
 }) {
+  const apolloClient = useApolloClient()
   const [userProfileId, setUserProfileId] = useState()
   const [signedIn, setSignedIn] = useState()
   useEffect(() => {
-    console.log('inside useEFFECT')
-
     async function checkingSession() {
       try {
-        const result = await checkSession()
+        const checkSessionResult = await checkSession()
         localStorage.setItem('signed_in', 'true')
-        setUserProfileId(result?.idTokenPayload.sub)
+        setUserProfileId(checkSessionResult?.idTokenPayload.sub)
         setSignedIn(true)
-        console.log('inside TRY')
+        apolloClient.writeData({
+          data: {
+            accessToken: checkSessionResult?.accessToken
+          }
+        })
       } catch (_) {
         localStorage.setItem('signed_in', 'false')
-        console.log('inside CATCH')
         setSignedIn(false)
       }
     }
     checkingSession()
-  }, [])
-  console.log('outside###', signedIn)
+  }, [apolloClient])
   // const { loading, error, data } = useQuery(GET_CURRENT_USER, {
   //   variables: { id: userProfileId }
   // })

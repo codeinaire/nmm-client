@@ -43,10 +43,10 @@ export interface Recipe {
   cost: CostEnum
   mealType: MealTypeEnum
   hashtags: [string]
+  ingredients: [string]
+  method: [string]
   lowResolution?: string
   recipeAttribution?: RecipeAttribution
-  ingredients?: [string]
-  method?: [string]
   standardResolution?: string
 }
 

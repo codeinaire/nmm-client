@@ -149,5 +149,7 @@ export const parseAuthHash = () => {
   })
 }
 
-export const logout = () =>
+export const logout = () => {
+  localStorage.setItem('signed_in', 'false')
   webAuth.logout({ clientID: process.env.APP_CLIENT_ID || '' })
+}
