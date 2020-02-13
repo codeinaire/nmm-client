@@ -27,3 +27,8 @@ export interface CreateUpdateMutationValues {
   lowResSharedFriendsImage: string
   standardResolution: string
 }
+
+export interface DeleteRecipeType {
+  recipeTitleOrId: string
+  deleteSecret: string
+}

@@ -10,9 +10,10 @@ module.exports = withCSS({
     // CLIENT_URL: 'https://myapp.example:3000/',
     CLIENT_URL: 'http://localhost:3000/',
     // SERVER_URL: 'https://localhost:4000/nmm-app',
-    SERVER_URL:
-      'https://0b7qzqr1t0.execute-api.ap-southeast-2.amazonaws.com/prod/nmm-app',
-    AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
+    SERVER_URL: 'http://localhost:4000/nmm-app',
+    // SERVER_URL:
+    //   'https://0b7qzqr1t0.execute-api.ap-southeast-2.amazonaws.com/prod/nmm-app',
+    // AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
     // REDIRECT_URL: 'https://myapp.example:3000/',
     REDIRECT_URL: 'http://localhost:3000/',
     LOGGER_URI: 'https://zjy4b2tny0.execute-api.ap-southeast-2.amazonaws.com',
