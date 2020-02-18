@@ -25,6 +25,7 @@ module.exports = withCSS({
     SERVER_URL: 'http://localhost:4000/nmm-app',
     FB_GROUP_ID: '548965739271455',
     FB_APP_ID: '695528800971318',
+    // Auth0 + CORS stuff
     APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
     AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
