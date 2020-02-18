@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { useApolloClient } from '@apollo/react-hooks'
 import { checkSession } from '../utils/auth'
 
 import SignIn from './SignIn'

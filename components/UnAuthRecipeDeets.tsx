@@ -1,5 +1,6 @@
 import React from 'react'
 import { Recipe } from '../containers/types'
+import SignUp from '../containers/SignUp'
 
 export default function UnAuthRecipeDeets({ recipe }: { recipe: Recipe }) {
   return (
@@ -21,6 +22,11 @@ export default function UnAuthRecipeDeets({ recipe }: { recipe: Recipe }) {
           <li key={index}>{step}</li>
         ))}
       </div>
+      <h1>
+        If you want access to all the recipes and earn points for cool stuff
+        sign up now!
+      </h1>
+      <SignUp />
     </>
   )
 }

@@ -17,7 +17,8 @@ module.exports = withCSS({
     // ! LOCAL & PROD ENVS
     // Don't worry about Ryan creating another account
     CLOUDINARY_API: 'https://api.cloudinary.com/v1_1/codeinaire/image/upload',
-    IS_DEVELOPMENT: false,
+    // * NOTE change to false in PROD
+    IS_DEVELOPMENT: true,
     // !LOCAL ENVS development
     // * FB stuff + Auth0 + CORS stuff + HTTPS server for FB testing
     REDIRECT_URL: 'http://localhost:3000/',
@@ -28,11 +29,11 @@ module.exports = withCSS({
     // Auth0 + CORS stuff
     APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
-    AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
-    HTTPS: true,
-    CLIENT_URL: 'https://myapp.example:3000/',
-    SERVER_URL: 'https://localhost:4000/nmm-app',
-    REDIRECT_URL: 'https://myapp.example:3000/'
+    AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/'
+    // HTTPS: true,
+    // CLIENT_URL: 'https://myapp.example:3000/',
+    // SERVER_URL: 'https://localhost:4000/nmm-app',
+    // REDIRECT_URL: 'https://myapp.example:3000/'
   },
   webpack: config => {
     // https://github.com/justadudewhohacks/face-api.js/issues/154

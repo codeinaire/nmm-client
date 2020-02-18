@@ -24,11 +24,7 @@ export const CREATE_USER_PROFILE = gql`
   }
 `
 
-export default function CreateProfile({
-  userProfileId
-}: {
-  userProfileId: string
-}) {
+export default function CreateProfile() {
   const checkboxInput = [
     {
       type: 'checkbox',
@@ -98,7 +94,7 @@ export default function CreateProfile({
       name: 'motivations',
       errorMessageId: 'motivationsError',
       checkboxInput,
-      hintText: 'Choose at least 1!'
+      hintText: 'Please choose at least 1'
     },
     {
       type: 'file',
@@ -203,7 +199,7 @@ export default function CreateProfile({
     }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
-      setFieldValue('id', router.query.userId || userProfileId)
+      setFieldValue('id', router.query.userId)
 
       /**
        * @remark convert checkbox values to Array<string> for DB &

@@ -16,7 +16,9 @@ export default function DynamicFormCheckbox({
       {() => (
         <>
           <fieldset name={inputItem.name}>
-            <legend>{inputItem.legend}</legend>
+            <legend>
+              {inputItem.legend} - <i>{inputItem.hintText}</i>
+            </legend>
             {inputItem.checkboxInput!.map(
               (checkboxItem: DynamicFormCheckboxInputObject) => (
                 <React.Fragment key={checkboxItem.name}>
@@ -29,8 +31,7 @@ export default function DynamicFormCheckbox({
                     </div>
                   ) : null}
                   <label htmlFor={checkboxItem.name}>
-                    <b>{checkboxItem.displayName}</b>: <br />
-                    <i>{inputItem.hintText}</i>
+                    <b>{checkboxItem.displayName}</b>:
                     <Field
                       aria-errormessage={checkboxItem.errorMessageId}
                       aria-invalid={!!errors[checkboxItem.name]}

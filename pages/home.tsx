@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import PleaseSignIn from '../containers/PleaseSignIn'
 import { logout } from '../utils/auth'
 
 export default function HomePage() {
@@ -10,11 +9,7 @@ export default function HomePage() {
       <Link href='/recipes'>
         <a>Recipes</a>
       </Link>
-      <PleaseSignIn message='Come on mate sign in!'>
-        {(userProfileId: string) => (
-          <p>You've signed in {userProfileId}. AWESOME!!</p>
-        )}
-      </PleaseSignIn>
+      {/* TODO - create nav bar */}
       <button onClick={() => logout()}>Logout</button>
     </div>
   )

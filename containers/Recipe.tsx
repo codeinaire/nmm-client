@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import dynamic from 'next/dynamic'
 import { withRouter, Router } from 'next/router'
 import logger from '../utils/logger'
+import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
@@ -79,16 +80,12 @@ const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
   lowResSharedFriendsImage: ''
 }
 
-const Recipe = ({
-  router,
-  userProfileId
-}: {
-  router: Router
-  userProfileId: string
-}) => {
+const Recipe = ({ router }: { router: Router }) => {
   // Parse the query
   const typedTitleId = router.query['title-id'] as string
   const recipeId = parseInt(typedTitleId.split('-')[1])
+
+  const { signedIn } = useCheckSigninStatus()
   // State
   const [challengeState, setChallengeState] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
@@ -203,7 +200,7 @@ const Recipe = ({
   if (recipeError != undefined && recipeError) {
     return <h1>Error! {recipeError.message}</h1>
   }
-  if (userProfileId == undefined) {
+  if (!signedIn) {
     return <UnAuthRecipeDeets recipe={recipeData.recipe} />
   }
   return (
