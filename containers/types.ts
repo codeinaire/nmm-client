@@ -28,6 +28,11 @@ export interface CreateUpdateMutationValues {
   standardResolution: string
 }
 
+export interface DeleteRecipeType {
+  recipeTitleOrId: string
+  deleteSecret: string
+}
+
 export interface RecipeData {
   recipe: Recipe
 }
