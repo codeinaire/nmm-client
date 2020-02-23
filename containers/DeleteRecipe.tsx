@@ -7,7 +7,6 @@ import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 
 import { OnSubmitObject } from '../components/types'
-import { DeleteRecipeType } from './types'
 import { FormikHelpers } from 'formik'
 
 const DELETE_RECIPE = gql`
