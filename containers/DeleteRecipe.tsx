@@ -39,7 +39,7 @@ export default function DeleteRecipe() {
       hintText: 'Just the full title of the recipe'
     },
     {
-      type: 'text',
+      type: 'password',
       name: 'deleteSecret',
       errorMessageId: 'deleteSecretError',
       required: true,
