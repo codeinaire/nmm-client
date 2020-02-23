@@ -16,7 +16,7 @@ const GET_RECIPES = gql`
     }
   }
 `
-export default () => {
+export default function Recipes() {
   const { loading, error, data } = useQuery(GET_RECIPES)
 
   if (loading) return <h1>'Loading...'</h1>

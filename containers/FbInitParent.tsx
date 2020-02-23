@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import loadFbApi from '../utils/loadFbApi'
 import { isServer } from '../utils/misc'
 import logger from '../utils/logger'
 
-if(!isServer()) {
+if (!isServer()) {
   logger.log({
     level: 'INFO',
     description: 'Initialising FB SDK...'
@@ -12,10 +12,6 @@ if(!isServer()) {
   loadFbApi()
 }
 
-export default ({ children }: { children: any}) => {
-  return (
-    <div>
-      {children('testing')}
-    </div>
-  )
+export default function FbInitParent({ children }: { children: any }) {
+  return <div>{children('testing')}</div>
 }

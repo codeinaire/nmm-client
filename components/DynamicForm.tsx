@@ -39,13 +39,8 @@ export default function DynamicForm(props: DynamicFormProps) {
         )}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
-        render={({
-          errors,
-          status,
-          setStatus,
-          touched,
-          values
-        }: FormikProps<any>) => (
+      >
+        {({ errors, status, setStatus, touched, values }: FormikProps<any>) => (
           <Form>
             <Modal
               failMessage={failMessage}
@@ -74,13 +69,6 @@ export default function DynamicForm(props: DynamicFormProps) {
                   />
                 )}
                 <br />
-                {inputItem.hintText ? (
-                  <span>
-                    <p>
-                      <i>{inputItem.hintText}</i>
-                    </p>
-                  </span>
-                ) : null}
               </React.Fragment>
             ))}
             {formSelect.length ? (
@@ -96,7 +84,7 @@ export default function DynamicForm(props: DynamicFormProps) {
             </button>
           </Form>
         )}
-      />
+      </Formik>
     </>
   )
 }

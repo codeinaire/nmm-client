@@ -46,7 +46,7 @@ export default function SignIn() {
     try {
       localStorage.setItem('signed_in', 'true')
       await signIn(SignInTypes.auth0, values.email, values.password)
-    } catch (err) {
+    } catch (_) {
       localStorage.setItem('signed_in', 'false')
       resetForm()
       setStatus({ openModal: true, success: false })

@@ -8,7 +8,7 @@ import {
 
 // TODO - styling for the button
 // TODO - logic for the challenge
-export default ({
+export default function FbUserShare({
   href,
   quote,
   handleCreateUpdateChallengeApi,
@@ -18,7 +18,7 @@ export default ({
   quote: string
   handleCreateUpdateChallengeApi: HandleCreateUpdateChallengeApi
   values: CreateUpdateMutationValues
-}) => {
+}) {
   function handleShareItem() {
     FB.ui(
       {

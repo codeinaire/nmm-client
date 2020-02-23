@@ -4,7 +4,10 @@ import Link from 'next/link'
 import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+
 import logger from '../utils/logger'
+import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
+import SignIn from './SignIn'
 
 import DynamicForm from '../components/DynamicForm'
 
@@ -25,6 +28,7 @@ export const CREATE_USER_PROFILE = gql`
 `
 
 export default function CreateProfile() {
+  const { signedIn } = useCheckSigninStatus()
   const checkboxInput = [
     {
       type: 'checkbox',
@@ -94,7 +98,7 @@ export default function CreateProfile() {
       name: 'motivations',
       errorMessageId: 'motivationsError',
       checkboxInput,
-      hintText: 'Choose at least 1!'
+      hintText: 'Please choose at least 1'
     },
     {
       type: 'file',
@@ -255,6 +259,18 @@ export default function CreateProfile() {
   const submitType = 'Create your profile!'
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
+
+  if (!signedIn) {
+    return (
+      <div>
+        <h1>
+          You've got to be signed into your account to create or update your
+          profile
+        </h1>
+        <SignIn />
+      </div>
+    )
+  }
 
   return (
     <div>

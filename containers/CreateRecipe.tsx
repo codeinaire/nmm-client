@@ -19,8 +19,17 @@ const CREATE_RECIPE = gql`
   }
 `
 
-export default function SignIn() {
+export default function CreateRecipe() {
   const formInput = [
+    {
+      type: 'text',
+      name: 'title',
+      errorMessageId: 'titleError',
+      required: true,
+      autocomplete: 'off',
+      displayName: 'Recipe Title',
+      hintText: 'The name of the recipe.'
+    },
     {
       type: 'text',
       name: 'ingredients',
@@ -53,15 +62,6 @@ export default function SignIn() {
       displayName: 'Hashtags',
       hintText: 'Add one hashtag per input box e.g. #hashtag',
       fieldArray: true
-    },
-    {
-      type: 'text',
-      name: 'title',
-      errorMessageId: 'titleError',
-      required: true,
-      autocomplete: 'off',
-      displayName: 'Recipe Title',
-      hintText: 'The name of the recipe.'
     },
     {
       type: 'file',

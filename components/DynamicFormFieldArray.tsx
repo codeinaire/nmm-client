@@ -2,13 +2,13 @@ import React from 'react'
 import { Field, FieldArray } from 'formik'
 import { DynamicFormInputObject } from './types'
 
-export default ({
+export default function DynamicFormFieldArray({
   inputItem,
   values
 }: {
   inputItem: DynamicFormInputObject
   values: any
-}) => {
+}) {
   return (
     <>
       <FieldArray
@@ -17,6 +17,7 @@ export default ({
           <div>
             <label htmlFor={inputItem.name}>
               <b>{inputItem.displayName}</b>: <br />
+              <i>{inputItem.hintText}</i>
             </label>
             {values[inputItem.name] && values[inputItem.name].length > 0 ? (
               values[inputItem.name].map((_: any, index: number) => (

@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, FormikErrors, FormikTouched } from 'formik'
 import { DynamicFormInputObject, DynamicFormCheckboxInputObject } from './types'
 
-export default ({
+export default function DynamicFormCheckbox({
   errors,
   inputItem,
   touched
@@ -10,13 +10,15 @@ export default ({
   errors: FormikErrors<DynamicFormInputObject>
   inputItem: DynamicFormInputObject
   touched: FormikTouched<DynamicFormInputObject>
-}) => {
+}) {
   return (
     <Field name={inputItem.name}>
       {() => (
         <>
           <fieldset name={inputItem.name}>
-            <legend>{inputItem.legend}</legend>
+            <legend>
+              {inputItem.legend} - <i>{inputItem.hintText}</i>
+            </legend>
             {inputItem.checkboxInput!.map(
               (checkboxItem: DynamicFormCheckboxInputObject) => (
                 <React.Fragment key={checkboxItem.name}>
@@ -29,7 +31,7 @@ export default ({
                     </div>
                   ) : null}
                   <label htmlFor={checkboxItem.name}>
-                    <b>{checkboxItem.displayName}</b>:{' '}
+                    <b>{checkboxItem.displayName}</b>:
                     <Field
                       aria-errormessage={checkboxItem.errorMessageId}
                       aria-invalid={!!errors[checkboxItem.name]}

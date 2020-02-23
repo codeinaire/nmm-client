@@ -17,7 +17,7 @@ const customStyles = {
 
 Modal.setAppElement('body')
 
-export default (props: ModalProps) => {
+export default function DynamicFormModal(props: ModalProps) {
   const {
     failMessage,
     successMessage,
@@ -26,11 +26,11 @@ export default (props: ModalProps) => {
       success: false
     },
     setStatus
-   } = props
+  } = props
 
   function closeModal() {
     setStatus({
-       openModal: false
+      openModal: false
     })
   }
 

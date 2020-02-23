@@ -4,13 +4,17 @@ import gql from 'graphql-tag'
 import dynamic from 'next/dynamic'
 import { withRouter, Router } from 'next/router'
 import logger from '../utils/logger'
+import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
+import UnAuthRecipeDeets from '../components/UnAuthRecipeDeets'
 
 import {
   CreateUpdateChallengeState,
-  CreateUpdateMutationValues
+  CreateUpdateMutationValues,
+  RecipeData,
+  RecipeVars
 } from '../containers/types'
 
 const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
@@ -77,8 +81,11 @@ const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
 }
 
 const Recipe = ({ router }: { router: Router }) => {
+  // Parse the query
   const typedTitleId = router.query['title-id'] as string
   const recipeId = parseInt(typedTitleId.split('-')[1])
+
+  const { signedIn } = useCheckSigninStatus()
   // State
   const [challengeState, setChallengeState] = useState(
     INITIAL_CREATE_UPDATE_CHALLENGE_STATE
@@ -89,7 +96,7 @@ const Recipe = ({ router }: { router: Router }) => {
     loading: recipeLoading,
     error: recipeError,
     data: recipeData
-  } = useQuery(GET_RECIPE, {
+  } = useQuery<RecipeData, RecipeVars>(GET_RECIPE, {
     variables: { recipeId }
   })
   const {
@@ -186,9 +193,16 @@ const Recipe = ({ router }: { router: Router }) => {
   const sharedRecipeCompleted = challengeState.sectionsCompleted.includes(
     'SharedRecipe'
   )
-
-  if (recipeError) return <h1>Error! {recipeError.message}</h1>
   if (recipeLoading) return <h1>Loading...</h1>
+  if (recipeData == undefined) {
+    return <h1>There was an error loading the recipe. Try again!</h1>
+  }
+  if (recipeError != undefined && recipeError) {
+    return <h1>Error! {recipeError.message}</h1>
+  }
+  if (!signedIn) {
+    return <UnAuthRecipeDeets recipe={recipeData.recipe} />
+  }
   return (
     <div>
       <h1>You've choosen {recipeData.recipe.id}</h1>

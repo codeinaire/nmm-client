@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { logout } from '../utils/auth'
 
 export default function HomePage() {
   return (
@@ -8,6 +9,8 @@ export default function HomePage() {
       <Link href='/recipes'>
         <a>Recipes</a>
       </Link>
+      {/* TODO - create nav bar */}
+      <button onClick={() => logout()}>Logout</button>
     </div>
   )
 }
