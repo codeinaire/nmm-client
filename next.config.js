@@ -13,7 +13,7 @@ module.exports = withCSS({
     // AUDIENCE: 'https://nomeatmay.au.auth0.com/api/v2/',
     // CLIENT_URL: 'https://d2hir6fuy7vez1.cloudfront.net',
     // REDIRECT_URL: 'https://d2hir6fuy7vez1.cloudfront.net',
-    // LOGGER_URI: 'https://q5lmn150zh.execute-api.ap-southeast-2.amazonaws.com',
+    LOGGER_URI: 'https://88xfp20uuk.execute-api.ap-southeast-2.amazonaws.com',
     // ! LOCAL & PROD ENVS
     // Don't worry about Ryan creating another account
     CLOUDINARY_API: 'https://api.cloudinary.com/v1_1/codeinaire/image/upload',

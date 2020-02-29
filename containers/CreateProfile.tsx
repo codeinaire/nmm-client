@@ -14,9 +14,9 @@ import DynamicForm from '../components/DynamicForm'
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
 import { FormikHelpers } from 'formik'
 
-export const CREATE_USER_PROFILE = gql`
-  mutation CreateUserProfile($userProfileInput: UserProfileInput) {
-    createUserProfile(userProfileInput: $userProfileInput) {
+export const CREATE_OR_UPDATE_USER_PROFILE = gql`
+  mutation CreateOrUpdateUserProfile($userProfileInput: UserProfileInput) {
+    createOrUpdateUserProfile(userProfileInput: $userProfileInput) {
       id
       totalPoints
       username
@@ -192,7 +192,7 @@ export default function CreateProfile() {
     }
   })
 
-  const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
+  const [CreateOrUpdateUserProfile] = useMutation(CREATE_OR_UPDATE_USER_PROFILE)
   const onSubmit = async (
     values: OnSubmitObject,
     {
@@ -234,7 +234,7 @@ export default function CreateProfile() {
         10
       )
 
-      const createdProfile = await createUserProfile({
+      const createdProfile = await CreateOrUpdateUserProfile({
         variables: {
           userProfileInput: values
         }
