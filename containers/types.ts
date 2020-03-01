@@ -21,7 +21,7 @@ interface SharedFriendsImage {
 
 export interface CreateUpdateMutationValues {
   type: string
-  difficulty: string
+  difficulty: DifficultyEnum | undefined
   recipeId: number
   sectionsCompleted: Array<string>
   lowResSharedFriendsImage: string

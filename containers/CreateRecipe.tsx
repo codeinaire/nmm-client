@@ -101,9 +101,18 @@ export default function CreateRecipe() {
     },
     {
       type: 'text',
+      name: 'videoUrl',
+      errorMessageId: 'videoUrlError',
+      required: false,
+      autocomplete: 'off',
+      displayName: 'Optional - URL for video',
+      hintText: 'The full URL for the youtube video'
+    },
+    {
+      type: 'text',
       name: 'facebook',
       errorMessageId: 'facebookError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Facebook page or profile',
       hintText: "Full URL to creator's page or profile."
@@ -112,7 +121,7 @@ export default function CreateRecipe() {
       type: 'text',
       name: 'instagram',
       errorMessageId: 'instagramError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Instagram profile',
       hintText: "Full URL to creator's page."
@@ -121,7 +130,7 @@ export default function CreateRecipe() {
       type: 'text',
       name: 'twitter',
       errorMessageId: 'twitterError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Twitter profile',
       hintText: "Full URL to creator's profile."
@@ -234,7 +243,8 @@ export default function CreateRecipe() {
     { name: 'facebook', value: '' },
     { name: 'instagram', value: '' },
     { name: 'twitter', value: '' },
-    { name: 'createSecret', value: '' }
+    { name: 'createSecret', value: '' },
+    { name: 'videoUrl', value: '' }
   ]
 
   const validationSchema = object().shape({

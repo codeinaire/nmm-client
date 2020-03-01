@@ -140,7 +140,7 @@ const Recipe = ({ router }: { router: Router }) => {
 
   const values: CreateUpdateMutationValues = {
     type: 'Recipe',
-    difficulty: router.query.difficulty as string,
+    difficulty: recipeData?.recipe.difficulty,
     recipeId,
     ...challengeState
   }
