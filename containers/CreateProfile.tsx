@@ -14,9 +14,9 @@ import DynamicForm from '../components/DynamicForm'
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
 import { FormikHelpers } from 'formik'
 
-export const CREATE_USER_PROFILE = gql`
-  mutation CreateUserProfile($userProfileInput: UserProfileInput) {
-    createUserProfile(userProfileInput: $userProfileInput) {
+export const CREATE_OR_UPDATE_USER_PROFILE = gql`
+  mutation CreateOrUpdateUserProfile($userProfileInput: UserProfileInput) {
+    createOrUpdateUserProfile(userProfileInput: $userProfileInput) {
       id
       totalPoints
       username
@@ -28,7 +28,7 @@ export const CREATE_USER_PROFILE = gql`
 `
 
 export default function CreateProfile() {
-  const { signedIn } = useCheckSigninStatus()
+  const { signedIn, userProfileId } = useCheckSigninStatus()
   const checkboxInput = [
     {
       type: 'checkbox',
@@ -146,6 +146,10 @@ export default function CreateProfile() {
   ]
 
   const router = useRouter()
+  const idForUserProfile =
+    typeof router.query.userId === 'undefined'
+      ? userProfileId
+      : router.query.userId
   const formInitialValues = [
     { name: 'Environment', value: false },
     { name: 'FoodSecurity', value: false },
@@ -158,7 +162,7 @@ export default function CreateProfile() {
     { name: 'lowResProfile', value: '' },
     { name: 'standardResolution', value: '' },
     { name: 'username', value: '' },
-    { name: 'id', value: router.query.userId }
+    { name: 'id', value: idForUserProfile }
   ]
 
   let validationSchema = object().shape({
@@ -192,7 +196,7 @@ export default function CreateProfile() {
     }
   })
 
-  const [createUserProfile] = useMutation(CREATE_USER_PROFILE)
+  const [CreateOrUpdateUserProfile] = useMutation(CREATE_OR_UPDATE_USER_PROFILE)
   const onSubmit = async (
     values: OnSubmitObject,
     {
@@ -203,8 +207,7 @@ export default function CreateProfile() {
     }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
-      setFieldValue('id', router.query.userId)
-
+      setFieldValue('id', idForUserProfile)
       /**
        * @remark convert checkbox values to Array<string> for DB &
        * remove empty keys with no value for CalculatePoints class
@@ -234,7 +237,7 @@ export default function CreateProfile() {
         10
       )
 
-      const createdProfile = await createUserProfile({
+      const createdProfile = await CreateOrUpdateUserProfile({
         variables: {
           userProfileInput: values
         }
@@ -243,14 +246,13 @@ export default function CreateProfile() {
       setStatus({ openModal: true, success: true })
       logger.log({
         level: 'INFO',
-        description: `Profile ${createdProfile.data.createUserProfile.id} with username ${createdProfile.data.createUserProfile.username} succeeded in being created!`
+        description: `Profile ${createdProfile.data.createOrUpdateUserProfile.id} with username ${createdProfile.data.createOrUpdateUserProfile.username} succeeded in being created!`
       })
     } catch (err) {
       logger.log({
         level: 'ERROR',
-        description: err
+        description: `Create Profile - ${err}`
       })
-      resetForm()
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
     }
@@ -260,6 +262,7 @@ export default function CreateProfile() {
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
 
+  if (typeof signedIn === 'undefined') return <h1>Loading...</h1>
   if (!signedIn) {
     return (
       <div>

@@ -21,7 +21,7 @@ interface SharedFriendsImage {
 
 export interface CreateUpdateMutationValues {
   type: string
-  difficulty: string
+  difficulty: DifficultyEnum | undefined
   recipeId: number
   sectionsCompleted: Array<string>
   lowResSharedFriendsImage: string
@@ -53,6 +53,7 @@ export interface Recipe {
   lowResolution?: string
   recipeAttribution?: RecipeAttribution
   standardResolution?: string
+  videoUrl?: string
 }
 
 export interface RecipeAttribution {

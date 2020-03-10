@@ -20,7 +20,7 @@
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
     "auth0-js": "^9.12.1",
-    "aws-cloudwatch-log-browser": "git+ssh://git@github.com/codeinaire/aws-cloudwatch-logger-browser.git#ac235159efb8e7e7dab2f03b0bd805aff4d664a9",
+    "aws-cloudwatch-log-browser": "file:../aws-cloudwatch-logger-browser",
     "face-api.js": "^0.21.0",
     "focus-trap-react": "^6.0.0",
     "formik": "^2.1.0",
@@ -69,7 +69,7 @@
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1",
     "react-test-renderer": "^16.12.0",
-    "serverless-next.js": "^1.8.0",
+    "serverless-next.js": "^1.9.3",
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.4"
   }

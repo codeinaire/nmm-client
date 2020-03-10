@@ -10,8 +10,8 @@ import { OnSubmitObject } from '../components/types'
 import { FormikHelpers } from 'formik'
 
 const CREATE_RECIPE = gql`
-  mutation createRecipe($recipe: RecipeInput!) {
-    createRecipe(recipe: $recipe) {
+  mutation createRecipe($recipe: RecipeInput!, $createSecret: String!) {
+    createRecipe(recipe: $recipe, createSecret: $createSecret) {
       id
       title
       method
@@ -101,9 +101,18 @@ export default function CreateRecipe() {
     },
     {
       type: 'text',
+      name: 'videoUrl',
+      errorMessageId: 'videoUrlError',
+      required: false,
+      autocomplete: 'off',
+      displayName: 'Optional - URL for video',
+      hintText: 'The full URL for the youtube video'
+    },
+    {
+      type: 'text',
       name: 'facebook',
       errorMessageId: 'facebookError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Facebook page or profile',
       hintText: "Full URL to creator's page or profile."
@@ -112,7 +121,7 @@ export default function CreateRecipe() {
       type: 'text',
       name: 'instagram',
       errorMessageId: 'instagramError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Instagram profile',
       hintText: "Full URL to creator's page."
@@ -121,10 +130,19 @@ export default function CreateRecipe() {
       type: 'text',
       name: 'twitter',
       errorMessageId: 'twitterError',
-      required: true,
+      required: false,
       autocomplete: 'off',
       displayName: 'Optional - Twitter profile',
       hintText: "Full URL to creator's profile."
+    },
+    {
+      type: 'password',
+      name: 'createSecret',
+      errorMessageId: 'createSecretError',
+      required: true,
+      autocomplete: 'off',
+      displayName: 'Create Secret',
+      hintText: 'The secret needed to create a recipe!'
     }
   ]
 
@@ -224,7 +242,9 @@ export default function CreateRecipe() {
     { name: 'email', value: '' },
     { name: 'facebook', value: '' },
     { name: 'instagram', value: '' },
-    { name: 'twitter', value: '' }
+    { name: 'twitter', value: '' },
+    { name: 'createSecret', value: '' },
+    { name: 'videoUrl', value: '' }
   ]
 
   const validationSchema = object().shape({
@@ -240,7 +260,10 @@ export default function CreateRecipe() {
     cost: string().required('Please select cost!'),
     mealType: string().required('Please select meal type!'),
     difficulty: string().required('Please select difficulty!'),
-    lowResolution: string().required('Please upload a photo!')
+    lowResolution: string().required('Please upload a photo!'),
+    createSecret: string().required(
+      'You need the create secret to create a recipe!'
+    )
   })
 
   const [createRecipe] = useMutation(CREATE_RECIPE)
@@ -249,9 +272,12 @@ export default function CreateRecipe() {
     { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
+      const createSecret = values.createSecret
+      delete values.createSecret
       const recipe = await createRecipe({
         variables: {
-          recipe: values
+          recipe: values,
+          createSecret
         }
       })
       resetForm()

@@ -7,7 +7,6 @@ import logger from '../utils/logger'
 import DynamicForm from '../components/DynamicForm'
 
 import { OnSubmitObject } from '../components/types'
-import { DeleteRecipeType } from './types'
 import { FormikHelpers } from 'formik'
 
 const DELETE_RECIPE = gql`
@@ -39,7 +38,7 @@ export default function DeleteRecipe() {
       hintText: 'Just the full title of the recipe'
     },
     {
-      type: 'text',
+      type: 'password',
       name: 'deleteSecret',
       errorMessageId: 'deleteSecretError',
       required: true,
