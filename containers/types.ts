@@ -53,6 +53,7 @@ export interface Recipe {
   lowResolution?: string
   recipeAttribution?: RecipeAttribution
   standardResolution?: string
+  videoUrl?: string
 }
 
 export interface RecipeAttribution {
