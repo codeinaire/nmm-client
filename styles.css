@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -7,9 +7,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-}
+} */
+/* This is an issue with getting the custom local font to work */
+/* https://github.com/grommet/grommet/issues/3835 */
+/* https://github.com/grommet/grommet/issues/3107 */
+/* https://codesandbox.io/s/grommet-v2-template-68g5b */
+/*
+@font-face {
+  font-family: "NoMeatMayTitle";
+  src: url("/public/fonts/NoMeatMayTitle-Regular.woff")format("woff"), url("/public/fonts/NoMeatMayTitle-Regular.otf")format("opentype");
+} */
 
-*,
+/* *,
 *:before,
 *:after {
   box-sizing: inherit;
@@ -19,7 +28,8 @@ body {
   width: 95%;
   max-width: 700px;
   margin: 2em auto;
-}
+} */
+
 p.lorem-text {
   text-align: justify;
 }

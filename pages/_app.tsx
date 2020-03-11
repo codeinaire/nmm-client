@@ -1,10 +1,29 @@
 import React from 'react'
+import { Grommet } from 'grommet'
+import { deepMerge } from 'grommet/utils'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
 import nextWithApollo from '../utils/withApollo'
 import '../styles.css'
 
 import { Props } from '../types'
+
+const theme = deepMerge({
+  global: {
+    font: {
+      family:
+        "'NoMeatMayTitle', 'Segoe UI', 'Roboto','Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
+      face: `
+        @font-face {
+          font-family: "NoMeatMayTitle";
+          src: url("/public/fonts/NoMeatMayTitle-Regular.woff") format("woff");
+        }
+      `,
+      size: '18px',
+      height: '20px'
+    }
+  }
+})
 
 class MyApp extends App<Props> {
   // Only uncomment this method if you have blocking data requirements for
@@ -38,7 +57,9 @@ class MyApp extends App<Props> {
 
     return (
       <ApolloProvider client={apollo}>
-        <Component {...pageProps} />
+        <Grommet theme={theme}>
+          <Component {...pageProps} />
+        </Grommet>
       </ApolloProvider>
     )
   }
