@@ -87,17 +87,16 @@ export default function DynamicForm(props: DynamicFormProps) {
                 touched={touched}
               />
             ) : null}
-            <br />
             <Button
-              active={isSubmitting}
               a11yTitle={a11yTitle}
+              active={isSubmitting}
+              alignSelf='center'
               color='red'
               data-testid='submit'
               disabled={isSubmitting}
               fill='horizontal'
               hoverIndicator={true}
               label={submitType}
-              margin='medium'
               onClick={() => onSubmit}
               primary={true}
               type='submit'

@@ -6,17 +6,21 @@ import nextWithApollo from '../utils/withApollo'
 import '../styles.css'
 
 import { Props } from '../types'
-import { isWhiteSpaceLike } from 'typescript'
 
 const theme = {
   global: {
+    focus: {
+      border: {
+        color: '#E8161A'
+      }
+    },
     font: {
       family:
-        "'NoMeatMayTitle', 'Segoe UI', 'Roboto','Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
+        "'Segoe UI', 'Roboto','Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
       face: `
         @font-face {
           font-family: "NoMeatMayTitle";
-          src: local("/public/fonts/NoMeatMayTitle-Regular.woff") format("woff");
+          src: url("/fonts/NoMeatMayTitle-Regular.woff2") format("woff2");
         }
       `,
       size: '18px',
@@ -33,6 +37,9 @@ const theme = {
   button: {
     border: {
       radius: '2px'
+    },
+    padding: {
+      horizontal: '21px'
     },
     extend: `
       font-weight: bold;

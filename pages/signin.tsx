@@ -20,7 +20,7 @@ export default function SignInPage() {
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
         href='/signup'
-        label='Register'
+        label='REGISTER'
         margin='medium'
         primary={true}
         type='button'

@@ -54,7 +54,7 @@ export default function SignIn() {
     }
   }
 
-  const submitType = 'Sign In!'
+  const submitType = 'SIGN IN'
   const failMessage = 'Failed to Sign In. Please try again!'
   const successMessage = 'You signed in onward to awesomeness! Yay!'
   const a11yTitle = 'Button to submit sign in credentials'
@@ -129,9 +129,8 @@ export default function SignIn() {
         a11yTitle='Submit Facebook sign in credentials'
         color='red'
         data-testid='submit'
-        fill='horizontal'
         hoverIndicator={true}
-        label='Facebook Sign In'
+        label='FACEBOOK SIGN IN'
         margin='medium'
         onClick={() => facebookSignIn}
         primary={true}

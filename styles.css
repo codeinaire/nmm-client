@@ -2,19 +2,9 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  background: red;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* This is an issue with getting the custom local font to work */
-/* https://github.com/grommet/grommet/issues/3835 */
-/* https://github.com/grommet/grommet/issues/3107 */
-/* https://codesandbox.io/s/grommet-v2-template-68g5b */
-/*
-@font-face {
-  font-family: "NoMeatMayTitle";
-  src: url("/public/fonts/NoMeatMayTitle-Regular.woff")format("woff"), url("/public/fonts/NoMeatMayTitle-Regular.otf")format("opentype");
-} */
 
 /* *,
 *:before,
