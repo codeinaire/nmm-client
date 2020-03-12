@@ -1,14 +1,14 @@
 import React from 'react'
 import { Grommet } from 'grommet'
-import { deepMerge } from 'grommet/utils'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
 import nextWithApollo from '../utils/withApollo'
 import '../styles.css'
 
 import { Props } from '../types'
+import { isWhiteSpaceLike } from 'typescript'
 
-const theme = deepMerge({
+const theme = {
   global: {
     font: {
       family:
@@ -16,14 +16,36 @@ const theme = deepMerge({
       face: `
         @font-face {
           font-family: "NoMeatMayTitle";
-          src: url("/public/fonts/NoMeatMayTitle-Regular.woff") format("woff");
+          src: local("/public/fonts/NoMeatMayTitle-Regular.woff") format("woff");
         }
       `,
       size: '18px',
       height: '20px'
+    },
+    colours: {
+      red: '#E8161A',
+      white: '#FFFFFF'
+    },
+    hover: {
+      color: 'red'
     }
+  },
+  button: {
+    border: {
+      radius: '2px'
+    },
+    extend: `
+      font-weight: bold;
+      color: white;
+    `
+  },
+  body: {
+    extend: `
+      margin: 0;
+      height: 100vh;
+    `
   }
-})
+}
 
 class MyApp extends App<Props> {
   // Only uncomment this method if you have blocking data requirements for

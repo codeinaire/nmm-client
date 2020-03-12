@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { object, string } from 'yup'
 import { FormikHelpers } from 'formik'
+import { Button, Box, Image } from 'grommet'
 import FacebookSignInFailModal from 'react-modal'
-import Link from 'next/link'
 
 import { signIn } from '../utils/auth'
 import DynamicForm from '../components/DynamicForm'
@@ -57,6 +57,7 @@ export default function SignIn() {
   const submitType = 'Sign In!'
   const failMessage = 'Failed to Sign In. Please try again!'
   const successMessage = 'You signed in onward to awesomeness! Yay!'
+  const a11yTitle = 'Button to submit sign in credentials'
 
   const formInitialValues = [
     { name: 'email', value: '' },
@@ -91,11 +92,29 @@ export default function SignIn() {
   }
 
   return (
-    <div>
-      <p>Please sign in</p>
-      <Link href='/'>
-        <a>Index</a>
-      </Link>
+    <Box
+      a11yTitle='sign in card'
+      align='center'
+      // alignContent='center'
+      // alignSelf='center'
+      background='white'
+      border={true}
+      // direction='row'
+      elevation='small'
+      flex={false}
+      gridArea='middlemiddle'
+      justify='center'
+      responsive={true}
+      round='xsmall'
+      width='medium'
+    >
+      <Box height='small' width='small' round='full'>
+        <Image
+          a11yTitle='no meat may logo'
+          src='/circle-NMM.png'
+          fit='contain'
+        />
+      </Box>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
@@ -104,8 +123,20 @@ export default function SignIn() {
         successMessage={successMessage}
         validationSchema={validationSchema}
         formInitialValues={formInitialValues}
+        a11yTitle={a11yTitle}
       />
-      <button onClick={facebookSignIn}>Facebook Sign In</button>
+      <Button
+        a11yTitle='Submit Facebook sign in credentials'
+        color='red'
+        data-testid='submit'
+        fill='horizontal'
+        hoverIndicator={true}
+        label='Facebook Sign In'
+        margin='medium'
+        onClick={() => facebookSignIn}
+        primary={true}
+        type='submit'
+      />
       <FacebookSignInFailModal
         isOpen={facebookSignInModalState}
         closeTimeoutMS={2}
@@ -116,6 +147,6 @@ export default function SignIn() {
         <button onClick={closeModal}>close</button>
         <h3>{failMessage}</h3>
       </FacebookSignInFailModal>
-    </div>
+    </Box>
   )
 }

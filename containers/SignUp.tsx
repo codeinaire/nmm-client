@@ -64,6 +64,7 @@ export default function SignIn() {
   const failMessage = 'Sign Up failed! Please try again!'
   const successMessage =
     'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
+  const a11yTitle = 'Sign up submission button'
 
   const formInitialValues = [
     { name: 'email', value: '' },
@@ -81,6 +82,7 @@ export default function SignIn() {
         submitType={submitType}
         successMessage={successMessage}
         formInitialValues={formInitialValues}
+        a11yTitle={a11yTitle}
       />
     </div>
   )
