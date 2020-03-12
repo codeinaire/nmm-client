@@ -1,5 +1,6 @@
 import React from 'react'
 import { object, string } from 'yup'
+import { Box, Image } from 'grommet'
 import { signUp } from '../utils/auth'
 
 import DynamicForm from '../components/DynamicForm'
@@ -60,7 +61,7 @@ export default function SignIn() {
     }
   }
 
-  const submitType = 'Sign Up!'
+  const submitType = 'SIGN UP'
   const failMessage = 'Sign Up failed! Please try again!'
   const successMessage =
     'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
@@ -72,8 +73,26 @@ export default function SignIn() {
   ]
 
   return (
-    <div>
-      <p>Please sign up</p>
+    <Box
+      a11yTitle='sign in card'
+      align='center'
+      background='white'
+      border={true}
+      elevation='small'
+      flex={false}
+      gridArea='middlemiddle'
+      justify='center'
+      responsive={true}
+      round='xsmall'
+      width='medium'
+    >
+      <Box height='small' width='small' round='full'>
+        <Image
+          a11yTitle='no meat may logo'
+          src='/circle-NMM.png'
+          fit='contain'
+        />
+      </Box>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
@@ -84,6 +103,6 @@ export default function SignIn() {
         formInitialValues={formInitialValues}
         a11yTitle={a11yTitle}
       />
-    </div>
+    </Box>
   )
 }

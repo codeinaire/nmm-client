@@ -95,11 +95,8 @@ export default function SignIn() {
     <Box
       a11yTitle='sign in card'
       align='center'
-      // alignContent='center'
-      // alignSelf='center'
       background='white'
       border={true}
-      // direction='row'
       elevation='small'
       flex={false}
       gridArea='middlemiddle'
@@ -131,7 +128,10 @@ export default function SignIn() {
         data-testid='submit'
         hoverIndicator={true}
         label='FACEBOOK SIGN IN'
-        margin='medium'
+        margin={{
+          top: '0',
+          bottom: '30px'
+        }}
         onClick={() => facebookSignIn}
         primary={true}
         type='submit'

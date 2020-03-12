@@ -97,6 +97,9 @@ export default function DynamicForm(props: DynamicFormProps) {
               fill='horizontal'
               hoverIndicator={true}
               label={submitType}
+              margin={{
+                bottom: '30px'
+              }}
               onClick={() => onSubmit}
               primary={true}
               type='submit'
