@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
 import Link from 'next/link'
+import { Box, Button } from 'grommet'
+
 import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
@@ -73,18 +75,47 @@ export default function Home() {
   if (!isServer() && window.location.hash) return <h1>Redirecting...</h1>
 
   return (
-    <div>
+    <Box
+      align='center'
+      direction='column'
+      height='100vh'
+      justify='center'
+      responsive={true}
+    >
       <h1>Welcome to the No Meat May App</h1>
-      <Link href='/signin'>
-        <a>Index</a>
-      </Link>
-      <br />
-      <Link href='/recipes'>
-        <a>Recipes</a>
-      </Link>
-      <Link href='/home'>
-        <a>Home</a>
-      </Link>
-    </div>
+      <Button
+        a11yTitle='go to sign up page'
+        color='red'
+        data-testid='button'
+        hoverIndicator={{ color: 'white' }}
+        href='/recipes'
+        label='RECIPES'
+        margin='medium'
+        primary={true}
+        type='button'
+      />
+      <Button
+        a11yTitle='go to sign up page'
+        color='red'
+        data-testid='button'
+        hoverIndicator={{ color: 'white' }}
+        href='/signin'
+        label='SIGN IN'
+        margin='medium'
+        primary={true}
+        type='button'
+      />
+      <Button
+        a11yTitle='go to sign up page'
+        color='red'
+        data-testid='button'
+        hoverIndicator={{ color: 'white' }}
+        href='/home'
+        label='HOME'
+        margin='medium'
+        primary={true}
+        type='button'
+      />
+    </Box>
   )
 }

@@ -3,6 +3,8 @@ import { Grommet } from 'grommet'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
 import nextWithApollo from '../utils/withApollo'
+
+import Navigation from '../components/Nav'
 import '../styles.css'
 
 import { Props } from '../types'
@@ -51,6 +53,16 @@ const theme = {
       margin: 0;
       height: 100vh;
     `
+  },
+  anchor: {
+    hover: {
+      extend: `
+        border: 2px solid #19e5e5;
+      `
+    },
+    extend: `
+      border: 2px solid red;
+    `
   }
 }
 
@@ -83,10 +95,10 @@ class MyApp extends App<Props> {
 
   render() {
     const { Component, pageProps, apollo } = this.props
-
     return (
       <ApolloProvider client={apollo}>
         <Grommet theme={theme}>
+          <Navigation page={Component.name} />
           <Component {...pageProps} />
         </Grommet>
       </ApolloProvider>

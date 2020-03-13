@@ -84,7 +84,7 @@ const Recipe = ({ router }: { router: Router }) => {
   // Parse the query
   const typedTitleId = router.query['title-id'] as string
   const recipeId = parseInt(typedTitleId.split('-')[1])
-
+  // Custom hooks
   const { signedIn } = useCheckSigninStatus()
   // State
   const [challengeState, setChallengeState] = useState(

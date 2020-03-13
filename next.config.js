@@ -1,5 +1,4 @@
 const withCSS = require('@zeit/next-css')
-const withFonts = require('next-fonts')
 
 module.exports = withCSS({
   env: {
@@ -30,11 +29,11 @@ module.exports = withCSS({
     // Auth0 + CORS stuff
     APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
-    AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
+    AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/'
     // HTTPS: true,
-    CLIENT_URL: 'https://myapp.example:3000/',
-    SERVER_URL: 'https://localhost:4000/nmm-app',
-    REDIRECT_URL: 'https://myapp.example:3000/'
+    // CLIENT_URL: 'https://myapp.example:3000/',
+    // SERVER_URL: 'https://localhost:4000/nmm-app',
+    // REDIRECT_URL: 'https://myapp.example:3000/'
   },
   webpack: config => {
     // https://github.com/justadudewhohacks/face-api.js/issues/154
