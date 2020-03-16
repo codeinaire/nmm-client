@@ -8,23 +8,24 @@ export default function FooterComponent({ page }: { page: string }) {
     <Footer a11yTitle='footer' background='red'>
       <Anchor
         a11yTitle='link to no meat may website'
+        color='white'
         href='https://www.nomeatmay.net/'
         label='No Meat May'
       />
       <Anchor
         a11yTitle='link to instagram page'
         href='https://www.instagram.com/no_meat_may/'
-        icon={<Instagram color='#19e5e5' />}
+        icon={<Instagram color='white' />}
       />
       <Anchor
         a11yTitle='link to the twitter page'
         href='http://www.twitter.com/nomeatmay'
-        icon={<Twitter color='#19e5e5' />}
+        icon={<Twitter color='white' />}
       />
       <Anchor
         a11yTitle='link to the facebook page'
         href='https://www.facebook.com/nomeatmay/'
-        icon={<Facebook color='#19e5e5' />}
+        icon={<Facebook color='white' />}
       />
     </Footer>
   )
