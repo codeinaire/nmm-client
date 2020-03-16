@@ -4,6 +4,7 @@ import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
 import nextWithApollo from '../utils/withApollo'
 
+import Footer from '../components/Footer'
 import Navigation from '../components/Nav'
 import '../styles.css'
 
@@ -100,6 +101,7 @@ class MyApp extends App<Props> {
         <Grommet theme={theme}>
           <Navigation page={Component.name} />
           <Component {...pageProps} />
+          <Footer page={Component.name} />
         </Grommet>
       </ApolloProvider>
     )
