@@ -56,6 +56,7 @@ const theme = {
     `
   },
   anchor: {
+    color: 'white',
     hover: {
       extend: `
         border: 2px solid #19e5e5;

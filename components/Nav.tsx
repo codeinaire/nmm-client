@@ -19,21 +19,25 @@ export default function Navigation({ page }: { page: string }) {
         a11yTitle='link to index page'
         href='/index'
         icon={<Home color='white' />}
+        label='Home'
       />
       <Anchor
         a11yTitle='link to the recipes page'
-        href='/recipes'
+        href='/recipes-by-meal'
         icon={<Cafeteria color='white' />}
+        label='Recipes'
       />
       <Anchor
         a11yTitle='link to the profile page'
         href='/profile'
         icon={<Accessibility color='white' />}
+        label='Profile'
       />
       <Anchor
         a11yTitle='logout'
         icon={<Logout color='white' />}
         onClick={() => logout()}
+        label='Logout'
       />
     </Box>
   )

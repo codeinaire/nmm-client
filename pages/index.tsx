@@ -88,14 +88,14 @@ export default function Home() {
         color='red'
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
-        href='/recipes'
+        href='/recipes-by-meal'
         label='RECIPES'
         margin='medium'
         primary={true}
         type='button'
       />
       <Button
-        a11yTitle='go to sign up page'
+        a11yTitle='go to sign in page'
         color='red'
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
@@ -106,7 +106,7 @@ export default function Home() {
         type='button'
       />
       <Button
-        a11yTitle='go to sign up page'
+        a11yTitle='go to sign home page'
         color='red'
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
