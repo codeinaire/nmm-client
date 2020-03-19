@@ -1,12 +1,30 @@
 import React from 'react'
+import { Box, Button } from 'grommet'
 
 import SignIn from '../containers/SignIn'
 
 export default function SignInPage() {
   return (
-    <div>
-      <h1>Please sign in to No Meat May</h1>
+    <Box
+      align='center'
+      background='url(/stir-fried-noodles-vegetables.jpg)'
+      direction='column'
+      height='100vh'
+      justify='center'
+      responsive={true}
+    >
       <SignIn />
-    </div>
+      <Button
+        a11yTitle='go to sign up page'
+        color='red'
+        data-testid='button'
+        hoverIndicator={{ color: 'white' }}
+        href='/signup'
+        label='SIGN UP'
+        margin='medium'
+        primary={true}
+        type='button'
+      />
+    </Box>
   )
 }

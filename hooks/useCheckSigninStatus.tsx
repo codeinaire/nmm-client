@@ -5,7 +5,7 @@ import logger from '../utils/logger'
 
 export default function useCheckSigninStatus() {
   const apolloClient = useApolloClient()
-  const [signedIn, setSignedIn] = useState()
+  const [signedIn, setSignedIn] = useState<boolean | undefined>()
   const [userProfileId, setUserProfileId] = useState('')
 
   useEffect(() => {

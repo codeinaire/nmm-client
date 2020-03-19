@@ -1,5 +1,6 @@
 import React from 'react'
 import { Formik, Form, FormikProps } from 'formik'
+import { Button } from 'grommet'
 import Modal from './DynamicFormModal'
 import DynamicFormCheckbox from './DynamicFormCheckbox'
 import DynamicFormSelect from './DynamicFormSelect'
@@ -23,7 +24,8 @@ export default function DynamicForm(props: DynamicFormProps) {
     validationSchema,
     successMessage,
     failMessage,
-    formSelect = []
+    formSelect = [],
+    a11yTitle
   } = props
 
   return (
@@ -40,7 +42,14 @@ export default function DynamicForm(props: DynamicFormProps) {
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        {({ errors, status, setStatus, touched, values }: FormikProps<any>) => (
+        {({
+          errors,
+          isSubmitting,
+          status,
+          setStatus,
+          touched,
+          values
+        }: FormikProps<any>) => (
           <Form>
             <Modal
               failMessage={failMessage}
@@ -78,10 +87,23 @@ export default function DynamicForm(props: DynamicFormProps) {
                 touched={touched}
               />
             ) : null}
-            <br />
-            <button data-testid='submit' type='submit'>
-              {submitType}
-            </button>
+            <Button
+              a11yTitle={a11yTitle}
+              active={isSubmitting}
+              alignSelf='center'
+              color='red'
+              data-testid='submit'
+              disabled={isSubmitting}
+              fill='horizontal'
+              hoverIndicator={true}
+              label={submitType}
+              margin={{
+                bottom: '30px'
+              }}
+              onClick={() => onSubmit}
+              primary={true}
+              type='submit'
+            />
           </Form>
         )}
       </Formik>

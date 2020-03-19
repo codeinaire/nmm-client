@@ -11,6 +11,7 @@ export interface DynamicFormProps {
   submitType: string
   successMessage: string
   validationSchema: ObjectSchema
+  a11yTitle?: string
   formSelect?: Array<DynamicFormSelectObject>
 }
 

@@ -4,7 +4,7 @@ import Recipes from '../containers/Recipes'
 export default function RecipesPage() {
   return (
     <div>
-      <h1>Choose your recipes</h1>
+      <h1>Choose your recipe</h1>
       <Recipes />
     </div>
   )

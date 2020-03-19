@@ -37,8 +37,16 @@ export interface RecipeData {
   recipe: Recipe
 }
 
+export interface IRecipesByType {
+  recipesByMealType: [Recipe]
+}
+
 export interface RecipeVars {
   recipeId: number
+}
+
+export interface RecipesTypeVars {
+  mealType: MealTypeEnum
 }
 
 export interface Recipe {
@@ -78,9 +86,9 @@ enum CostEnum {
   Expensive
 }
 
-enum MealTypeEnum {
-  Breakfast,
-  Lunch,
-  Dinner,
-  Snack
+export enum MealTypeEnum {
+  Breakfast = 'Breakfast',
+  Lunch = 'Lunch',
+  Dinner = 'Dinner',
+  Snack = 'Snack'
 }

@@ -1,7 +1,11 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import Link from 'next/link'
+import { Box } from 'grommet'
+
+import RecipeListCard from '../components/RecipeListCard'
+
+import { Recipe } from '../containers/types'
 
 const GET_RECIPES = gql`
   {
@@ -24,29 +28,17 @@ export default function Recipes() {
 
   return (
     <div>
-      <h2>testing</h2>
-      {data.recipes.map((recipe: any) => (
-        <div key={recipe.title}>
-          <Link
-            href={{
-              pathname: '/recipe/[title-id]',
-              query: { difficulty: recipe.difficulty, recipeId: recipe.id }
-            }}
-            as={`/recipe/${recipe.title}-${recipe.id}`}
+      {data.recipes.map((recipe: Recipe) => (
+        <React.Fragment key={recipe.title}>
+          <Box
+            direction='row-responsive'
+            justify='center'
+            pad='medium'
+            width='xxlarge'
           >
-            <a>
-              <p>
-                {recipe.id} {recipe.title} {recipe.mealType}
-              </p>
-              <img
-                src={recipe.lowResolution}
-                alt='picture of food'
-                width='170'
-                height='170'
-              ></img>
-            </a>
-          </Link>
-        </div>
+            <RecipeListCard recipe={recipe} />
+          </Box>
+        </React.Fragment>
       ))}
     </div>
   )
