@@ -91,7 +91,6 @@ class MyApp extends App<Props> {
   //   console.log('ctx', ctx.query)
 
   //   pageProps.query = ctx.query
-
   //   return { pageProps }
   // }
 

@@ -18,6 +18,7 @@ next.config.js
 /.serverless/
 /.serverless_nextjs/
 
+
 # misc
 .DS_Store
 .env*

@@ -27,6 +27,7 @@ export default function SignIn() {
       displayName: 'Password'
     }
   ]
+  
   const PASSWORD_REGEX = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])([^\s]){10,16}$/
   const validationSchema = object().shape({
     email: string()
@@ -93,6 +94,7 @@ export default function SignIn() {
           fit='contain'
         />
       </Box>
+
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
