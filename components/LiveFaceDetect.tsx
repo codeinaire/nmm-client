@@ -12,6 +12,7 @@ import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
 import FbInitAndToken from '../containers/FbInitParent'
 import FbGroupShare from '../components/FbGroupShare'
+import { Box } from 'grommet'
 
 import { FaceRecogProperties } from './types'
 import {
@@ -186,14 +187,18 @@ export default function LiveFaceDetect({
             >
               <div style={{ position: 'relative', width: WIDTH }}>
                 {!!videoConstraints ? (
-                  <div style={{ position: 'absolute' }}>
+                  <Box
+                    a11yTitle='recipe container'
+                    align='center'
+                    justify='center'
+                  >
                     <Webcam
                       audio={false}
                       ref={webcamRef}
                       screenshotFormat='image/jpeg'
                       videoConstraints={videoConstraints}
                     />
-                  </div>
+                  </Box>
                 ) : null}
                 {!!drawBox ? drawBox : null}
               </div>
