@@ -31,6 +31,7 @@ export default function UnAuthRecipeDeets({ recipe }: { recipe: Recipe }) {
       >
         <List
           a11yTitle='list of recipe ingredients'
+
           data={recipe.ingredients}
         />
       </Box>

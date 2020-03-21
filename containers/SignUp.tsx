@@ -27,7 +27,6 @@ export default function SignIn() {
       displayName: 'Password'
     }
   ]
-
   const validationSchema = object().shape({
     email: string()
       .email('Invalid email!')
