@@ -206,6 +206,7 @@ export default function LiveFaceDetect({
             onClick={captureImage}
           />
         </Box>
+
       )}
     </>
   )
