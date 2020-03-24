@@ -1,9 +1,9 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { Box, Heading } from 'grommet'
 
 import logger from '../utils/logger'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
@@ -27,7 +27,7 @@ export const CREATE_OR_UPDATE_USER_PROFILE = gql`
   }
 `
 
-export default function CreateProfile() {
+export default function UpdateProfile() {
   const { signedIn, userProfileId } = useCheckSigninStatus()
   const checkboxInput = [
     {
@@ -119,7 +119,7 @@ export default function CreateProfile() {
     {
       name: 'challengeGoals',
       errorMessageId: 'challengeGoalsError',
-      title: 'How much do you want to challenge yourself?',
+      title: 'Challenge Goal',
       options: [
         {
           value: '',
@@ -263,24 +263,27 @@ export default function CreateProfile() {
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
 
   if (typeof signedIn === 'undefined') return <h1>Loading...</h1>
-  if (!signedIn) {
-    return (
-      <div>
-        <h1>
-          You've got to be signed into your account to create or update your
-          profile
-        </h1>
-        <SignIn />
-      </div>
-    )
-  }
+  // if (!signedIn) {
+  //   return (
+  //     <div>
+  //       <h1>
+  //         You've got to be signed into your account to create or update your
+  //         profile
+  //       </h1>
+  //       <SignIn />
+  //     </div>
+  //   )
+  // }
 
   return (
-    <div>
-      <Link href='/recipes'>
-        <a>Recipes page</a>
-      </Link>
-      <h1>Fill it out please!</h1>
+    <Box
+      a11yTitle='update profile container'
+      align='center'
+      background='white'
+      justify='center'
+      margin='medium'
+    >
+      <Heading a11yTitle='update profile heading'>Update your profile</Heading>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
@@ -291,6 +294,6 @@ export default function CreateProfile() {
         formSelect={formSelect}
         formInitialValues={formInitialValues}
       />
-    </div>
+    </Box>
   )
 }

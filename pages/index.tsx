@@ -20,6 +20,8 @@ export default function Home() {
   useEffect(() => {
     async function parsingAuthHash() {
       const signedIn = localStorage.getItem('signed_in')
+      console.log('signedIn', signedIn)
+
       /**
        * @remark this will only run
        */
@@ -37,11 +39,11 @@ export default function Home() {
                 accessToken: authResult.accessToken
               }
             })
+            console.log('userData', userData)
 
             const FIRST_TIME_SIGNIN = 1
             const isFirstTimeLogin =
-              userData[`${process.env.CLIENT_URL}/login_count`] ==
-              FIRST_TIME_SIGNIN
+              userData[`http://localhost:3000/login_count`] == FIRST_TIME_SIGNIN
             if (isFirstTimeLogin) {
               logger.log({
                 level: 'INFO',

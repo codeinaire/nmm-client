@@ -132,7 +132,7 @@ export default function SignIn() {
           top: '0',
           bottom: '30px'
         }}
-        onClick={() => facebookSignIn}
+        onClick={() => facebookSignIn()}
         primary={true}
         type='submit'
       />
