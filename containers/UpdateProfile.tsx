@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { string, object, boolean, ValidationError } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import { Box, Heading } from 'grommet'
+import { Box, Heading, Button } from 'grommet'
+import { Trash } from 'grommet-icons'
+import DeleteProfileModal from 'react-modal'
+import useGetUserProfile from '../hooks/useGetUserProfile'
 
 import logger from '../utils/logger'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
@@ -13,6 +16,7 @@ import DynamicForm from '../components/DynamicForm'
 
 import { OnSubmitObject, CheckboxSchemaObj } from '../components/types'
 import { FormikHelpers } from 'formik'
+import { MotivationsEnum } from '../hooks/types'
 
 export const CREATE_OR_UPDATE_USER_PROFILE = gql`
   mutation CreateOrUpdateUserProfile($userProfileInput: UserProfileInput) {
@@ -27,8 +31,19 @@ export const CREATE_OR_UPDATE_USER_PROFILE = gql`
   }
 `
 
+export const DELETE_USER_PROFILE = gql`
+  mutation deleteUserProfile($userProfileId: String!) {
+    deleteUserProfile(userProfileId: $userProfileId) {
+      id
+    }
+  }
+`
+
 export default function UpdateProfile() {
   const { signedIn, userProfileId } = useCheckSigninStatus()
+  const { loading, error, data } = useGetUserProfile(userProfileId)
+  console.log('data', data)
+
   const checkboxInput = [
     {
       type: 'checkbox',
@@ -151,17 +166,32 @@ export default function UpdateProfile() {
       ? userProfileId
       : router.query.userId
   const formInitialValues = [
-    { name: 'Environment', value: false },
-    { name: 'FoodSecurity', value: false },
-    { name: 'AnimalWelfare', value: false },
-    { name: 'PersonalHealth', value: false },
-    { name: 'challengeGoals', value: '' },
-    { name: 'bio', value: '' },
-    { name: 'challengeQuote', value: '' },
+    {
+      name: 'Environment',
+      value: data?.me.motivations.includes(MotivationsEnum.Environment) || false
+    },
+    {
+      name: 'FoodSecurity',
+      value:
+        data?.me.motivations.includes(MotivationsEnum.FoodSecurity) || false
+    },
+    {
+      name: 'AnimalWelfare',
+      value:
+        data?.me.motivations.includes(MotivationsEnum.AnimalWelfare) || false
+    },
+    {
+      name: 'PersonalHealth',
+      value:
+        data?.me.motivations.includes(MotivationsEnum.PersonalHealth) || false
+    },
+    { name: 'challengeGoals', value: data?.me.challengeGoals || '' },
+    { name: 'bio', value: data?.me.bio || '' },
+    { name: 'challengeQuote', value: data?.me.challengeQuote || '' },
     { name: 'motivations', value: '' },
     { name: 'lowResProfile', value: '' },
     { name: 'standardResolution', value: '' },
-    { name: 'username', value: '' },
+    { name: 'username', value: data?.me.username || '' },
     { name: 'id', value: idForUserProfile }
   ]
 
@@ -197,6 +227,7 @@ export default function UpdateProfile() {
   })
 
   const [CreateOrUpdateUserProfile] = useMutation(CREATE_OR_UPDATE_USER_PROFILE)
+  const [DeleteUserProfile] = useMutation(DELETE_USER_PROFILE)
   const onSubmit = async (
     values: OnSubmitObject,
     {
@@ -257,6 +288,41 @@ export default function UpdateProfile() {
       setSubmitting(false)
     }
   }
+  const [deleteProfileSuccess, setDeleteProfileSuccess] = useState(false)
+  const [deleteProfileFailure, setDeleteProfileFailure] = useState(false)
+  const deleteUserProfile = async () => {
+    try {
+      const deletedUserProfile = await DeleteUserProfile({
+        variables: {
+          userProfileId: userProfileId
+        }
+      })
+      console.log('deletedUserProfile', deletedUserProfile)
+      setDeleteProfileSuccess(true)
+    } catch (error) {
+      setDeleteProfileFailure(true)
+      console.error(`Profile was not deleted b/c of ${error}`)
+    }
+  }
+  function closeModal() {
+    setDeleteProfileFailure(false)
+    setDeleteProfileSuccess(false)
+  }
+  const facebookModalCustomStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  }
+  const modalMessage = deleteProfileSuccess
+    ? 'You succeeded in deleting your user profile!'
+    : deleteProfileFailure
+    ? 'You failed in deleting your user profile'
+    : ''
 
   const submitType = 'Update your profile!'
   const failMessage = 'Profile creation failed! Please try again.'
@@ -297,6 +363,29 @@ export default function UpdateProfile() {
         formSelect={formSelect}
         formInitialValues={formInitialValues}
       />
+      <Button
+        a11yTitle='delete user profile'
+        data-testid='submit'
+        icon={<Trash />}
+        label='DELETE USER PROFILE'
+        margin={{
+          top: '0',
+          bottom: '10px'
+        }}
+        onClick={() => deleteUserProfile()}
+        primary={true}
+        type='submit'
+      />
+      <DeleteProfileModal
+        isOpen={deleteProfileFailure || deleteProfileSuccess}
+        closeTimeoutMS={2}
+        style={facebookModalCustomStyles}
+        contentLabel='Fail or Success modal for deleting user profile'
+        shouldCloseOnOverlayClick={true}
+      >
+        <button onClick={closeModal}>close</button>
+        <h3>{modalMessage}</h3>
+      </DeleteProfileModal>
     </Box>
   )
 }

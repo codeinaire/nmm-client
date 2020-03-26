@@ -112,7 +112,7 @@ export default function FbGroupShare({
     ? 'You succeed in posting to the No Meat May Facebook group!'
     : facebookShareGroupFailMessage
     ? 'Failed to post photo to group. Please try again!'
-    : 'aaoeu'
+    : ''
 
   return (
     <div>

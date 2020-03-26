@@ -3,6 +3,7 @@ import { Box, Button, Heading, Image } from 'grommet'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 import useGetUserProfile from '../hooks/useGetUserProfile'
 import SignIn from '../containers/SignIn'
+import { MotivationsEnum } from '../hooks/types'
 
 export default function ProfilePage() {
   const { signedIn, userProfileId } = useCheckSigninStatus()
@@ -25,15 +26,6 @@ export default function ProfilePage() {
   if (error) return <h3>Sorry there was an error: {error.message}</h3>
   if (loading) return <h3>Loading...</h3>
 
-  const {
-    bio,
-    challengeGoals,
-    challengeQuote,
-    standardResolution,
-    motivations,
-    totalPoints,
-    username
-  } = data.me
   return (
     <Box
       a11yTitle='update profile container'
@@ -42,29 +34,32 @@ export default function ProfilePage() {
       justify='center'
       margin='medium'
     >
-      <Heading a11yTitle='update profile heading'>Hey {username}!</Heading>
+      <Heading a11yTitle='update profile heading'>
+        Hey {data?.me.username}!
+      </Heading>
       <Image
-        src={standardResolution}
-        alt={`An image of ${username}`}
+        src={data?.me.standardResolution}
+        alt={`An image of ${data?.me.username}`}
         height='360'
         width='400'
       />
-      <h2>Wow! You have {totalPoints} points!</h2>
+      <h2>Wow! You have {data?.me.totalPoints} points!</h2>
       <p>
-        <i>{challengeQuote}</i>
+        <i>{data?.me.challengeQuote}</i>
       </p>
       <p>
         <strong>Bio: </strong>
-        {bio}
+        {data?.me.bio}
       </p>
       <p>You're motivated by these important issues:</p>
       <ul>
-        {motivations.map((motivation: string) => (
+        {data?.me.motivations.map((motivation: MotivationsEnum) => (
           <li key={motivation}>{motivation}</li>
         ))}
       </ul>
       <p>
-        Which will keep you going to complete {challengeGoals} challenges a week
+        Which will keep you going to complete {data?.me.challengeGoals}{' '}
+        challenges a week
       </p>
       <Button
         a11yTitle='update your profile button'

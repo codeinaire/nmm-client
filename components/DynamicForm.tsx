@@ -41,6 +41,7 @@ export default function DynamicForm(props: DynamicFormProps) {
         )}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
+        enableReinitialize={true}
       >
         {({
           errors,
