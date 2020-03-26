@@ -50,7 +50,7 @@ export default function Home() {
                 description: 'Index - redirect to create profile.'
               })
               Router.push({
-                pathname: '/create-profile',
+                pathname: '/update-profile',
                 query: {
                   userId: userData.sub
                 }
@@ -92,33 +92,10 @@ export default function Home() {
       </HeadingStyled>
       <Button
         a11yTitle='go to sign up page'
-        color='red'
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
         href='/recipes-by-meal'
         label='RECIPES'
-        margin='medium'
-        primary={true}
-        type='button'
-      />
-      <Button
-        a11yTitle='go to sign in page'
-        color='red'
-        data-testid='button'
-        hoverIndicator={{ color: 'white' }}
-        href='/signin'
-        label='SIGN IN'
-        margin='medium'
-        primary={true}
-        type='button'
-      />
-      <Button
-        a11yTitle='go to sign home page'
-        color='red'
-        data-testid='button'
-        hoverIndicator={{ color: 'white' }}
-        href='/home'
-        label='HOME'
         margin='medium'
         primary={true}
         type='button'

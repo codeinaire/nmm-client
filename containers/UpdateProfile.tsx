@@ -258,22 +258,25 @@ export default function UpdateProfile() {
     }
   }
 
-  const submitType = 'Create your profile!'
+  const submitType = 'Update your profile!'
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
 
   if (typeof signedIn === 'undefined') return <h1>Loading...</h1>
-  // if (!signedIn) {
-  //   return (
-  //     <div>
-  //       <h1>
-  //         You've got to be signed into your account to create or update your
-  //         profile
-  //       </h1>
-  //       <SignIn />
-  //     </div>
-  //   )
-  // }
+  if (!signedIn) {
+    return (
+      <Box
+        a11yTitle='sign in container'
+        align='center'
+        background='white'
+        justify='center'
+        margin='medium'
+      >
+        <h3>Sorry, you have to be signed in to update your profile!</h3>
+        <SignIn />
+      </Box>
+    )
+  }
 
   return (
     <Box

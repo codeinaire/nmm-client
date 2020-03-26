@@ -286,7 +286,6 @@ const Recipe = ({ router }: { router: Router }) => {
           ) : (
             <Button
               a11yTitle='open up camera button'
-              color='red'
               data-testid='button'
               hoverIndicator={{ color: 'white' }}
               label='TAKE PHOTO'

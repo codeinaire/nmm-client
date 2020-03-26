@@ -20,7 +20,6 @@ export default function SignUpPage() {
       <SignUp />
       <Button
         a11yTitle='go to sign up page'
-        color='red'
         data-testid='button'
         hoverIndicator={{ color: 'white' }}
         href='/signin'

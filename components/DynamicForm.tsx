@@ -91,7 +91,6 @@ export default function DynamicForm(props: DynamicFormProps) {
               a11yTitle={a11yTitle}
               active={isSubmitting}
               alignSelf='center'
-              color='red'
               data-testid='submit'
               disabled={isSubmitting}
               fill='horizontal'

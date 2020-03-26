@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { object, string } from 'yup'
 import { FormikHelpers } from 'formik'
-import { Button, Box, Image } from 'grommet'
+import { Button, Box, Image, Paragraph } from 'grommet'
+import { Facebook } from 'grommet-icons'
 import FacebookSignInFailModal from 'react-modal'
 
 import { signIn } from '../utils/auth'
@@ -124,18 +125,29 @@ export default function SignIn() {
       />
       <Button
         a11yTitle='Submit Facebook sign in credentials'
-        color='red'
+        color='#4267B2'
         data-testid='submit'
-        hoverIndicator={true}
-        label='FACEBOOK SIGN IN'
+        icon={<Facebook />}
+        label='CONTINUE WITH FACEBOOK'
         margin={{
           top: '0',
-          bottom: '30px'
+          bottom: '10px'
         }}
         onClick={() => facebookSignIn()}
         primary={true}
         type='submit'
       />
+      <Paragraph
+        a11yTitle='facebook reassurance'
+        margin={{
+          top: '0',
+          bottom: '20px'
+        }}
+        size='small'
+        textAlign='center'
+      >
+        We won't post anything to Facebook without your permission.
+      </Paragraph>
       <FacebookSignInFailModal
         isOpen={facebookSignInModalState}
         closeTimeoutMS={2}

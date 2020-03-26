@@ -12,11 +12,6 @@ import { Props } from '../types'
 
 const theme = {
   global: {
-    focus: {
-      border: {
-        color: '#E8161A'
-      }
-    },
     font: {
       family:
         "'Segoe UI', 'Roboto','Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
@@ -34,15 +29,19 @@ const theme = {
       white: '#FFFFFF'
     },
     hover: {
-      color: 'red'
+      color: '#002E5D'
     }
   },
   button: {
     border: {
-      radius: '2px'
+      radius: '2px',
+      color: '#002E5D'
     },
     padding: {
       horizontal: '21px'
+    },
+    primary: {
+      color: '#002E5D'
     },
     extend: `
       font-weight: bold;
@@ -59,12 +58,17 @@ const theme = {
     color: 'white',
     hover: {
       extend: `
-        border: 2px solid #19e5e5;
+        border: 2px solid #00FF37;
       `
     },
     extend: `
-      border: 2px solid red;
+      border: 2px solid #002E5D;
     `
+  },
+  icon: {
+    extend: `
+        color: #00FF37;
+      `
   }
 }
 

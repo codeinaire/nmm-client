@@ -14,7 +14,7 @@ export default function Navigation({ page }: { page: string }) {
     <Box
       a11yTitle='navigation bar'
       as='nav'
-      background='red'
+      background='#002E5D'
       basis='medium'
       direction='row-responsive'
       justify='between'
