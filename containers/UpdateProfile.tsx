@@ -42,7 +42,9 @@ export const DELETE_USER_PROFILE = gql`
 export default function UpdateProfile() {
   const { signedIn, userProfileId } = useCheckSigninStatus()
   const { loading, error, data } = useGetUserProfile(userProfileId)
-  console.log('data', data)
+  // if (typeof data === 'undefined' || data!.me === null) {
+  //   return <h1>No user profile found</h1>
+  // }
 
   const checkboxInput = [
     {
@@ -168,30 +170,31 @@ export default function UpdateProfile() {
   const formInitialValues = [
     {
       name: 'Environment',
-      value: data?.me.motivations.includes(MotivationsEnum.Environment) || false
+      value:
+        data?.me?.motivations.includes(MotivationsEnum.Environment) || false
     },
     {
       name: 'FoodSecurity',
       value:
-        data?.me.motivations.includes(MotivationsEnum.FoodSecurity) || false
+        data?.me?.motivations.includes(MotivationsEnum.FoodSecurity) || false
     },
     {
       name: 'AnimalWelfare',
       value:
-        data?.me.motivations.includes(MotivationsEnum.AnimalWelfare) || false
+        data?.me?.motivations.includes(MotivationsEnum.AnimalWelfare) || false
     },
     {
       name: 'PersonalHealth',
       value:
-        data?.me.motivations.includes(MotivationsEnum.PersonalHealth) || false
+        data?.me?.motivations.includes(MotivationsEnum.PersonalHealth) || false
     },
-    { name: 'challengeGoals', value: data?.me.challengeGoals || '' },
-    { name: 'bio', value: data?.me.bio || '' },
-    { name: 'challengeQuote', value: data?.me.challengeQuote || '' },
+    { name: 'challengeGoals', value: data?.me?.challengeGoals || '' },
+    { name: 'bio', value: data?.me?.bio || '' },
+    { name: 'challengeQuote', value: data?.me?.challengeQuote || '' },
     { name: 'motivations', value: '' },
     { name: 'lowResProfile', value: '' },
     { name: 'standardResolution', value: '' },
-    { name: 'username', value: data?.me.username || '' },
+    { name: 'username', value: data?.me?.username || '' },
     { name: 'id', value: idForUserProfile }
   ]
 
@@ -327,8 +330,10 @@ export default function UpdateProfile() {
   const submitType = 'Update your profile!'
   const failMessage = 'Profile creation failed! Please try again.'
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
+  console.log('data', data)
 
   if (typeof signedIn === 'undefined') return <h1>Loading...</h1>
+  if (error) return <h1>Error: ${error.message}</h1>
   if (!signedIn) {
     return (
       <Box

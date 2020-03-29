@@ -7,7 +7,6 @@ import { AnchorStyled } from './sharedStyledComponents/anchors'
 
 const FooterStyled = styled(Footer)`
   position: absolute;
-  bottom: 0;
   width: 100%;
 `
 
