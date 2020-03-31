@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
-import { Box, Button, Heading } from 'grommet'
-import styled from 'styled-components'
+import { Box, Button, Paragraph } from 'grommet'
 
 import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
+import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
+import SignIn from '../containers/SignIn'
 
-const HeadingStyled = styled(Heading)`
-  font-family: 'NoMeatMayTitle';
-`
+// const HeadingStyled = styled(Heading)`
+//   font-family: 'NoMeatMayTitle';
+//   text-align: center;
+//   position: none;
+// `
 /**
  * @remark this page will show links to recipes, profile, etc
  */
 export default function Home() {
   const apolloClient = useApolloClient()
+  const { signedIn } = useCheckSigninStatus()
 
   useEffect(() => {
     async function parsingAuthHash() {
       const signedIn = localStorage.getItem('signed_in')
-      console.log('signedIn', signedIn)
-
       /**
        * @remark this will only run
        */
@@ -39,11 +41,11 @@ export default function Home() {
                 accessToken: authResult.accessToken
               }
             })
-            console.log('userData', userData)
 
             const FIRST_TIME_SIGNIN = 1
             const isFirstTimeLogin =
-              userData[`http://localhost:3000/login_count`] == FIRST_TIME_SIGNIN
+              userData[`${process.env.CLIENT_URL}login_count`] ==
+              FIRST_TIME_SIGNIN
             if (isFirstTimeLogin) {
               logger.log({
                 level: 'INFO',
@@ -58,7 +60,7 @@ export default function Home() {
             } else {
               logger.log({
                 level: 'INFO',
-                description: 'Index - redirect to another page.'
+                description: 'Index - redirect to home page.'
               })
               Router.push({
                 pathname: '/',
@@ -78,6 +80,30 @@ export default function Home() {
   }, [apolloClient])
 
   if (!isServer() && window.location.hash) return <h1>Redirecting...</h1>
+  if (!signedIn) {
+    return (
+      <Box
+        align='center'
+        direction='column'
+        justify='center'
+        margin={{ bottom: '100px' }}
+        responsive={true}
+      >
+        <h1 className='impactFont margins-top-bot'>Please Sign In!</h1>
+        <SignIn />
+        <Button
+          a11yTitle='go to sign up page'
+          data-testid='button'
+          hoverIndicator={{ color: 'white' }}
+          href='/signup'
+          label='SIGN UP'
+          margin='medium'
+          primary={true}
+          type='button'
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -87,9 +113,16 @@ export default function Home() {
       justify='center'
       responsive={true}
     >
-      <HeadingStyled a11yTitle='index page heading'>
-        Welcome to the No Meat May App
-      </HeadingStyled>
+      <h1 className='impactFont'>Welcome to the No Meat May App</h1>
+      <Paragraph>
+        By eating less animal products, or going meat free, you can protect our
+        planet, your health, and save living beings, both human and animal from
+        suffering.
+      </Paragraph>
+      <Paragraph>
+        The power to change the world for the better is in our hands. What are
+        we going to do with all that power?
+      </Paragraph>
       <Button
         a11yTitle='go to sign up page'
         data-testid='button'

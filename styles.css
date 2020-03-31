@@ -1,14 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  position: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box; */
+}
+
+.impactFont {
+  font-family: "ImpactReversed";
+}
+
+.margins-top-bot {
+  margin-top: 70px;
+  margin-bottom: -70px;
 }
 
 /* *,

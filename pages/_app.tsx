@@ -17,8 +17,8 @@ const theme = {
         "'Segoe UI', 'Roboto','Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','sans-serif'",
       face: `
         @font-face {
-          font-family: "NoMeatMayTitle";
-          src: url("/fonts/NoMeatMayTitle-Regular.woff2") format("woff2");
+          font-family: "ImpactReversed";
+          src: url("/fonts/ImpactLabelReversed.woff") format("woff");
         }
       `,
       size: '18px',
@@ -29,19 +29,19 @@ const theme = {
       white: '#FFFFFF'
     },
     hover: {
-      color: '#002E5D'
+      color: '#FF0AAD'
     }
   },
   button: {
     border: {
       radius: '2px',
-      color: '#002E5D'
+      color: '#FF0AAD'
     },
     padding: {
       horizontal: '21px'
     },
     primary: {
-      color: '#002E5D'
+      color: '#FF0AAD'
     },
     extend: `
       font-weight: bold;
@@ -75,6 +75,7 @@ const theme = {
 class MyApp extends App<Props> {
   render() {
     const { Component, pageProps, apollo } = this.props
+
     return (
       <ApolloProvider client={apollo}>
         <Grommet theme={theme}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from 'grommet'
+import { Box, Anchor } from 'grommet'
 import { Home, Cafeteria, Accessibility, Logout, Login } from 'grommet-icons'
 
 import { logout } from '../utils/auth'
@@ -20,39 +20,44 @@ export default function Navigation({ page }: { page: string }) {
       justify='between'
       responsive={true}
     >
-      <AnchorStyled
+      <Anchor
         a11yTitle='link to index page'
         href='/index'
         icon={<Home color='white' />}
         label='Home'
+        className='impactFont'
       />
-      <AnchorStyled
+      <Anchor
         a11yTitle='link to the recipes page'
         href='/recipes-by-meal'
         icon={<Cafeteria color='white' />}
         label='Recipes'
+        className='impactFont'
       />
       {signedIn ? (
         <>
-          <AnchorStyled
+          <Anchor
             a11yTitle='link to the profile page'
             href='/profile'
             icon={<Accessibility color='white' />}
             label='Profile'
+            className='impactFont'
           />
-          <AnchorStyled
+          <Anchor
             a11yTitle='logout'
             icon={<Logout color='white' />}
             onClick={() => logout()}
             label='Logout'
+            className='impactFont'
           />
         </>
       ) : (
-        <AnchorStyled
+        <Anchor
           a11yTitle='signin'
           icon={<Login color='white' />}
           href='/signin'
           label='Sign In'
+          className='impactFont'
         />
       )}
     </Box>

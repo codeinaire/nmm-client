@@ -33,7 +33,7 @@ export default function SignIn() {
       .trim()
       .required('Please enter an email!'),
     password: string()
-      .min(10, 'Too short!')
+      .min(8, 'Too short!')
       .trim()
       .required('Please enter a password!')
   })

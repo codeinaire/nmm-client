@@ -4,10 +4,6 @@ import ImageUpload from './FileUpload'
 import { TextInput, Paragraph, Heading } from 'grommet'
 import styled from 'styled-components'
 
-const LabelStyled = styled(Heading)`
-  font-family: 'NoMeatMayTitle';
-  text-align: center;
-`
 import { DynamicFormInputObject } from './types'
 
 export default function DynamicFormInput({
@@ -26,14 +22,15 @@ export default function DynamicFormInput({
           <label htmlFor={inputItem.name}>
             {inputItem.name === 'id' ? null : (
               <>
-                <LabelStyled
+                <Heading
                   a11yTitle='input label'
                   level='3'
                   margin='xsmall'
                   size='xlarge'
+                  className='impactFont'
                 >
                   {inputItem.displayName}
-                </LabelStyled>
+                </Heading>
                 <Paragraph
                   a11yTitle='input hint text'
                   fill={true}
