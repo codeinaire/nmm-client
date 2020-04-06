@@ -19,16 +19,7 @@ export default function RecipeListCard({
   recipe: Recipe
 }) {
   return (
-    <Link
-      href={{
-        pathname: '/recipe/[title-id]',
-        query: {
-          difficulty: difficulty,
-          recipeId: id
-        }
-      }}
-      as={`/recipe/${title}-${id}`}
-    >
+    <Link href={`/recipe?title=${title}&recipeId=${id}`}>
       <Box
         a11yTitle='recipe card'
         align='center'

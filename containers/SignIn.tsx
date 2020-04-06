@@ -36,10 +36,10 @@ export default function SignIn() {
       .email('Invalid email!')
       .required('Please enter your email!'),
     password: string()
-      .min(10, 'Too short!')
+      .min(8, 'Too short!')
       .required('Please enter your password!')
   })
-
+  const [failMessageTest, setFailMessageTest] = useState('')
   const onSubmit = async (
     values: OnSubmitObject,
     { resetForm, setStatus, setSubmitting }: FormikHelpers<OnSubmitObject>
@@ -47,10 +47,15 @@ export default function SignIn() {
     try {
       localStorage.setItem('signed_in', 'true')
       await signIn(SignInTypes.auth0, values.email, values.password)
-    } catch (_) {
+    } catch (err) {
+      setFailMessageTest(`${err.description} Maybe you haven't Signed Up?`)
       localStorage.setItem('signed_in', 'false')
       resetForm()
-      setStatus({ openModal: true, success: false })
+      setStatus({
+        openModal: true,
+        success: false,
+        errorMessage: err.description
+      })
       setSubmitting(false)
     }
   }
@@ -117,7 +122,7 @@ export default function SignIn() {
         />
       </Box>
       <DynamicForm
-        failMessage={failMessage}
+        failMessage={failMessageTest}
         formInput={formInput}
         onSubmit={onSubmit}
         submitType={submitType}

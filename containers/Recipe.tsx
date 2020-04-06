@@ -83,8 +83,10 @@ const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
 
 const Recipe = ({ router }: { router: Router }) => {
   // Parse the query
-  const typedTitleId = router.query['title-id'] as string
-  const recipeId = parseInt(typedTitleId.split('-')[1])
+  const recipeId = (router.query.recipeId as unknown) as number
+  const recipeTitle = router.query.title
+
+  // const recipeId = (router.query.recipeId as unknown) as number
   // Custom hooks
   const { signedIn } = useCheckSigninStatus()
   // State
@@ -197,6 +199,9 @@ const Recipe = ({ router }: { router: Router }) => {
   if (recipeLoading) return <h1>Loading...</h1>
   if (recipeData == undefined) {
     return <h1>There was an error loading the recipe. Try again!</h1>
+  }
+  if (recipeData.recipe.title !== recipeTitle) {
+    return <h1>The url you enter is incorrect!</h1>
   }
   if (recipeError != undefined && recipeError) {
     return <h1>Error! {recipeError.message}</h1>
