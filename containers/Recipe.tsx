@@ -85,8 +85,6 @@ const Recipe = ({ router }: { router: Router }) => {
   // Parse the query
   const recipeId = (router.query.recipeId as unknown) as number
   const recipeTitle = router.query.title
-
-  // const recipeId = (router.query.recipeId as unknown) as number
   // Custom hooks
   const { signedIn } = useCheckSigninStatus()
   // State

@@ -6,7 +6,7 @@ module.exports = withCSS({
     // * FB stuff + Auth0 + CORS stuff + HTTPS server for FB testing
     SERVER_URL:
       'https://welqbatkyb.execute-api.ap-southeast-2.amazonaws.com/prod/nmm-app',
-    FB_GROUP_ID: '548965739271455',
+    FB_GROUP_ID: '469380029875741',
     FB_APP_ID: '563815617525253',
     APP_DOMAIN: 'nomeatmay.au.auth0.com',
     APP_CLIENT_ID: '4i4QDNDVF5rKsxsaRdMf6EmQvuQx0Gx4',

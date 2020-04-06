@@ -3,12 +3,13 @@ import { Box, Anchor } from 'grommet'
 import { Home, Cafeteria, Accessibility, Logout, Login } from 'grommet-icons'
 
 import { logout } from '../utils/auth'
-import { AnchorStyled } from './sharedStyledComponents/anchors'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
+import useGetUserProfile from '../hooks/useGetUserProfile'
 
 export default function Navigation({ page }: { page: string }) {
   // Custom hooks
-  const { signedIn } = useCheckSigninStatus()
+  const { signedIn, userProfileId } = useCheckSigninStatus()
+  const { loading, error, data } = useGetUserProfile(userProfileId)
   if (page == 'SignInPage' || page == 'SignUpPage') return null
   return (
     <Box
