@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
-import { Grid, Box, Button, Paragraph, Heading, Image, Main } from 'grommet'
+import { Grid, Box, Button, Paragraph, Heading, Image } from 'grommet'
 
 import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
+import FacebookSignIn from '../components/FacebookSignIn'
 
 /**
  * @remark this page will show links to recipes, profile, etc
@@ -113,6 +114,70 @@ export default function Home() {
             src='/piggy.png'
             fit='contain'
             className='width-100'
+          />
+        </Box>
+        <Box justify='center' gridArea='content-intro'>
+          <Heading className='impactFont' level='2' textAlign='center'>
+            Welcome to the No Meat May App
+          </Heading>
+          <Paragraph alignSelf='center'>
+            We're trying something new here at No Meat May. We heard about this
+            app thingy and decided to give it a go.
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            But it's our first time. And, unfortnately, as <i>volunteers</i> we
+            have limited time and resources so this is an experimental app - a
+            work in progress! Ain't we all!?
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            So why use it? Well, we'll be offering recipes to <i>anyone</i>,
+            just go to the recipes link above and you'll get a random selection
+            of 3 recipes for each meal of the day.
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            But if you sign up you'll get access to all the recipes. There's
+            over 100! There's two ways to sign up, through Facebook or
+            registering through the app.
+          </Paragraph>
+        </Box>
+        <Box align='center' justify='center' gridArea='content-action'>
+          <Heading
+            className='impactFont'
+            level='3'
+            textAlign='center'
+            margin='xsmall'
+          >
+            Option 1 - Full Recipe Access & Sharing
+          </Heading>
+          <Paragraph alignSelf='center'>
+            By signing up through Facebook, you'll get access to over{' '}
+            <i>100 recipes</i> but also the ability to share the recipes on your
+            Facebook wall and share a photo of your creation in the No Meat May
+            group.
+          </Paragraph>
+          <FacebookSignIn />
+          <Heading
+            className='impactFont'
+            level='3'
+            textAlign='center'
+            margin='xsmall'
+          >
+            Option 2 - Full Recipe Access
+          </Heading>
+          <Paragraph alignSelf='center'>
+            Of course, not everyone to get Facebook involved so you can just
+            sign up through the app itself. You'll still get access to{' '}
+            <i>100 recipes</i> but won't be able to share them on Facebook.
+          </Paragraph>
+          <Button
+            a11yTitle='go to sign up page'
+            data-testid='button'
+            hoverIndicator={{ color: 'white' }}
+            href='/signup'
+            label='SIGN UP'
+            margin='small'
+            primary={true}
+            type='button'
           />
         </Box>
       </Grid>
