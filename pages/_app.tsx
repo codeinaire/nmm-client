@@ -19,6 +19,10 @@ const theme = {
         @font-face {
           font-family: "ImpactReversed";
           src: url("/fonts/ImpactLabelReversed.woff") format("woff");
+        },
+        @font-face {
+          font-family: "NoMeatMayTitle";
+          src: url("/fonts/NoMeatMayTitle-Regular.woff2") format("woff2");
         }
       `,
       size: '18px',

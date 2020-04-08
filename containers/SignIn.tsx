@@ -116,7 +116,7 @@ export default function SignIn() {
     >
       <Box height='small' width='small' round='full'>
         <Image
-          a11yTitle='no meat may logo'
+          aria-label='no meat may logo'
           src='/circle-NMM.png'
           fit='contain'
         />

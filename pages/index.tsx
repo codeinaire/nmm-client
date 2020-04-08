@@ -1,25 +1,17 @@
 import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
-import { Box, Button, Paragraph } from 'grommet'
+import { Grid, Box, Button, Paragraph, Heading, Image, Main } from 'grommet'
 
 import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
-import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
-import SignIn from '../containers/SignIn'
 
-// const HeadingStyled = styled(Heading)`
-//   font-family: 'NoMeatMayTitle';
-//   text-align: center;
-//   position: none;
-// `
 /**
  * @remark this page will show links to recipes, profile, etc
  */
 export default function Home() {
   const apolloClient = useApolloClient()
-  const { signedIn } = useCheckSigninStatus()
 
   useEffect(() => {
     async function parsingAuthHash() {
@@ -80,59 +72,50 @@ export default function Home() {
   }, [apolloClient])
 
   if (!isServer() && window.location.hash) return <h1>Redirecting...</h1>
-  if (!signedIn) {
-    return (
-      <Box
-        align='center'
-        direction='column'
-        justify='center'
-        margin={{ bottom: '100px' }}
-        responsive={true}
-      >
-        <h1 className='impactFont margins-top-bot'>Please Sign In!</h1>
-        <SignIn />
-        <Button
-          a11yTitle='go to sign up page'
-          data-testid='button'
-          hoverIndicator={{ color: 'white' }}
-          href='/signup'
-          label='SIGN UP'
-          margin='medium'
-          primary={true}
-          type='button'
-        />
-      </Box>
-    )
-  }
 
   return (
-    <Box
-      align='center'
-      direction='column'
-      height='100vh'
-      justify='center'
-      responsive={true}
-    >
-      <h1 className='impactFont'>Welcome to the No Meat May App</h1>
-      <Paragraph>
-        By eating less animal products, or going meat free, you can protect our
-        planet, your health, and save living beings, both human and animal from
-        suffering.
-      </Paragraph>
-      <Paragraph>
-        The power to change the world for the better is in our hands. What are
-        we going to do with all that power?
-      </Paragraph>
-      <Button
-        a11yTitle='go to sign up page'
-        data-testid='button'
-        hoverIndicator={{ color: 'white' }}
-        href='/recipes-by-meal'
-        label='RECIPES'
-        margin='medium'
-        primary={true}
-        type='button'
-      />
-    </Box>
+    <>
+      <Grid
+        a11yTitle='grid container for hero content'
+        as='main'
+        rows={[
+          ['100px', '1fr'],
+          ['100px', '1fr'],
+          ['100px', '1fr']
+        ]}
+        columns={[
+          ['150px', '1fr'],
+          ['150px', '1fr']
+        ]}
+        areas={[
+          { name: 'header', start: [0, 0], end: [1, 0] },
+          { name: 'sidepic', start: [0, 1], end: [0, 2] },
+          { name: 'content-intro', start: [1, 1], end: [1, 1] },
+          { name: 'content-action', start: [1, 2], end: [1, 2] }
+        ]}
+        justifyContent='center'
+      >
+        <Box a11yTitle='container for header image in grid' gridArea='header'>
+          <Image
+            a11yTitle='header image of 5 people with vegetables and no meat may title'
+            src='/heroImage.png'
+            fit='contain'
+            className='width-100'
+          />
+        </Box>
+        <Box
+          a11yTitle='container for side image'
+          gridArea='sidepic'
+          direction='row'
+        >
+          <Image
+            a11yTitle='side image of cute piglet'
+            src='/piggy.png'
+            fit='contain'
+            className='width-100'
+          />
+        </Box>
+      </Grid>
+    </>
   )
 }
