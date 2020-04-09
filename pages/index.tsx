@@ -7,6 +7,20 @@ import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
 import { isServer } from '../utils/misc'
 import FacebookSignIn from '../components/FacebookSignIn'
+import styled from 'styled-components'
+
+const GridMobile = styled.main`
+  @media (max-width: 700px) {
+    display: block;
+    text-align: justify;
+    p {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+  }
+  display: grid;
+  grid-template-areas: 'header header' 'sidepic content-intro' 'sidepic content-action';
+`
 
 /**
  * @remark this page will show links to recipes, profile, etc
@@ -76,44 +90,16 @@ export default function Home() {
 
   return (
     <>
-      <Grid
-        a11yTitle='grid container for hero content'
-        as='main'
-        rows={[
-          ['100px', '1fr'],
-          ['100px', '1fr'],
-          ['100px', '1fr']
-        ]}
-        columns={[
-          ['150px', '1fr'],
-          ['150px', '1fr']
-        ]}
-        areas={[
-          { name: 'header', start: [0, 0], end: [1, 0] },
-          { name: 'sidepic', start: [0, 1], end: [0, 2] },
-          { name: 'content-intro', start: [1, 1], end: [1, 1] },
-          { name: 'content-action', start: [1, 2], end: [1, 2] }
-        ]}
-        justifyContent='center'
-      >
-        <Box a11yTitle='container for header image in grid' gridArea='header'>
+      <GridMobile aria-label='grid container for home page content'>
+        <Box
+          a11yTitle='container for header image in grid'
+          gridArea='header'
+          as='header'
+        >
           <Image
             a11yTitle='header image of 5 people with vegetables and no meat may title'
             src='/heroImage.png'
             fit='contain'
-            className='width-100'
-          />
-        </Box>
-        <Box
-          a11yTitle='container for side image'
-          gridArea='sidepic'
-          direction='row'
-        >
-          <Image
-            a11yTitle='side image of cute piglet'
-            src='/piggy.png'
-            fit='contain'
-            className='width-100'
           />
         </Box>
         <Box justify='center' gridArea='content-intro'>
@@ -139,6 +125,17 @@ export default function Home() {
             over 100! There's two ways to sign up, through Facebook or
             registering through the app.
           </Paragraph>
+        </Box>
+        <Box
+          a11yTitle='container for side image'
+          gridArea='sidepic'
+          direction='row'
+        >
+          <Image
+            a11yTitle='side image of cute piglet'
+            src='/piggy.png'
+            fit='contain'
+          />
         </Box>
         <Box align='center' justify='center' gridArea='content-action'>
           <Heading
@@ -180,7 +177,7 @@ export default function Home() {
             type='button'
           />
         </Box>
-      </Grid>
+      </GridMobile>
     </>
   )
 }

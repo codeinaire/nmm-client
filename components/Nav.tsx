@@ -17,7 +17,7 @@ export default function Navigation({ page }: { page: string }) {
       as='nav'
       background='#002E5D'
       basis='medium'
-      direction='row-responsive'
+      direction='row'
       justify='between'
       responsive={true}
     >
