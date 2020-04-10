@@ -20,7 +20,7 @@
     "apollo-client": "^2.6.8",
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
-    "auth0-js": "^9.12.1",
+    "auth0-js": "^9.13.2",
     "aws-cloudwatch-log-browser": "file:../aws-cloudwatch-logger-browser",
     "face-api.js": "^0.21.0",
     "focus-trap-react": "^6.0.0",
