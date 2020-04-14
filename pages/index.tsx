@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 const Grid = styled.main`
   display: grid;
-  grid-template-areas: 'header header' 'sidepic content-intro' 'sidepic content-action';
+  grid-template-areas: 'header header' 'sidepic1 content-intro' 'sidepic1 content-points' 'content-action sidepic2 ' 'content-action sidepic2';
 `
 
 const Mobile = styled.main`
@@ -32,7 +32,7 @@ const Mobile = styled.main`
  */
 export default function Home() {
   const apolloClient = useApolloClient()
-  const isMobile = useMediaQuery({ maxWidth: 700 })
+  const isMobile = useMediaQuery({ minWidth: 700 })
   const responsive = useContext(ResponsiveContext)
   console.log('isMobile on index', isMobile, responsive)
 
@@ -119,7 +119,10 @@ export default function Home() {
             alignSelf='center'
             className='impactFont'
             level='2'
-            margin='xsmall'
+            margin={{
+              top: '30px',
+              bottom: '10px'
+            }}
             textAlign='center'
           >
             Welcome to the No Meat May App
@@ -146,7 +149,7 @@ export default function Home() {
         </Box>
         <Box
           a11yTitle='container for side image'
-          gridArea='sidepic'
+          gridArea='sidepic1'
           direction='row'
         >
           <Image
@@ -155,16 +158,77 @@ export default function Home() {
             fit='contain'
           />
         </Box>
+        <Box justify='center' gridArea='content-points'>
+          <Heading
+            alignSelf='center'
+            className='impactFont'
+            level='2'
+            margin={{
+              bottom: '10px'
+            }}
+            textAlign='center'
+          >
+            Gain Points!
+          </Heading>
+          <Paragraph alignSelf='center'>
+            We're also rewarding points for completing a recipe. Just
+            press/click on the ingredients and method to complete that recipe.
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            For more points you can share the recipe to your Facebook wall. Then
+            for even more points you can take a photo of yourself and the
+            finished product to share on the No Meat May Facebook Group!
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            Due to the experimental nature of the app we are still working on
+            better ways to gain points, but the recipe is the start! We are also
+            working on ways to redeem those points!
+          </Paragraph>
+          <Paragraph alignSelf='center'>
+            Before you ask. Yes, points accumulated now will be redeemable for
+            future goodies!
+          </Paragraph>
+        </Box>
+
+        <Box
+          a11yTitle='container for side image'
+          gridArea='sidepic2'
+          direction='row'
+        >
+          <Image
+            a11yTitle='side image of cute piglet'
+            src='/nmmCelery.png'
+            fit='contain'
+          />
+        </Box>
         <Box align='center' justify='center' gridArea='content-action'>
+          <Heading
+            alignSelf='center'
+            className='impactFont'
+            level='2'
+            margin={{
+              bottom: '20px'
+            }}
+            textAlign='center'
+          >
+            Sign Up Now!
+          </Heading>
+          <Paragraph alignSelf='center' margin={{ bottom: '20px' }}>
+            Start accumulating points by making recipes, sharing them and
+            Facebook, and sharing photos of you and the finished product on the
+            No Meat May Group!
+          </Paragraph>
           <Heading
             className='impactFont'
             level='3'
             textAlign='center'
-            margin='small'
+            margin={{
+              bottom: '15px'
+            }}
           >
             Option 1 - Full Recipe Access & Sharing
           </Heading>
-          <Paragraph alignSelf='center'>
+          <Paragraph alignSelf='center' margin={{ bottom: '25px' }}>
             By signing up through Facebook, you'll get access to over{' '}
             <i>100 recipes</i> but also the ability to share the recipes on your
             Facebook wall and share a photo of your creation in the No Meat May
@@ -175,11 +239,14 @@ export default function Home() {
             className='impactFont'
             level='3'
             textAlign='center'
-            margin='xsmall'
+            margin={{
+              top: '30px',
+              bottom: '15px'
+            }}
           >
             Option 2 - Full Recipe Access
           </Heading>
-          <Paragraph alignSelf='center'>
+          <Paragraph alignSelf='center' margin={{ bottom: '25px' }}>
             Of course, not everyone to get Facebook involved so you can just
             sign up through the app itself. You'll still get access to{' '}
             <i>100 recipes</i> but won't be able to share them on Facebook.
