@@ -1,7 +1,7 @@
 import React from 'react'
 import { Formik, Form, FormikProps } from 'formik'
 import { Button } from 'grommet'
-import Modal from './DynamicFormModal'
+import DynamicFormModal from './DynamicFormModal'
 import DynamicFormCheckbox from './DynamicFormCheckbox'
 import DynamicFormSelect from './DynamicFormSelect'
 import DynamicFormInput from './DynamicFormInput'
@@ -25,7 +25,8 @@ export default function DynamicForm(props: DynamicFormProps) {
     successMessage,
     failMessage,
     formSelect = [],
-    a11yTitle
+    a11yTitle,
+    redirect = ''
   } = props
 
   return (
@@ -52,11 +53,12 @@ export default function DynamicForm(props: DynamicFormProps) {
           values
         }: FormikProps<any>) => (
           <Form>
-            <Modal
+            <DynamicFormModal
               failMessage={failMessage}
               successMessage={successMessage}
               status={status}
               setStatus={setStatus}
+              redirect={redirect}
             />
             {formInput.map((inputItem: DynamicFormInputObject) => (
               <React.Fragment key={inputItem.name}>

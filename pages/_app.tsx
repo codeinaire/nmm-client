@@ -1,7 +1,9 @@
 import React from 'react'
-import { Grommet, Image } from 'grommet'
+import { Grommet } from 'grommet'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
+import { Context as ResponsiveContext } from 'react-responsive'
+
 import nextWithApollo from '../utils/withApollo'
 
 import Footer from '../components/Footer'
@@ -24,9 +26,7 @@ const theme = {
           font-family: "NoMeatMayTitle";
           src: url("/fonts/NoMeatMayTitle-Regular.woff2") format("woff2");
         }
-      `,
-      size: '16px',
-      height: '1.5'
+      `
     },
     colours: {
       red: '#E8161A',
@@ -73,6 +73,13 @@ const theme = {
     extend: `
         color: #00FF37;
       `
+  },
+  menu: {
+    extend: `
+      button:hover {
+        color: #FF0AAD;
+      }
+    `
   }
 }
 
@@ -87,6 +94,13 @@ class MyApp extends App<Props> {
           <Component {...pageProps} />
           <Footer page={Component.name} />
         </Grommet>
+        {/* <ResponsiveContext.Provider value={{ width: 659 }}>
+          <Grommet theme={theme}>
+            <Navigation page={Component.name} />
+            <Component {...pageProps} />
+            <Footer page={Component.name} />
+          </Grommet>
+        </ResponsiveContext.Provider> */}
       </ApolloProvider>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal'
+import Router from 'next/router'
 
 import { ModalProps } from './types'
 
@@ -25,13 +26,19 @@ export default function DynamicFormModal(props: ModalProps) {
       openModal: false,
       success: false
     },
-    setStatus
+    setStatus,
+    redirect = ''
   } = props
 
   function closeModal() {
     setStatus({
       openModal: false
     })
+    if (redirect.length) {
+      Router.push({
+        pathname: `/${redirect}`
+      })
+    }
   }
 
   return (
@@ -43,7 +50,7 @@ export default function DynamicFormModal(props: ModalProps) {
         contentLabel={failMessage || successMessage}
         shouldCloseOnOverlayClick={true}
       >
-        <button onClick={closeModal}>close</button>
+        <button onClick={closeModal}>X</button>
         {status!.success ? (
           <>
             <h3>{successMessage}</h3>

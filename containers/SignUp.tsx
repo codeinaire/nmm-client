@@ -5,6 +5,7 @@ import { Facebook } from 'grommet-icons'
 import { signUp, signIn } from '../utils/auth'
 import { SignInTypes } from '../utils/types'
 import FacebookSignInFailModal from 'react-modal'
+import logger from '../utils/logger'
 
 import DynamicForm from '../components/DynamicForm'
 
@@ -40,19 +41,30 @@ export default function SignIn() {
       .trim()
       .required('Please enter a password!')
   })
-
-  const onSubmit = (
+  const [failMessage, setFailMessage] = useState('')
+  const onSubmit = async (
     values: OnSubmitObject,
     { resetForm, setSubmitting, setStatus }: FormikHelpers<OnSubmitObject>
   ) => {
     try {
-      signUp({
+      const res = await signUp({
         email: values.email,
         password: values.password
       })
+      logger.log({
+        level: 'INFO',
+        description: `Email has been successfully signed up - ${res}`
+      })
       resetForm()
       setStatus({ openModal: true, success: true })
-    } catch (error) {
+    } catch (err) {
+      setFailMessage(
+        `${err.description} - Email already taken or other error. Try again!`
+      )
+      logger.log({
+        level: 'INFO',
+        description: `Email has been successfully signed up`
+      })
       resetForm()
       setStatus({ openModal: true, success: false })
       setSubmitting(false)
@@ -60,9 +72,8 @@ export default function SignIn() {
   }
 
   const submitType = 'SIGN UP'
-  const failMessage = 'Sign Up failed! Please try again!'
   const successMessage =
-    'You suceeded in Signing Up! Yay! We have sent you an email to confirm your email address.'
+    'You suceeded in Signing Up! Yay! You will be redirected to the sign in page.'
   const a11yTitle = 'Sign up submission button'
 
   const formInitialValues = [
@@ -107,11 +118,22 @@ export default function SignIn() {
       flex={false}
       gridArea='middlemiddle'
       justify='center'
+      margin={{
+        top: '120px'
+      }}
       responsive={true}
       round='xsmall'
       width='medium'
     >
-      <Box height='small' width='small' round='full'>
+      <Box
+        height='small'
+        margin={{
+          top: '24px',
+          bottom: '24px'
+        }}
+        width='small'
+        round='full'
+      >
         <Image
           a11yTitle='no meat may logo'
           src='/circle-NMM.png'
@@ -127,19 +149,8 @@ export default function SignIn() {
         successMessage={successMessage}
         formInitialValues={formInitialValues}
         a11yTitle={a11yTitle}
+        redirect='signup'
       />
-      <Paragraph
-        a11yTitle='sign up information'
-        margin={{
-          top: '0',
-          bottom: '20px'
-        }}
-        size='small'
-        textAlign='center'
-      >
-        To access only RECIPES use the sign up form above. To access RECIPES and
-        FACEBOOK SHARING functionality click the Facebook button below.
-      </Paragraph>
       <Button
         a11yTitle='Submit Facebook sign in credentials'
         color='#4267B2'
@@ -172,7 +183,7 @@ export default function SignIn() {
         contentLabel={failMessage}
         shouldCloseOnOverlayClick={true}
       >
-        <button onClick={closeModal}>close</button>
+        <button onClick={closeModal}>X</button>
         <h3>{failMessage}</h3>
       </FacebookSignInFailModal>
     </Box>

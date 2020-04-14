@@ -9,7 +9,7 @@ export default function SignUpPage() {
       align='center'
       background='url(/potato-roses-with-zucchini-cropped.jpeg)'
       direction='column'
-      height='100vh'
+      height='100%'
       justify='center'
       responsive={true}
     >
@@ -20,7 +20,10 @@ export default function SignUpPage() {
         hoverIndicator={{ color: 'white' }}
         href='/signin'
         label='SIGN IN'
-        margin='medium'
+        margin={{
+          top: '24px',
+          bottom: '100px'
+        }}
         primary={true}
         type='button'
       />

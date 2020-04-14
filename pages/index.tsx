@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Router from 'next/router'
 import { useApolloClient } from '@apollo/react-hooks'
-import { Grid, Box, Button, Paragraph, Heading, Image } from 'grommet'
+import { Box, Button, Paragraph, Heading, Image } from 'grommet'
+import { useMediaQuery } from 'react-responsive'
+import { Context as ResponsiveContext } from 'react-responsive'
 
 import { parseAuthHash } from '../utils/auth'
 import logger from '../utils/logger'
@@ -9,24 +11,30 @@ import { isServer } from '../utils/misc'
 import FacebookSignIn from '../components/FacebookSignIn'
 import styled from 'styled-components'
 
-const GridMobile = styled.main`
-  @media (max-width: 700px) {
-    display: block;
-    text-align: justify;
-    p {
-      margin-left: 1em;
-      margin-right: 1em;
-    }
-  }
+const Grid = styled.main`
   display: grid;
   grid-template-areas: 'header header' 'sidepic content-intro' 'sidepic content-action';
 `
 
+const Mobile = styled.main`
+  main {
+    display: block;
+    text-align: justify;
+  }
+  p {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+`
+
 /**
- * @remark this page will show links to recipes, profile, etc
+ * @remark this page will show links to recipes, profile, etc tdt
  */
 export default function Home() {
   const apolloClient = useApolloClient()
+  const isMobile = useMediaQuery({ maxWidth: 700 })
+  const responsive = useContext(ResponsiveContext)
+  console.log('isMobile on index', isMobile, responsive)
 
   useEffect(() => {
     async function parsingAuthHash() {
@@ -48,6 +56,7 @@ export default function Home() {
                 accessToken: authResult.accessToken
               }
             })
+            console.log('process.env.CLIENT_URL', process.env.CLIENT_URL)
 
             const FIRST_TIME_SIGNIN = 1
             const isFirstTimeLogin =
@@ -86,14 +95,17 @@ export default function Home() {
     parsingAuthHash()
   }, [apolloClient])
 
+  const GridMobile = isMobile ? Grid : Mobile
+
   if (!isServer() && window.location.hash) return <h1>Redirecting...</h1>
 
   return (
     <>
-      <GridMobile aria-label='grid container for home page content'>
+      <GridMobile aria-label='container for home page content'>
         <Box
           a11yTitle='container for header image in grid'
           gridArea='header'
+          direction='row'
           as='header'
         >
           <Image
@@ -103,7 +115,13 @@ export default function Home() {
           />
         </Box>
         <Box justify='center' gridArea='content-intro'>
-          <Heading className='impactFont' level='2' textAlign='center'>
+          <Heading
+            alignSelf='center'
+            className='impactFont'
+            level='2'
+            margin='xsmall'
+            textAlign='center'
+          >
             Welcome to the No Meat May App
           </Heading>
           <Paragraph alignSelf='center'>
@@ -142,7 +160,7 @@ export default function Home() {
             className='impactFont'
             level='3'
             textAlign='center'
-            margin='xsmall'
+            margin='small'
           >
             Option 1 - Full Recipe Access & Sharing
           </Heading>

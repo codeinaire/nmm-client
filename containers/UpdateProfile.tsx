@@ -370,7 +370,9 @@ export default function UpdateProfile() {
       justify='center'
       margin='medium'
     >
-      <Heading a11yTitle='update profile heading'>Update your profile</Heading>
+      <Heading a11yTitle='update profile heading' className='impactFont'>
+        Update your profile
+      </Heading>
       <DynamicForm
         failMessage={failMessage}
         formInput={formInput}
@@ -380,6 +382,7 @@ export default function UpdateProfile() {
         successMessage={successMessage}
         formSelect={formSelect}
         formInitialValues={formInitialValues}
+        redirect='recipes-by-meal'
       />
       <Button
         a11yTitle='delete user profile'
