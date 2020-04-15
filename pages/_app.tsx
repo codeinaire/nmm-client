@@ -2,7 +2,6 @@ import React from 'react'
 import { Grommet } from 'grommet'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { Context as ResponsiveContext } from 'react-responsive'
 
 import nextWithApollo from '../utils/withApollo'
 
@@ -94,13 +93,6 @@ class MyApp extends App<Props> {
           <Component {...pageProps} />
           <Footer page={Component.name} />
         </Grommet>
-        {/* <ResponsiveContext.Provider value={{ width: 659 }}>
-          <Grommet theme={theme}>
-            <Navigation page={Component.name} />
-            <Component {...pageProps} />
-            <Footer page={Component.name} />
-          </Grommet>
-        </ResponsiveContext.Provider> */}
       </ApolloProvider>
     )
   }
