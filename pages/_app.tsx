@@ -79,6 +79,11 @@ const theme = {
         color: #FF0AAD;
       }
     `
+  },
+  icon: {
+    extend: `
+        color: #00FF37;
+      `
   }
 }
 

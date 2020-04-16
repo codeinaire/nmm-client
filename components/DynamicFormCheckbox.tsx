@@ -20,6 +20,7 @@ export default function DynamicFormCheckbox({
           <Heading className='impactFont' textAlign='center' margin='small'>
             {inputItem.legend}
           </Heading>
+
           <fieldset name={inputItem.name}>
             <legend>
               <i>{inputItem.hintText}</i>

@@ -58,7 +58,7 @@ export default function Home() {
 
             const FIRST_TIME_SIGNIN = 1
             const isFirstTimeLogin =
-              userData[`${process.env.CLIENT_URL}/login_count`] ==
+              userData[`${process.env.CLIENT_URL}login_count`] ==
               FIRST_TIME_SIGNIN
             if (isFirstTimeLogin) {
               logger.log({

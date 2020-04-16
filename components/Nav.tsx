@@ -6,12 +6,14 @@ import Router from 'next/router'
 
 import { logout } from '../utils/auth'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
+import useGetUserProfile from '../hooks/useGetUserProfile'
 
 export default function Navigation({ page }: { page: string }) {
   const isMobile = useMediaQuery({ query: '(max-device-width: 700px)' })
 
   // Custom hooks
-  const { signedIn } = useCheckSigninStatus()
+  const { signedIn, userProfileId } = useCheckSigninStatus()
+  const { loading, error, data } = useGetUserProfile(userProfileId)
   if (page == 'SignInPage' || page == 'SignUpPage') return null
   return (
     <Box
@@ -117,6 +119,7 @@ export default function Navigation({ page }: { page: string }) {
             />
           )}
         </>
+
       )}
     </Box>
   )
