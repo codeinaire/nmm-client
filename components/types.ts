@@ -13,6 +13,7 @@ export interface DynamicFormProps {
   validationSchema: ObjectSchema
   a11yTitle?: string
   formSelect?: Array<DynamicFormSelectObject>
+  redirect?: string
 }
 
 export interface InitialValues {
@@ -90,6 +91,7 @@ export interface ModalProps {
   successMessage?: string
   failMessage?: string
   setStatus: (arg: ModalStatus) => void
+  redirect?: string
 }
 
 export interface ModalStatus {

@@ -34,7 +34,7 @@ export const signIn = (
           password: password || ''
         },
         (error: Auth0Error | null, res: any) => {
-          if (error) {
+          if (error !== null && 'error' in error) {
             logger.log({
               level: 'ERROR',
               description: `Auth0 Sign In Error - ${error.description}`
@@ -76,19 +76,11 @@ export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
         email,
         password
       },
-      (error: Auth0Error | null, res: any) => {
+      (error: Auth0Error | null) => {
         if (error) {
-          logger.log({
-            level: 'ERROR',
-            description: `Auth0 Sign Up Error - ${error.description}`
-          })
           reject(error)
         } else {
-          logger.log({
-            level: 'INFO',
-            description: `${res.email}, has been successfully signed up`
-          })
-          resolve(res)
+          resolve()
         }
       }
     )

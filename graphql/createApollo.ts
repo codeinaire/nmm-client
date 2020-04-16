@@ -27,9 +27,6 @@ export default (initialState: NormalizedCacheObject) => {
     let data: AccessTokenObject = {
       accessToken: ''
     }
-    console.log('cache.data.data.ROOT_QUERY', cache.data.data.ROOT_QUERY)
-    // TODO - update signed_in when user logs out or refreshes page
-    // TODO - need to remove signed in value from local storage.
     if (isBrowser) {
       signedIn = localStorage.getItem('signed_in') || ''
 
@@ -48,13 +45,14 @@ export default (initialState: NormalizedCacheObject) => {
         }
       }
     }
-
+    const NO_AUTHORIZATION_TOKEN = 0
     return {
       headers: {
         ...previousContext.headers,
-        authorization: !data.accessToken.length
-          ? ''
-          : `Bearer ${data.accessToken}`,
+        authorization:
+          data.accessToken.length === NO_AUTHORIZATION_TOKEN
+            ? ''
+            : `Bearer ${data.accessToken}`,
         'Access-Control-Allow-Origin': process.env.CLIENT_URL
       }
     }

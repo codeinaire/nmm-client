@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button } from 'grommet'
+import { Box, Button } from 'grommet'
+import { Facebook } from 'grommet-icons'
 import logger from '../utils/logger'
 
 import {
@@ -55,17 +56,28 @@ export default function FbUserShare({
   }
 
   return (
-    <div>
+    <Box
+      a11yTitle='sharing section container'
+      align='center'
+      justify='center'
+      margin={{
+        bottom: '20px'
+      }}
+    >
       <Button
-        a11yTitle='share'
-        data-testid='button'
-        hoverIndicator={{ color: 'white' }}
-        label='SHARE RECIPE TO TIMELINE'
-        margin='medium'
+        a11yTitle='share to facebook time line button'
+        color='#4267B2'
+        data-testid='submit'
+        icon={<Facebook />}
+        label='SHARE TO FACEBOOK'
+        margin={{
+          top: '0',
+          bottom: '10px'
+        }}
+        onClick={handleShareItem}
         primary={true}
         type='button'
-        onClick={handleShareItem}
       />
-    </div>
+    </Box>
   )
 }

@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic'
 import { withRouter, Router } from 'next/router'
 import logger from '../utils/logger'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
-import { Box, Image, Heading, Button, List } from 'grommet'
+import { Box, Heading, Button, List, Text, Paragraph } from 'grommet'
+import styled from 'styled-components'
 
 import FbUserShare from '../components/FbUserShare'
 import FbInitAndToken from '../containers/FbInitParent'
@@ -17,6 +18,13 @@ import {
   RecipeData,
   RecipeVars
 } from '../containers/types'
+
+const Complete = styled(Box)`
+  border: #00ff37;
+  background-color: rgba(0, 255, 55, 0.3);
+  padding-left: 12px;
+  padding-right: 12px;
+`
 
 const LiveFaceDetect = dynamic(() => import('../components/LiveFaceDetect'), {
   ssr: false
@@ -33,6 +41,7 @@ const GET_RECIPE = gql`
       cost
       mealType
       hashtags
+      videoUrl
       recipeAttribution {
         name
         website
@@ -83,7 +92,7 @@ const INITIAL_CREATE_UPDATE_CHALLENGE_STATE: CreateUpdateChallengeState = {
 
 const Recipe = ({ router }: { router: Router }) => {
   // Parse the query
-  const recipeId = (router.query.recipeId as unknown) as number
+  const recipeId: number = parseInt(router.query.recipeId as string)
   const recipeTitle = router.query.title
   // Custom hooks
   const { signedIn } = useCheckSigninStatus()
@@ -207,115 +216,259 @@ const Recipe = ({ router }: { router: Router }) => {
   if (!signedIn) {
     return <UnAuthRecipeDeets recipe={recipeData.recipe} />
   }
+
+  const IngredientsSection = ingredientsCompleted ? Complete : Box
+  const MethodSection = methodCompleted ? Complete : Box
+
   return (
     <Box a11yTitle='recipe container' align='center' justify='center'>
-      <Box a11yTitle='recipe title and image container' pad='small' width='640'>
-        <Heading size='medium'>{recipeData.recipe.title}</Heading>
-        <Image
-          a11yTitle='recipe image'
-          fit='contain'
-          src={recipeData.recipe.standardResolution}
-        />
+      <Box
+        a11yTitle='recipe title and image container'
+        background={{
+          image: `url(${recipeData.recipe.standardResolution})`,
+          size: 'cover'
+        }}
+        pad='small'
+        width='640px'
+        height='480px'
+        margin={{
+          top: '50px'
+        }}
+        direction='row'
+      >
+        <Heading
+          alignSelf='end'
+          className='impactFont'
+          color='white'
+          size='1'
+          textAlign='end'
+        >
+          {recipeData.recipe.title}
+        </Heading>
       </Box>
       <Box>
-        <Heading level='2'>Meal Type: {recipeData.recipe.mealType}</Heading>
-        <Heading level='2'>Difficulty: {recipeData.recipe.difficulty}</Heading>
-        <Heading level='2'>Budget: {recipeData.recipe.cost}</Heading>
+        <Heading
+          a11yTitle='meal type heading'
+          className='impactFont'
+          level='2'
+          margin='small'
+        >
+          Meal Type: {recipeData.recipe.mealType}
+        </Heading>
+        <Heading
+          a11yTitle='difficulty heading'
+          className='impactFont'
+          level='2'
+          margin='small'
+        >
+          Difficulty: {recipeData.recipe.difficulty}
+        </Heading>
+        <Heading
+          a11yTitle='cost heading'
+          className='impactFont'
+          level='2'
+          margin='small'
+        >
+          Budget: {recipeData.recipe.cost}
+        </Heading>
       </Box>
-      <h3>Ingredients</h3>
-      {/* TODO -  1) add styling 2) make sure the non-signed in user doesn't have access to clicking on the items */}
+      <Heading
+        a11yTitle='ingredients heading'
+        alignSelf='start'
+        className='impactFont'
+        level='2'
+        margin={{
+          top: '25px',
+          bottom: '0px'
+        }}
+      >
+        Ingredients
+      </Heading>
       {ingredientsCompleted ? (
-        <span>
-          <p>You've completed this section!</p>
-        </span>
-      ) : (
-        <Box
-          a11yTitle='recipe ingredient container'
-          align='center'
-          border={{
-            size: 'xsmall',
-            side: 'vertical'
+        <Text
+          a11yTitle='ingredient completion text'
+          size='xsmall'
+          textAlign='center'
+        >
+          <i>You've completed this section!</i>
+        </Text>
+      ) : null}
+      <IngredientsSection
+        a11yTitle='recipe ingredient container'
+        align='center'
+        justify='center'
+        width='medium'
+        pad='medium'
+      >
+        <List
+          a11yTitle='list of recipe ingredients'
+          data={recipeData.recipe.ingredients}
+        />
+        <Button
+          a11yTitle='complete ingredients section'
+          alignSelf='center'
+          fill='horizontal'
+          label='COMPLETE INGREDIENTS'
+          margin={{
+            bottom: '10px',
+            top: '30px'
           }}
-          justify='center'
           onClick={() =>
             handleCreateUpdateChallengeApi(values, ['Ingredients'])
           }
-          width='medium'
-        >
-          <List
-            a11yTitle='list of recipe ingredients'
-            data={recipeData.recipe.ingredients}
-          />
-        </Box>
-      )}
-      <h3>Method</h3>
+          primary={true}
+          type='button'
+        />
+        <Text a11yTitle='ingredient hint text' size='xsmall' textAlign='center'>
+          <i>Click on button when you got all ingredients to earn points!</i>
+        </Text>
+      </IngredientsSection>
+      <Heading
+        a11yTitle='method heading'
+        alignSelf='start'
+        className='impactFont'
+        level='2'
+        margin={{
+          top: '25px'
+        }}
+      >
+        Method
+      </Heading>
       {methodCompleted ? (
-        <span>
-          <p>You've completed this section!</p>
-        </span>
-      ) : (
-        <Box
-          a11yTitle='recipe method container'
-          align='center'
-          border={{
-            size: 'xsmall',
-            side: 'vertical'
-          }}
-          justify='center'
-          onClick={() => handleCreateUpdateChallengeApi(values, ['Method'])}
-          width='medium'
+        <Text
+          a11yTitle='ingredient completion text'
+          size='xsmall'
+          textAlign='center'
         >
-          <List
-            a11yTitle='list of steps for recipe method'
-            data={recipeData.recipe.method}
-          />
-        </Box>
-      )}
-      {sharedFriendsImageCompleted ? (
-        <div>
-          <p>You've completed this section! Take a look at your photo!</p>
-          <img
-            src={challengeState.standardResolution}
-            alt='Image of friends'
-          ></img>
-        </div>
-      ) : (
-        <div>
-          {takePhoto ? (
-            <LiveFaceDetect
-              handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
-              values={values}
-            />
-          ) : (
-            <Button
-              a11yTitle='open up camera button'
-              data-testid='button'
-              hoverIndicator={{ color: 'white' }}
-              label='TAKE PHOTO'
-              margin='medium'
-              primary={true}
-              type='button'
-              onClick={() => setTakePhoto(true)}
-            />
-          )}
-        </div>
-      )}
-      {sharedRecipeCompleted ? (
-        <span>
-          <p>You've completed this section!</p>
-        </span>
-      ) : (
-        <FbInitAndToken>
-          {() => (
-            <FbUserShare
-              href={`${process.env.CLIENT_URL}${router.asPath}`}
-              quote='By eating less animal products, or going meat free, you can protect our planet, your health, and save living beings, both human and animal from suffering.'
-              handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
-              values={values}
-            />
-          )}
-        </FbInitAndToken>
-      )}
+          <i>You've completed this section!</i>
+        </Text>
+      ) : null}
+      <MethodSection
+        a11yTitle='recipe method container'
+        align='center'
+        justify='center'
+        width='medium'
+        pad='medium'
+      >
+        <List
+          a11yTitle='list of steps for recipe method'
+          data={recipeData.recipe.method}
+        />
+        <Button
+          a11yTitle='completed method section'
+          alignSelf='center'
+          fill='horizontal'
+          label='COMPLETE METHOD'
+          margin={{
+            bottom: '10px',
+            top: '30px'
+          }}
+          onClick={() => handleCreateUpdateChallengeApi(values, ['Method'])}
+          primary={true}
+          type='button'
+        />
+        <Text a11yTitle='ingredient hint text' size='xsmall' textAlign='center'>
+          <i>
+            Click on button when you've completed making the meal to earn
+            points!
+          </i>
+        </Text>
+      </MethodSection>
+      <Box
+        a11yTitle='sharing section container'
+        align='center'
+        justify='center'
+        width='medium'
+        margin={{
+          bottom: '20px'
+        }}
+        pad='medium'
+      >
+        <Heading
+          a11yTitle='sharing section heading'
+          alignSelf='start'
+          className='impactFont'
+          level='2'
+          margin={{
+            top: '25px',
+            bottom: '0px'
+          }}
+        >
+          Sharing
+        </Heading>
+        {sharedFriendsImageCompleted ? (
+          <div>
+            <p>You've completed this section! Take a look at your photo!</p>
+            <img
+              src={challengeState.standardResolution}
+              alt='Image of friends'
+            ></img>
+          </div>
+        ) : (
+          <div>
+            {takePhoto ? (
+              <LiveFaceDetect
+                handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
+                values={values}
+              />
+            ) : (
+              <>
+                <Paragraph alignSelf='center'>
+                  Take a photo of yourself with the delicious meal you just
+                  made, sharing it on the No Meat May Facebook Group and earn
+                  some points!
+                </Paragraph>
+                <Box
+                  a11yTitle='sharing section container'
+                  align='center'
+                  justify='center'
+                  margin={{
+                    bottom: '20px'
+                  }}
+                >
+                  <Button
+                    a11yTitle='open up camera button'
+                    alignSelf='center'
+                    data-testid='button'
+                    fill='horizontal'
+                    hoverIndicator={{ color: 'white' }}
+                    label='TAKE PHOTO'
+                    margin={{ top: '0px', bottom: '20px' }}
+                    primary={true}
+                    type='button'
+                    onClick={() => setTakePhoto(true)}
+                  />
+                </Box>
+              </>
+            )}
+          </div>
+        )}
+        {sharedRecipeCompleted ? (
+          <span>
+            <p>You've completed this section!</p>
+          </span>
+        ) : (
+          <FbInitAndToken>
+            {() => (
+              <>
+                <Paragraph alignSelf='center'>
+                  Share the recipe to your Facebook wall to get more people
+                  interested in trying out these delicious meal and you'll get
+                  points!
+                </Paragraph>
+                <FbUserShare
+                  href={`${process.env.CLIENT_URL}/${router.asPath}`}
+                  quote='By eating less animal products, or going meat free, you can protect our planet, your health, and save living beings, both human and animal from suffering.'
+                  handleCreateUpdateChallengeApi={
+                    handleCreateUpdateChallengeApi
+                  }
+                  values={values}
+                />
+              </>
+            )}
+          </FbInitAndToken>
+        )}
+      </Box>
     </Box>
   )
 }

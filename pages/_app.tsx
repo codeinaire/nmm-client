@@ -2,6 +2,7 @@ import React from 'react'
 import { Grommet } from 'grommet'
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/react-hooks'
+
 import nextWithApollo from '../utils/withApollo'
 
 import Footer from '../components/Footer'
@@ -24,9 +25,7 @@ const theme = {
           font-family: "NoMeatMayTitle";
           src: url("/fonts/NoMeatMayTitle-Regular.woff2") format("woff2");
         }
-      `,
-      size: '18px',
-      height: '20px'
+      `
     },
     colours: {
       red: '#E8161A',
@@ -73,6 +72,13 @@ const theme = {
     extend: `
         color: #00FF37;
       `
+  },
+  menu: {
+    extend: `
+      button:hover {
+        color: #FF0AAD;
+      }
+    `
   }
 }
 
