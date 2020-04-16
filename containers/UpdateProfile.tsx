@@ -42,9 +42,6 @@ export const DELETE_USER_PROFILE = gql`
 export default function UpdateProfile() {
   const { signedIn, userProfileId } = useCheckSigninStatus()
   const { loading, error, data } = useGetUserProfile(userProfileId)
-  // if (typeof data === 'undefined' || data!.me === null) {
-  //   return <h1>No user profile found</h1>
-  // }
 
   const checkboxInput = [
     {
@@ -346,7 +343,6 @@ export default function UpdateProfile() {
   const successMessage = 'You suceeded in creating your NMM profile. Yay!'
 
   if (typeof signedIn === 'undefined') return <h1>Loading...</h1>
-  if (error) return <h1>Error: ${error.message}</h1>
   if (!signedIn) {
     return (
       <Box
@@ -356,11 +352,19 @@ export default function UpdateProfile() {
         justify='center'
         margin='medium'
       >
-        <h3>Sorry, you have to be signed in to update your profile!</h3>
+        <Heading
+          className='impactFont'
+          level='2'
+          textAlign='center'
+          margin={{ bottom: '-65px' }}
+        >
+          Sorry, you have to be signed in to update your profile!
+        </Heading>
         <SignIn />
       </Box>
     )
   }
+  if (error) return <h1>Error: ${error.message}</h1>
 
   return (
     <Box

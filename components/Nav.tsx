@@ -9,7 +9,6 @@ import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 
 export default function Navigation({ page }: { page: string }) {
   const isMobile = useMediaQuery({ query: '(max-device-width: 700px)' })
-  console.log('isMobile on recipe', isMobile)
 
   // Custom hooks
   const { signedIn } = useCheckSigninStatus()

@@ -34,7 +34,6 @@ export default function Home() {
   const apolloClient = useApolloClient()
   const isMobile = useMediaQuery({ minWidth: 700 })
   const responsive = useContext(ResponsiveContext)
-  console.log('isMobile on index', isMobile, responsive)
 
   useEffect(() => {
     async function parsingAuthHash() {
@@ -56,11 +55,10 @@ export default function Home() {
                 accessToken: authResult.accessToken
               }
             })
-            console.log('process.env.CLIENT_URL', process.env.CLIENT_URL)
 
             const FIRST_TIME_SIGNIN = 1
             const isFirstTimeLogin =
-              userData[`${process.env.CLIENT_URL}login_count`] ==
+              userData[`${process.env.CLIENT_URL}/login_count`] ==
               FIRST_TIME_SIGNIN
             if (isFirstTimeLogin) {
               logger.log({

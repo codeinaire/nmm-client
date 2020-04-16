@@ -26,7 +26,7 @@ export default function DynamicForm(props: DynamicFormProps) {
     failMessage,
     formSelect = [],
     a11yTitle,
-    redirect = ''
+    redirect
   } = props
 
   return (

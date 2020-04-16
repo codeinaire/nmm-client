@@ -149,7 +149,7 @@ export default function SignIn() {
         successMessage={successMessage}
         formInitialValues={formInitialValues}
         a11yTitle={a11yTitle}
-        redirect='signup'
+        redirect='signin'
       />
       <Button
         a11yTitle='Submit Facebook sign in credentials'

@@ -34,7 +34,8 @@ export default function DynamicFormModal(props: ModalProps) {
     setStatus({
       openModal: false
     })
-    if (redirect.length) {
+    const NO_REDIRECT_REQUIRED = 0
+    if (redirect.length !== NO_REDIRECT_REQUIRED) {
       Router.push({
         pathname: `/${redirect}`
       })

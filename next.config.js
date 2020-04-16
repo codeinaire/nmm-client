@@ -11,8 +11,8 @@ module.exports = withCSS({
     APP_DOMAIN: 'nomeatmay.au.auth0.com',
     APP_CLIENT_ID: '4i4QDNDVF5rKsxsaRdMf6EmQvuQx0Gx4',
     AUDIENCE: 'https://nomeatmay.au.auth0.com/api/v2/',
-    CLIENT_URL: 'https://nomeatmay.recipes/',
-    REDIRECT_URL: 'https://nomeatmay.recipes/',
+    CLIENT_URL: 'https://nomeatmay.recipes',
+    REDIRECT_URL: 'https://nomeatmay.recipes',
     LOGGER_URI: 'https://88xfp20uuk.execute-api.ap-southeast-2.amazonaws.com',
     // ! LOCAL & PROD ENVS
     // Don't worry about Ryan creating another account
@@ -21,19 +21,19 @@ module.exports = withCSS({
     IS_DEVELOPMENT: true
     // !LOCAL ENVS development
     // * FB stuff + Auth0 + CORS stuff + HTTPS server for FB testing
-    // REDIRECT_URL: 'http://localhost:3000/',
+    // REDIRECT_URL: 'http://localhost:3000',
     // CLIENT_URL: 'http://localhost:3000',
     // SERVER_URL: 'http://localhost:4000/nmm-app',
     // FB_GROUP_ID: '673489553408260',
     // FB_APP_ID: '695528800971318',
-    // // // Auth0 + CORS stuff
+    // // // // Auth0 + CORS stuff
     // APP_DOMAIN: 'dev-s70wdmyk.au.auth0.com',
     // APP_CLIENT_ID: 'Mn51EwPsHWiZUVRZJyNkNRZGKMikJoSE',
-    // AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/',
-    // HTTPS: true,
-    // CLIENT_URL: 'https://myapp.example:3000/',
+    // AUDIENCE: 'https://dev-s70wdmyk.au.auth0.com/api/v2/'
+    // HTTPS: true
+    // CLIENT_URL: 'https://myapp.example:3000',
     // SERVER_URL: 'https://localhost:4000/nmm-app',
-    // REDIRECT_URL: 'https://myapp.example:3000/'
+    // REDIRECT_URL: 'https://myapp.example:3000'
   },
   webpack: config => {
     // https://github.com/justadudewhohacks/face-api.js/issues/154
