@@ -9,7 +9,7 @@ export default function SignInPage() {
       align='center'
       background='url(/stir-fried-noodles-vegetables.jpg)'
       direction='column'
-      height='100vh'
+      height='100%'
       justify='center'
       responsive={true}
     >
@@ -20,7 +20,10 @@ export default function SignInPage() {
         hoverIndicator={{ color: 'white' }}
         href='/signup'
         label='SIGN UP'
-        margin='medium'
+        margin={{
+          top: '24px',
+          bottom: '100px'
+        }}
         primary={true}
         type='button'
       />

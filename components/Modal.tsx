@@ -45,7 +45,7 @@ export default (props: ModalProps) => {
         contentLabel='Example Modal'
         shouldCloseOnOverlayClick={true}
       >
-        <button onClick={closeModal}>close</button>
+        <button onClick={closeModal}>X</button>
         {status!.success ? (
           <>
             <h3>{successMessage}</h3>

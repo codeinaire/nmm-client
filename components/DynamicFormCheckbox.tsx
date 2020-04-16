@@ -1,12 +1,6 @@
 import React from 'react'
 import { Field, FormikErrors, FormikTouched } from 'formik'
 import { Heading } from 'grommet'
-import styled from 'styled-components'
-
-const LabelStyled = styled(Heading)`
-  font-family: 'NoMeatMayTitle';
-  text-align: center;
-`
 
 import { DynamicFormInputObject, DynamicFormCheckboxInputObject } from './types'
 
@@ -23,7 +17,10 @@ export default function DynamicFormCheckbox({
     <Field name={inputItem.name}>
       {() => (
         <>
-          <LabelStyled>{inputItem.legend}</LabelStyled>
+          <Heading className='impactFont' textAlign='center' margin='small'>
+            {inputItem.legend}
+          </Heading>
+
           <fieldset name={inputItem.name}>
             <legend>
               <i>{inputItem.hintText}</i>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from 'grommet'
+import { Facebook } from 'grommet-icons'
 import FacebookShareGroupMessageModal from 'react-modal'
 import logger from '../utils/logger'
 
@@ -118,13 +119,17 @@ export default function FbGroupShare({
     <div>
       <Button
         a11yTitle='share image to group button'
+        color='#4267B2'
         data-testid='button'
-        hoverIndicator={{ color: 'white' }}
-        label='SHARE IMAGE TO FB GROUP'
-        margin='medium'
+        icon={<Facebook />}
+        label='SHARE PHOTO TO NMM GROUP'
+        margin={{
+          top: '0',
+          bottom: '10px'
+        }}
+        onClick={handleShareImage}
         primary={true}
         type='button'
-        onClick={handleShareImage}
       />
       <FacebookShareGroupMessageModal
         isOpen={

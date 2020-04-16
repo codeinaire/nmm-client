@@ -85,7 +85,15 @@ export default function SignIn() {
       round='xsmall'
       width='medium'
     >
-      <Box height='small' width='small' round='full'>
+      <Box
+        height='small'
+        margin={{
+          top: '24px',
+          bottom: '24px'
+        }}
+        width='small'
+        round='full'
+      >
         <Image
           aria-label='no meat may logo'
           src='/circle-NMM.png'

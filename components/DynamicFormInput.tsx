@@ -28,6 +28,8 @@ export default function DynamicFormInput({
                   margin='xsmall'
                   size='xlarge'
                   className='impactFont'
+                  textAlign='center'
+
                 >
                   {inputItem.displayName}
                 </Heading>

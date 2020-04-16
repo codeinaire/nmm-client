@@ -6,12 +6,6 @@ import {
   SelectOption
 } from './types'
 import { Heading } from 'grommet'
-import styled from 'styled-components'
-
-const LabelStyled = styled(Heading)`
-  font-family: 'NoMeatMayTitle';
-  text-align: center;
-`
 
 export default function DynamicFormSelect({
   formSelect,
@@ -30,7 +24,13 @@ export default function DynamicFormSelect({
             <React.Fragment key={selectItem.name}>
               <br />
               <label htmlFor={`{selectItem.name}-select`}>
-                <LabelStyled>{selectItem.title}</LabelStyled>
+                <Heading
+                  className='impactFont'
+                  textAlign='center'
+                  margin='small'
+                >
+                  {selectItem.title}
+                </Heading>
                 <br />
                 <Field
                   component='select'
