@@ -1,4 +1,4 @@
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { Logger, createLogStream } from 'aws-cloudwatch-log-browser'
 
 const randomIdentifier = uuid()
