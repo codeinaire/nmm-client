@@ -60,7 +60,7 @@ export default (initialState: NormalizedCacheObject) => {
 
   return new ApolloClient({
     name: 'No Meat May',
-    version: 'v0.0.0',
+    version: 'v0.0.6',
     cache,
     link: authLink.concat(httpLink),
     connectToDevTools: !isServer(),
