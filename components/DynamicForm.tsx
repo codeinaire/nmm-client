@@ -1,17 +1,17 @@
-import React from 'react'
-import { Formik, Form, FormikProps } from 'formik'
-import { Button } from 'grommet'
-import DynamicFormModal from './DynamicFormModal'
-import DynamicFormCheckbox from './DynamicFormCheckbox'
-import DynamicFormSelect from './DynamicFormSelect'
-import DynamicFormInput from './DynamicFormInput'
-import DynamicFormFieldArray from './DynamicFormFieldArray'
+import React from "react";
+import { Formik, Form, FormikProps } from "formik";
+import { Button } from "grommet";
+import DynamicFormModal from "./DynamicFormModal";
+import DynamicFormCheckbox from "./DynamicFormCheckbox";
+import DynamicFormSelect from "./DynamicFormSelect";
+import DynamicFormInput from "./DynamicFormInput";
+import DynamicFormFieldArray from "./DynamicFormFieldArray";
 
 import {
   DynamicFormProps,
   DynamicFormInputObject,
-  InitialValues
-} from './types'
+  InitialValues,
+} from "./types";
 
 // TODO - STYLING
 // TODO - placeholder for inputs explaining pw conditions
@@ -26,8 +26,8 @@ export default function DynamicForm(props: DynamicFormProps) {
     failMessage,
     formSelect = [],
     a11yTitle,
-    redirect
-  } = props
+    redirect,
+  } = props;
 
   return (
     <>
@@ -35,8 +35,8 @@ export default function DynamicForm(props: DynamicFormProps) {
         initialValues={formInitialValues.reduce(
           (acc: object, cur: InitialValues) => {
             return Object.assign(acc, {
-              [cur.name]: cur.value
-            })
+              [cur.name]: cur.value,
+            });
           },
           {}
         )}
@@ -50,7 +50,7 @@ export default function DynamicForm(props: DynamicFormProps) {
           status,
           setStatus,
           touched,
-          values
+          values,
         }: FormikProps<any>) => (
           <Form>
             <DynamicFormModal
@@ -93,23 +93,23 @@ export default function DynamicForm(props: DynamicFormProps) {
             <Button
               a11yTitle={a11yTitle}
               active={isSubmitting}
-              alignSelf='center'
-              data-testid='submit'
+              alignSelf="center"
+              data-testid="submit"
               disabled={isSubmitting}
-              fill='horizontal'
+              fill="horizontal"
               hoverIndicator={true}
               label={submitType}
               margin={{
-                bottom: '30px',
-                top: '30px'
+                bottom: "30px",
+                top: "30px",
               }}
               onClick={() => onSubmit}
               primary={true}
-              type='submit'
+              type="submit"
             />
           </Form>
         )}
       </Formik>
     </>
-  )
+  );
 }
