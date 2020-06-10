@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button } from 'grommet'
 import { Facebook } from 'grommet-icons'
 import FacebookShareGroupMessageModal from 'react-modal'
-import logger from '../utils/logger'
 
 import {
   HandleCreateUpdateChallengeApi,
@@ -30,7 +29,7 @@ export default function FbGroupShare({
   function handleShareImage() {
     FB.getLoginStatus(async (res: fb.StatusResponse) => {
       if (res.status != 'connected') {
-        logger.log({
+        console.log({
           level: 'ERROR',
           description: `Couldn't authorize b/c ${res.status}`
         })
@@ -67,7 +66,7 @@ export default function FbGroupShare({
           // }
           if (res?.error) {
             setFacebookShareGroupFailMessage(true)
-            logger.log({
+            console.log({
               level: 'ERROR',
               description: res.error.message
             })
@@ -77,7 +76,7 @@ export default function FbGroupShare({
               standardResolution: files.secure_url,
               lowResSharedFriendsImage: files.eager[0].secure_url
             })
-            logger.log({
+            console.log({
               level: 'INFO',
               description: `Successfully posted image to group with post_id: ${res.post_id} `
             })

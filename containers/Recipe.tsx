@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import dynamic from 'next/dynamic'
 import { withRouter, Router } from 'next/router'
-import logger from '../utils/logger'
+
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 import { Box, Heading, Button, List, Text, Paragraph } from 'grommet'
 import styled from 'styled-components'
@@ -131,7 +131,7 @@ const Recipe = ({ router }: { router: Router }) => {
   // To set the state if there's data for the challenge
   useEffect(() => {
     if (challengeError) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: `Error querying for challenge: ${challengeError}`
       })
@@ -165,7 +165,7 @@ const Recipe = ({ router }: { router: Router }) => {
           challengeInput: values
         }
       })
-      logger.log({
+      console.log({
         level: 'INFO',
         description: `Challenge ${challenge.data.createOrUpdateChallenge.id} by userid in being created or updated!`
       })
@@ -179,7 +179,7 @@ const Recipe = ({ router }: { router: Router }) => {
           challengeData.challenge.sharedFriendsImages.lowResSharedFriendsImage
       })
     } catch (err) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: `Error creating or updating challenge: ${err}`
       })

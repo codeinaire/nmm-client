@@ -8,7 +8,7 @@ import React, {
 import Webcam from 'react-webcam'
 import { loadModels, detectFacesAndExpression } from '../utils/faceRecog'
 import ImagePreview from './ImagePreview'
-import logger from '../utils/logger'
+
 import { isServer } from '../utils/misc'
 import FbInitAndToken from '../containers/FbInitParent'
 import FbGroupShare from '../components/FbGroupShare'
@@ -48,7 +48,7 @@ export default function LiveFaceDetect({
     if (!isServer()) {
       loadModels()
     }
-    logger.log({
+    console.log({
       level: 'INFO',
       description: 'Starting setInputDevice()'
     })
@@ -72,12 +72,12 @@ export default function LiveFaceDetect({
       } else {
         setCameraFacingMode('environment')
       }
-      logger.log({
+      console.log({
         level: 'INFO',
         description: 'Starting capture.'
       })
     } catch (error) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: `Error in setInputDevice: ${error}`
       })
@@ -96,7 +96,7 @@ export default function LiveFaceDetect({
           setFaceRecogAttributes(result)
         }
       } catch (error) {
-        logger.log({
+        console.log({
           level: 'ERROR',
           description: `Error in detectFaceAndExpression: ${error}`
         })
@@ -105,13 +105,13 @@ export default function LiveFaceDetect({
   }
 
   const captureImage = useCallback(() => {
-    logger.log({
+    console.log({
       level: 'INFO',
       description: 'Running getScreenShot()'
     })
     const imageSrc = webcamRef.current.getScreenshot()
     setDataUri(imageSrc)
-    logger.log({
+    console.log({
       level: 'INFO',
       description: 'Running dataUriToBlod()'
     })

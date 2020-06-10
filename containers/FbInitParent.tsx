@@ -2,10 +2,9 @@ import React from 'react'
 
 import loadFbApi from '../utils/loadFbApi'
 import { isServer } from '../utils/misc'
-import logger from '../utils/logger'
 
 if (!isServer()) {
-  logger.log({
+  console.log({
     level: 'INFO',
     description: 'Initialising FB SDK...'
   })

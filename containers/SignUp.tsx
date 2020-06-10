@@ -5,7 +5,6 @@ import { Facebook } from 'grommet-icons'
 import { signUp, signIn } from '../utils/auth'
 import { SignInTypes } from '../utils/types'
 import FacebookSignInFailModal from 'react-modal'
-import logger from '../utils/logger'
 
 import DynamicForm from '../components/DynamicForm'
 
@@ -51,7 +50,7 @@ export default function SignIn() {
         email: values.email,
         password: values.password
       })
-      logger.log({
+      console.info({
         level: 'INFO',
         description: `Email has been successfully signed up - ${res}`
       })
@@ -61,7 +60,7 @@ export default function SignIn() {
       setFailMessage(
         `${err.description} - Email already taken or other error. Try again!`
       )
-      logger.log({
+      console.info({
         level: 'INFO',
         description: `Email has been successfully signed up`
       })
@@ -154,7 +153,7 @@ export default function SignIn() {
       <Button
         a11yTitle='Submit Facebook sign in credentials'
         color='#4267B2'
-        data-testid='submit'
+        data-testid='facebook-submit'
         icon={<Facebook />}
         label='CONTINUE WITH FACEBOOK'
         margin={{

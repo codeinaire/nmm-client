@@ -2,7 +2,6 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { string, object } from 'yup'
 import gql from 'graphql-tag'
-import logger from '../utils/logger'
 
 import DynamicForm from '../components/DynamicForm'
 
@@ -79,12 +78,12 @@ export default function DeleteRecipe() {
       })
       resetForm()
       setStatus({ openModal: true, success: true })
-      logger.log({
+      console.log({
         level: 'INFO',
         description: `Recipe ${deletedRecipe.data.title} has been successfully deleted!`
       })
     } catch (err) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: err
       })

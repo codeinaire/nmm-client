@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 import { Context as ResponsiveContext } from 'react-responsive'
 
 import { parseAuthHash } from '../utils/auth'
-import logger from '../utils/logger'
+
 import { isServer } from '../utils/misc'
 import FacebookSignIn from '../components/FacebookSignIn'
 import styled from 'styled-components'
@@ -46,7 +46,7 @@ export default function Home() {
           const authResult = await parseAuthHash()
           if (authResult) {
             const userData = authResult.idTokenPayload
-            logger.log({
+            console.log({
               level: 'INFO',
               description: 'Index - writing access token to cache.'
             })
@@ -61,7 +61,7 @@ export default function Home() {
               userData[`${process.env.CLIENT_URL}login_count`] ==
               FIRST_TIME_SIGNIN
             if (isFirstTimeLogin) {
-              logger.log({
+              console.log({
                 level: 'INFO',
                 description: 'Index - redirect to create profile.'
               })
@@ -72,7 +72,7 @@ export default function Home() {
                 }
               })
             } else {
-              logger.log({
+              console.log({
                 level: 'INFO',
                 description: 'Index - redirect to home page.'
               })

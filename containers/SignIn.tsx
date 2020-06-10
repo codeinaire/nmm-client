@@ -47,7 +47,7 @@ export default function SignIn() {
       localStorage.setItem('signed_in', 'true')
       await signIn(SignInTypes.auth0, values.email, values.password)
     } catch (err) {
-      setFailMessage(`${err.description} Maybe you haven't Signed Up?`)
+      setFailMessage(err.description)
       localStorage.setItem('signed_in', 'false')
       resetForm()
       setStatus({

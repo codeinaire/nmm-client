@@ -3,7 +3,6 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { resolvers, ACCESS_TOKEN } from './resolvers'
-import logger from '../utils/logger'
 
 import { AccessTokenObject } from './types'
 
@@ -31,14 +30,14 @@ export default (initialState: NormalizedCacheObject) => {
       signedIn = localStorage.getItem('signed_in') || ''
 
       if (signedIn == 'true') {
-        logger.log({
+        console.log({
           level: 'INFO',
           description: 'CreateApollo - retrieving access token from cache.'
         })
 
         if (typeof cache.data.data.ROOT_QUERY !== 'undefined') {
           data = cache.readQuery({ query: ACCESS_TOKEN })
-          logger.log({
+          console.log({
             level: 'INFO',
             description: 'CreateApollo - token retrieved from cache'
           })

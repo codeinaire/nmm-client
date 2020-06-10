@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/react-hooks'
 import { checkSession } from '../utils/auth'
-import logger from '../utils/logger'
 
 export default function useCheckSigninStatus() {
   const apolloClient = useApolloClient()

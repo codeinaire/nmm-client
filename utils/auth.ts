@@ -1,5 +1,4 @@
 import auth0, { Auth0Error, Auth0DecodedHash } from 'auth0-js'
-import logger from './logger'
 
 import { ISignUpArgs, SignInTypes } from './types'
 
@@ -22,7 +21,7 @@ export const signIn = (
   password?: string
 ): void | Promise<any | undefined> => {
   if (type === SignInTypes.auth0) {
-    logger.log({
+    console.info({
       level: 'INFO',
       description: `${email} address, is signing in with Auth0`
     })
@@ -35,13 +34,13 @@ export const signIn = (
         },
         (error: Auth0Error | null, res: any) => {
           if (error !== null && 'error' in error) {
-            logger.log({
+            console.info({
               level: 'ERROR',
               description: `Auth0 Sign In Error - ${error.description}`
             })
             reject(error)
           } else {
-            logger.log({
+            console.info({
               level: 'INFO',
               description: `${res.username}, has been successfully signed in`
             })
@@ -53,7 +52,7 @@ export const signIn = (
   }
 
   if (type === SignInTypes.social) {
-    logger.log({
+    console.info({
       level: 'INFO',
       description: `Signing in with Facebook`
     })
@@ -65,7 +64,7 @@ export const signIn = (
 }
 
 export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
-  logger.log({
+  console.info({
     level: 'INFO',
     description: `A user with ${email} address, is signing up`
   })
@@ -88,7 +87,7 @@ export const signUp = ({ email, password }: ISignUpArgs): Promise<void> => {
 }
 
 export const checkSession = () => {
-  logger.log({
+  console.info({
     level: 'INFO',
     description: 'Checking if user is signed in'
   })
@@ -97,13 +96,13 @@ export const checkSession = () => {
       {},
       (error: Auth0Error | null, res: Auth0DecodedHash | null) => {
         if (error) {
-          logger.log({
+          console.info({
             level: 'ERROR',
             description: `Auth0 Sign In check Error - ${error.description}`
           })
           reject(error)
         } else {
-          logger.log({
+          console.info({
             level: 'INFO',
             description: 'Sign in check successful'
           })
@@ -115,7 +114,7 @@ export const checkSession = () => {
 }
 
 export const parseAuthHash = () => {
-  logger.log({
+  console.info({
     level: 'INFO',
     description: 'Parsing hash'
   })
@@ -124,13 +123,13 @@ export const parseAuthHash = () => {
       { hash: window.location.hash },
       (error: Auth0Error | null, res: Auth0DecodedHash | null) => {
         if (error) {
-          logger.log({
+          console.info({
             level: 'ERROR',
             description: `Parsing failed with error - ${error.description}`
           })
           reject(error)
         } else {
-          logger.log({
+          console.info({
             level: 'INFO',
             description: 'Parsing successful!'
           })

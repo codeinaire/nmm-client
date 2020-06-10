@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Button } from 'grommet'
 import { Facebook } from 'grommet-icons'
-import logger from '../utils/logger'
 
 import {
   HandleCreateUpdateChallengeApi,
@@ -31,7 +30,7 @@ export default function FbUserShare({
       },
       (res: fb.ShareDialogResponse) => {
         if (res == undefined) {
-          logger.log({
+          console.log({
             level: 'ERROR',
             description:
               'Undefined error occurred when attempting to post to user timeline!'
@@ -40,13 +39,13 @@ export default function FbUserShare({
         }
 
         if (res.error_message) {
-          logger.log({
+          console.log({
             level: 'ERROR',
             description: `Couldn't post to user timeline b/c ${res.error_message}`
           })
         } else {
           handleCreateUpdateChallengeApi(values, ['SharedRecipe'])
-          logger.log({
+          console.log({
             level: 'INFO',
             description: 'Successfully posted to timeline'
           })

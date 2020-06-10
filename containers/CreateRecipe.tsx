@@ -2,7 +2,7 @@ import React from 'react'
 import { object, string } from 'yup'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import logger from '../utils/logger'
+
 // COMPONENTS
 import DynamicForm from '../components/DynamicForm'
 // TYPES
@@ -282,12 +282,12 @@ export default function CreateRecipe() {
       })
       resetForm()
       setStatus({ openModal: true, success: true })
-      logger.log({
+      console.log({
         level: 'INFO',
         description: `Recipe ${recipe.data.createRecipe.id} with title ${recipe.data.createRecipe.title} succeeded in being created!`
       })
     } catch (err) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: err
       })

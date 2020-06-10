@@ -8,7 +8,6 @@ import { Trash } from 'grommet-icons'
 import DeleteProfileModal from 'react-modal'
 import useGetUserProfile from '../hooks/useGetUserProfile'
 
-import logger from '../utils/logger'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
 import SignIn from './SignIn'
 
@@ -289,12 +288,12 @@ export default function UpdateProfile() {
       })
       resetForm()
       setStatus({ openModal: true, success: true })
-      logger.log({
+      console.log({
         level: 'INFO',
         description: `Profile ${createdProfile.data.createOrUpdateUserProfile.id} with username ${createdProfile.data.createOrUpdateUserProfile.username} succeeded in being created!`
       })
     } catch (err) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: `Create Profile - ${err}`
       })

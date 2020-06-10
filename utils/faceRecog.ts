@@ -6,7 +6,7 @@ export async function loadModels() {
   try {
     // TODO - maybe load models on recipe page load
     // TODO - maybe load models SSR which requires the polyfill monkeypatch
-    logger.log({
+    console.log({
       level: 'INFO',
       description: 'Loading models'
     })
@@ -16,7 +16,7 @@ export async function loadModels() {
     // await faceapi.loadTinyFaceDetectorModel('/models')
     // await faceapi.loadFaceExpressionModel('/models')
   } catch (error) {
-    logger.log({
+    console.log({
       level: 'ERROR',
       description: `Loading models error: ${error}`
     })

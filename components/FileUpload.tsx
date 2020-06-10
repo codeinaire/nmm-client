@@ -1,13 +1,12 @@
 import React, { ChangeEvent } from 'react'
 
-import logger from '../utils/logger'
 import { FileUploadProps } from './types'
 
 export default function FileUpload(props: FileUploadProps) {
   const { field, form } = props
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    logger.log({
+    console.log({
       level: 'INFO',
       description: `Starting file upload... for ${field.name}`
     })
@@ -28,14 +27,14 @@ export default function FileUpload(props: FileUploadProps) {
       method: 'POST',
       body: data
     })
-    logger.log({
+    console.log({
       level: 'INFO',
       description: `Transformation status: ${res.statusText} ${res.status}`
     })
 
     const files = await res.json()
     if (files.error) {
-      logger.log({
+      console.log({
         level: 'ERROR',
         description: files.error.message
       })
@@ -44,7 +43,7 @@ export default function FileUpload(props: FileUploadProps) {
 
     form.setFieldValue(field.name, files.secure_url)
     form.setFieldValue('standardResolution', files.eager[0].secure_url)
-    logger.log({
+    console.log({
       level: 'INFO',
       description: 'Finished file upload!'
     })
@@ -60,7 +59,7 @@ export default function FileUpload(props: FileUploadProps) {
         data-testid={props['data-testid']}
         id={props.id}
         type={props.type}
-        onChange={event => handleChange(event)}
+        onChange={(event) => handleChange(event)}
       />
     </>
   )
