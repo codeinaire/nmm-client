@@ -8,7 +8,7 @@ Even though it didn't go live the prototype will still be useful in applying for
 
 ### Background
 
-The project originally started as the final assessment for the Diploma of Software Development I completed 3 years ago. I didn't get to finish the project. When I quit EnergyLink due to the company going into liquidation I decided it was an opportunity to finish off what I started.
+The project originally started as the [final assessment](https://github.com/codeinaire/CFA-Major-Project-3-Backend) for the Diploma of Software Development I completed 3 years ago. I didn't get to finish the project. When I quit EnergyLink due to the company going into liquidation I decided it was an opportunity to finish off what I'd started.
 
 From the perspective of No Meat May they are focused on inspiring participants to decrease their consumption of animal products while supporting and encoraging their experimentation with a plant based diet. The hope is a decrease in the or cessation of the consumption of animal products by participants. From a long-term point of view the organisers are using No Meat May as a means to empower people to live sustainably.
 
