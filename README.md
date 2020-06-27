@@ -60,11 +60,11 @@ In future iterations the points will be redeemable for NMM merchandise, and disc
 
 ### UML Activity Diagrams
 
-**Sign In**
+#### Sign In
 ![alt-tag](https://github.com/codeinaire/nmm-client/blob/update-readme/readmeImages/Sign%20In%20Activity%20diagram.png)
 
-**Sign Up**
+#### Sign Up
 ![alt-tag](https://github.com/codeinaire/nmm-client/blob/update-readme/readmeImages/Registration%20Activity%20diagram-v2.png)
 
-**Recipe Feature**
+#### Recipe Feature
 ![alt-tag](https://github.com/codeinaire/nmm-client/blob/update-readme/readmeImages/RecipeFeatureActivityDiagram-v2.png)
