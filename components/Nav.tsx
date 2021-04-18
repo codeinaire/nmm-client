@@ -4,12 +4,10 @@ import { Home, Cafeteria, Accessibility, Logout, Login } from 'grommet-icons'
 
 import { logout } from '../utils/auth'
 import useCheckSigninStatus from '../hooks/useCheckSigninStatus'
-import useGetUserProfile from '../hooks/useGetUserProfile'
 
 export default function Navigation({ page }: { page: string }) {
   // Custom hooks
-  const { signedIn, userProfileId } = useCheckSigninStatus()
-  const { loading, error, data } = useGetUserProfile(userProfileId)
+  const { signedIn } = useCheckSigninStatus()
   if (page == 'SignInPage' || page == 'SignUpPage') return null
   return (
     <Box

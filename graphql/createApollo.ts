@@ -13,7 +13,7 @@ export default (initialState: NormalizedCacheObject) => {
   const cache: any = new InMemoryCache().restore(initialState)
 
   const httpLink: HttpLink = new HttpLink({
-    uri: process.env.SERVER_URL,
+    uri: process.env.NEXT_PUBLIC_SERVER_URL,
     credentials: 'include'
   })
 
@@ -55,7 +55,7 @@ export default (initialState: NormalizedCacheObject) => {
         authorization: !data.accessToken.length
           ? ''
           : `Bearer ${data.accessToken}`,
-        'Access-Control-Allow-Origin': process.env.CLIENT_URL
+        'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_CLIENT_URL
       }
     }
   })

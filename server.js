@@ -1,4 +1,4 @@
-// This file is for HTTPS used locally.
+// This file is for NEXT_PUBLIC_HTTPS used locally.
 const { createServer } = require('https')
 const { parse } = require('url')
 const { readFileSync } = require('fs')

@@ -24,7 +24,7 @@ export default function FileUpload(props: FileUploadProps) {
       data.append('upload_preset', 'nmm-recipes')
     }
 
-    const res = await fetch(process.env.CLOUDINARY_API || '', {
+    const res = await fetch(process.env.NEXT_PUBLIC_CLOUDINARY_API || '', {
       method: 'POST',
       body: data
     })

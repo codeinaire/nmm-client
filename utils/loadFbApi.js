@@ -11,7 +11,7 @@ export default () => {
 
   window.fbAsyncInit = function() {
     FB.init({
-      appId: process.env.FB_APP_ID,
+      appId: process.env.NEXT_PUBLIC_FB_APP_ID,
       autoLogAppEvents: true,
       xfbml: true,
       version: 'v6.0'

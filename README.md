@@ -54,6 +54,8 @@ In future iterations the points will be redeemable for NMM merchandise, and disc
 
 - **Testing** - I believe testing is important, but as this is a prototype and I had limited time I didn't implement any tests in the client side of the app. This is an area that I can put more effort into improving.
 
+- **AWS Cloudwatch Logger** - I forked [this package](https://github.com/ckckchoudhary/aws-cloudwatch-logger-browser) and changed it so as to send logs to Cloudwatch via API Gateway. It was working when I first made the changes, but currently it isn't functioning. I've not looked into it as it wasn't a pressing issue so I'm not entirely sure why it's not functioning as expected.
+
 ### UML Use Case Diagram
 
 ![alt-tag](https://github.com/codeinaire/nmm-client/blob/update-readme/readmeImages/NMM%20UML%20Use%20Case%20Diagram.png)

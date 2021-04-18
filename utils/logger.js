@@ -1,5 +1,5 @@
-import uuid from 'uuid'
-import { Logger, createLogStream } from 'aws-cloudwatch-log-browser'
+const uuid = require('uuid')
+const { Logger, createLogStream } = require('aws-cloudwatch-log-browser')
 
 const randomIdentifier = uuid()
 
@@ -8,10 +8,10 @@ const config = {
   logStreamName: randomIdentifier,
   uri: `${process.env.LOGGER_URI}/prod/put-logs`,
   uploadFreq: 5000, // make sure use this to activate batch uploading
-  local: process.env.IS_DEVELOPMENT
+  local: process.env.NEXT_PUBLIC_IS_DEVELOPMENT
 }
 
-if (!process.env.IS_DEVELOPMENT) {
+if (!process.env.NEXT_PUBLIC_IS_DEVELOPMENT) {
   const logStreamConfig = {
     uri: `${process.env.LOGGER_URI}/prod/create-streams`,
     logGroupName: 'nmm-client-group'

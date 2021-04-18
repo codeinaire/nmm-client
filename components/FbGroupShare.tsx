@@ -39,14 +39,17 @@ export default function FbGroupShare({
       formData.append('file', imageSrc)
       formData.append('upload_preset', 'nmm-profile-pics')
 
-      const uploadedPhoto = await fetch(process.env.CLOUDINARY_API || '', {
-        method: 'POST',
-        body: formData
-      })
+      const uploadedPhoto = await fetch(
+        process.env.NEXT_PUBLIC_CLOUDINARY_API || '',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
 
       const files = await uploadedPhoto.json()
       FB.api(
-        `/${process.env.FB_GROUP_ID}/photos`,
+        `/${process.env.NEXT_PUBLIC_FB_GROUP_ID}/photos`,
         'post',
         {
           url: files.eager[0].secure_url,

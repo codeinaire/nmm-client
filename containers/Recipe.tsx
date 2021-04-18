@@ -308,7 +308,7 @@ const Recipe = ({ router }: { router: Router }) => {
         <FbInitAndToken>
           {() => (
             <FbUserShare
-              href={`${process.env.CLIENT_URL}${router.asPath}`}
+              href={`${process.env.NEXT_PUBLIC_CLIENT_URL}${router.asPath}`}
               quote='By eating less animal products, or going meat free, you can protect our planet, your health, and save living beings, both human and animal from suffering.'
               handleCreateUpdateChallengeApi={handleCreateUpdateChallengeApi}
               values={values}

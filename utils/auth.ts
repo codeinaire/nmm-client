@@ -7,12 +7,12 @@ const DATABASE_CONNECTION = 'Username-Password-Authentication'
 const SOCIAL_MEDIA_SIGN_IN = 'facebook'
 
 export const webAuth = new auth0.WebAuth({
-  domain: process.env.APP_DOMAIN || '',
-  clientID: process.env.APP_CLIENT_ID || '',
-  redirectUri: process.env.REDIRECT_URL,
+  domain: process.env.NEXT_PUBLIC_APP_DOMAIN || '',
+  clientID: process.env.NEXT_PUBLIC_APP_CLIENT_ID || '',
+  redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL,
   responseType: 'token id_token',
   scope: 'openid profile email',
-  audience: process.env.AUDIENCE
+  audience: process.env.NEXT_PUBLIC_AUDIENCE
 })
 
 // TODO - fix res: any type - find out what it returns
@@ -152,7 +152,7 @@ export const parseAuthHash = () => {
 export const logout = () => {
   localStorage.setItem('signed_in', 'false')
   webAuth.logout({
-    clientID: process.env.APP_CLIENT_ID || '',
-    returnTo: process.env.REDIRECT_URL
+    clientID: process.env.NEXT_PUBLIC_APP_CLIENT_ID || '',
+    returnTo: process.env.NEXT_PUBLIC_REDIRECT_URL
   })
 }
